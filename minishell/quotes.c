@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 01:21:23 by seunan            #+#    #+#             */
-/*   Updated: 2023/08/25 01:55:23 by seunan           ###   ########.fr       */
+/*   Updated: 2023/08/25 02:33:02 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,29 +29,8 @@ void	pair_quotes(char *str)
 		if (str[i] == '\"' && dou == 0 && sin == 0)
 			++dou;
 		if (sin == 1)
-		{
-			for (j = len - 1; j > i; j++)
-			{
-				if (str[j] == '\'')
-					++sin;
-				if (sin == 2)
-				{
-					answer = ft_calloc(j - i + 1, sizeof(char));
-					break;
-				}
-			}
-			for (int k = i; i <= j; k++)
-			{
-				if (str[i] == '\'')
-				{
-					++i;
-					break;
-				}
-				answer[k] = str[i];
-				++i;
-			}
-			break;
-		}
+			if (str[i] == '\'' && (str[i + 1] == '|' || str[i + 1] == ' ' || str[i + 1] == '\0'))
+				++sin;
 		++i;
 	}
 	printf("%s\n", answer);
