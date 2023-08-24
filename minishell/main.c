@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 22:42:16 by seunan            #+#    #+#             */
-/*   Updated: 2023/08/24 23:11:32 by seunan           ###   ########.fr       */
+/*   Updated: 2023/08/25 01:54:13 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,15 @@ int	main(void)
 	while(1)
 	{
 		str = readline("minishell $>");
-		if (strcmp(str, "exit") == 0)
+		if (ft_strncmp(str, "exit", 5) == 0)
 		{
-			printf("exit ...\n");
+			printf("exit");
 			break;
 		}
 		else
-			printf("Result : %s\n\n", str);
+		{
+			pair_quotes(str);
+		}
 		add_history(str);
 		free(str);
 	}
