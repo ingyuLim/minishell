@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 22:42:16 by seunan            #+#    #+#             */
-/*   Updated: 2023/08/24 22:53:57 by seunan           ###   ########.fr       */
+/*   Updated: 2023/08/24 23:11:32 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	main(void)
 	char *str;
 	while(1)
 	{
-		str = readline("Enter the string : ");
+		str = readline("minishell $>");
 		if (strcmp(str, "exit") == 0)
 		{
 			printf("exit ...\n");
