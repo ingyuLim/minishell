@@ -6,12 +6,13 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:26:36 by seunan            #+#    #+#             */
-/*   Updated: 2023/03/20 17:32:35 by seunan           ###   ########seoul.kr  */
+/*   Updated: 2023/08/21 20:55:54 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+
 int	ft_isalnum(int c)
 {
-	return (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')
-		|| ('0' <= c && c <= '9'));
+	return (ft_isalpha(c) || ft_isdigit(c));
 }

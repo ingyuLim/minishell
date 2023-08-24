@@ -6,7 +6,7 @@ CFLAGS=-Wall -Werror -Wextra
 LIBFT=./libft/libft.a
 DEBUG=-g3 -fsanitize=address
 
-SRCS=main.c deque.c cmd_push.c cmd_swap.c cmd_rotate.c parse.c set_idx.c sort.c utils.c find_min_rot.c find_min_rot_utils.c
+SRCS=
 OBJS=$(SRCS:.c=.o)
 
 all: $(NAME)
@@ -16,6 +16,8 @@ $(NAME): $(LIBFT) $(OBJS)
 
 $(LIBFT):
 	$(MAKE) bonus -C ./libft
+
+bonus: $(BONUS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
