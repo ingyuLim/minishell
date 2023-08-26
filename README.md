@@ -1,5 +1,8 @@
 # minishell
 
+- [Ctrl + D, Ctrl + C](https://kldp.org/node/94835)
+- [ref](https://ohgyun.com/330)
+
 ## readline
 
 - [ref](https://wtg-study.tistory.com/103)
