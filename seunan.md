@@ -9,7 +9,7 @@
 ## Todo
 
 - [ ] parsing
-	- [ ] parsing 순서
+	- [ ] [parsing 순서](https://mywiki.wooledge.org/BashParser)
 	- [ ] parsing 자료구조 트리? 리스트?
 - [ ] execute
 	- [ ] 다중 파이프
@@ -18,6 +18,9 @@
 - [ ] 환경 변수 출력하기
 
 ## Analyzing a subject
+
+- [ref](https://www.geeksforgeeks.org/developing-linux-based-shell/)
+- [ref](https://vorpaljs.github.io/bash-parser-playground/)
 
 ```bash
 # success
@@ -32,14 +35,14 @@ $> 'ls
 '
 ```
 
-고려사항
-- 따옴표 안에 있는 같은 따옴표는 제거
--
+'l'''''''s'|"grep"" "a""
+'ls'|"grep" "a"
+"ls -a"
 
-1. 따옴표 짝이 맞기 전까지 공백이 있을 경우 -> 따옴표로 묶인 것이라고 간주, 공백이 없고 문자만 있으면 따옴표 제거
-2. 대문자 -> 소문자로 모두 바꿔주기
-3. 따옴표 -> 파이프, 공백을 기준으로 파싱을 하고 pipex 실행
-	1. 따옴표 파싱의 기준은 str[i] == "'" && str[i + 1] == "|" || " " || "\0"
+1. 따옴표 짝 맞추기 |, \0 을 기준으로 파싱
+2. 공백 기준으로 파싱
+3. 대문자 -> 소문자로 모두 바꿔주기
+4. 따옴표 -> 파이프, 공백을 기준으로 파싱을 하고 pipex 실행
 ## Mandatory
 
 - 당신의 쉘은:

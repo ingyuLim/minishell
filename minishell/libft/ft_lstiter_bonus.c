@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:45:54 by seunan            #+#    #+#             */
-/*   Updated: 2023/08/27 20:05:35 by seunan           ###   ########.fr       */
+/*   Updated: 2023/08/27 23:07:00 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
-	while (lst != 0)
+	while (lst != NULL)
 	{
-		f(lst->argv);
+		f(lst->cmd);
 		lst = lst->next;
 	}
 }

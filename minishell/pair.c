@@ -1,37 +1,38 @@
 #include "minishell.h"
 
-void	pair_quotes(char *str, char quote)
+char	*single_quotes(char **str, int *sin_quote)
 {
-	int	i;
+	char	*tmp;
 
-	i = 1;
-	while (str[i])
+	while (**str != '\0')
 	{
-		if (str[i] == quote && (ft_iswhitesp(str[i + 1]) || str[i + 1] == '\0'
-				|| str[i + 1] == '|'))
-		{
-			str[i] = '\0';
-			break ;
-		}
-		++i;
+		/* code */
 	}
+
 }
 
 char	*trim_quotes(char *str)
 {
-	int	i;
-	int	sin_quote;
-	int	dou_quote;
+	t_list	*head;
+	int		quote[2];
 
-	i = 0;
-	sin_quote = 0;
-	dou_quote = 0;
-	while (str[i])
+	head = ft_lstnew(0);
+	quote[SINGLE] = 0;
+	quote[DOUBLE] = 0;
+	while (*str)
 	{
-		if (str[i] == '\'' && dou_quote == 0 && sin_quote == 0)
-			pair_quotes(str + i, '\'');
-		if (str[i] == '\"' && dou_quote == 0 && sin_quote == 0)
-			pair_quotes(str + i, '\"');
-		++i;
+		if (*str == '\'' && quote[SINGLE] == 0 && quote[DOUBLE] == 0)
+		{
+			quote[SINGLE] = 1;
+			double_quotes(str);
+			quote[SINGLE] = 0;
+		}
+		if (*str == '\"' && quote[SINGLE] == 0 && quote[DOUBLE] == 0)
+		{
+			quote[DOUBLE] = 1;
+			single_quotes(&str, &quote[DOUBLE]);
+			quote[DOUBLE] = 0;
+		}
+		str++;
 	}
 }
