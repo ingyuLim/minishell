@@ -1,22 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
+/*   ft_iswhitesp.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/17 14:45:54 by seunan            #+#    #+#             */
-/*   Updated: 2023/08/27 23:07:00 by seunan           ###   ########.fr       */
+/*   Created: 2023/08/27 20:16:45 by seunan            #+#    #+#             */
+/*   Updated: 2023/08/27 20:53:50 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-void	ft_lstiter(t_list *lst, void (*f)(void *))
+int	ft_iswhitesp(char c)
 {
-	while (lst != NULL)
-	{
-		f(lst->cmd);
-		lst = lst->next;
-	}
+	return ((9 <= c && c <= 13) || (c == ' '));
 }

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 16:29:19 by seunan            #+#    #+#             */
-/*   Updated: 2023/08/21 21:34:00 by seunan           ###   ########.fr       */
+/*   Updated: 2023/08/27 03:46:54 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (str);
 	}
 	else if (len > ft_strlen(s) - start)
-		str = ft_calloc( ft_strlen(s) - start + 1, sizeof(char));
+		str = ft_calloc(ft_strlen(s) - start + 1, sizeof(char));
 	else
 		str = ft_calloc(len + 1, sizeof(char));
 	if (!str)

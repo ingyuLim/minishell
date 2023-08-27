@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:46:05 by seunan            #+#    #+#             */
-/*   Updated: 2023/03/18 13:32:16 by seunan           ###   ########seoul.kr  */
+/*   Updated: 2023/08/27 23:06:45 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,21 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	t_list	*thead;
 
 	tmp = ft_calloc(1, sizeof(t_list));
-	if (lst == 0 || tmp == 0)
-		return (0);
+	if (lst == NULL || tmp == NULL)
+		return (NULL);
 	thead = tmp;
-	while (lst->next != 0)
+	while (lst->next != NULL)
 	{
-		tmp->content = f(lst->content);
+		tmp->cmd = f(lst->cmd);
 		tmp->next = ft_calloc(1, sizeof(t_list));
-		if (tmp->next == 0)
+		if (tmp->next == NULL)
 		{
 			ft_lstclear(&thead, del);
-			return (0);
+			return (NULL);
 		}
 		tmp = tmp->next;
 		lst = lst->next;
 	}
-	tmp->content = f(lst->content);
+	tmp->cmd = f(lst->cmd);
 	return (thead);
 }
