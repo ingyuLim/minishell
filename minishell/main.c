@@ -9,8 +9,7 @@ int	main(void)
 		str = readline("\033[0;37mminishell$\033[0;31m>\033[0;m ");
 		if (ft_strncmp(str, "exit", 5) == 0)
 			break ;
-		else
-			minishell(str);
+		tokenize(str);
 		add_history(str);
 		free(str);
 	}

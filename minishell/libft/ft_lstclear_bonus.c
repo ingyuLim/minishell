@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:45:19 by seunan            #+#    #+#             */
-/*   Updated: 2023/03/18 19:07:46 by seunan           ###   ########seoul.kr  */
+/*   Updated: 2023/08/27 20:05:10 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 	while (*lst != 0)
 	{
 		tmp = *lst;
-		del((*lst)->content);
+		del((*lst)->argv);
 		*lst = (*lst)->next;
 		free(tmp);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anseungwon <anseungwon@student.42seoul.    +#+  +:+       +#+        */
+/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:45:37 by seunan            #+#    #+#             */
-/*   Updated: 2023/03/19 19:30:56 by anseungwon       ###   ########seoul.kr  */
+/*   Updated: 2023/08/27 20:05:19 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,6 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
 	if (lst == 0)
 		return ;
-	del(lst->content);
+	del(lst->argv);
 	free(lst);
 }
