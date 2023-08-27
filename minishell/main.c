@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: inlim <inlim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 22:42:16 by seunan            #+#    #+#             */
-/*   Updated: 2023/08/25 01:54:13 by seunan           ###   ########.fr       */
+/*   Updated: 2023/08/27 23:09:16 by inlim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	main(void)
 	char *str;
 	while(1)
 	{
-		str = readline("minishell $>");
+		str = readline("minishell $> ");
 		if (ft_strncmp(str, "exit", 5) == 0)
 		{
 			printf("exit");
@@ -25,7 +25,7 @@ int	main(void)
 		}
 		else
 		{
-			pair_quotes(str);
+			printf("%s\n",str);
 		}
 		add_history(str);
 		free(str);

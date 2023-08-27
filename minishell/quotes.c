@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: inlim <inlim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 01:21:23 by seunan            #+#    #+#             */
-/*   Updated: 2023/08/25 01:55:23 by seunan           ###   ########.fr       */
+/*   Updated: 2023/08/25 02:12:41 by inlim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,13 @@ void	pair_quotes(char *str)
 			++dou;
 		if (sin == 1)
 		{
-			for (j = len - 1; j > i; j++)
+			for (j = len - 1; j > i; j--)
 			{
 				if (str[j] == '\'')
 					++sin;
 				if (sin == 2)
 				{
+					printf("%d\n",j-i);
 					answer = ft_calloc(j - i + 1, sizeof(char));
 					break;
 				}
@@ -45,7 +46,7 @@ void	pair_quotes(char *str)
 				if (str[i] == '\'')
 				{
 					++i;
-					break;
+					continue;
 				}
 				answer[k] = str[i];
 				++i;
