@@ -6,11 +6,11 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 20:16:45 by seunan            #+#    #+#             */
-/*   Updated: 2023/08/27 20:53:50 by seunan           ###   ########.fr       */
+/*   Updated: 2023/08/28 21:24:09 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_iswhitesp(char c)
+int	ft_iswhitespace(char c)
 {
 	return ((9 <= c && c <= 13) || (c == ' '));
 }
