@@ -1,7 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-enum				e_quote
+enum e_quote
 {
 	SINGLE = 0,
 	DOUBLE,
@@ -18,7 +18,5 @@ enum				e_quote
 # include <sys/stat.h>
 # include <term.h>
 # include <termios.h>
-
-void				split_by_pipe(char *str);
 
 #endif

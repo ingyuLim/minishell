@@ -6,7 +6,11 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:29:31 by seunan            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/08/28 21:37:57 by seunan           ###   ########.fr       */
+=======
+/*   Updated: 2023/08/27 23:02:43 by seunan           ###   ########.fr       */
+>>>>>>> 5410290b7d2ddc3ca8b0114d21a4e8cb63c408f1
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +21,11 @@
 
 typedef struct s_list
 {
+<<<<<<< HEAD
 	char			*token;
+=======
+	char			*cmd;
+>>>>>>> 5410290b7d2ddc3ca8b0114d21a4e8cb63c408f1
 	struct s_list	*next;
 }					t_list;
 
@@ -26,7 +34,11 @@ int					ft_isdigit(int c);
 int					ft_isalnum(int c);
 int					ft_isascii(int c);
 int					ft_isprint(int c);
+<<<<<<< HEAD
 int					ft_iswhitespace(char c);
+=======
+int					ft_iswhitesp(char c);
+>>>>>>> 5410290b7d2ddc3ca8b0114d21a4e8cb63c408f1
 size_t				ft_strlen(const char *s);
 void				*ft_memset(void *b, int c, size_t len);
 void				ft_bzero(void *s, size_t n);
