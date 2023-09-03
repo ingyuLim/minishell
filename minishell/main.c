@@ -1,71 +1,65 @@
 #include "minishell.h"
 
-int is_quote(char c)
+char	*gnl_strndup(char *src, int n)
 {
-	return (c == '\'' || c == '\"');
-}
-
-char	*gnl_strndup(char *src, unsigned int n)
-{
-	char			*dup;
-	unsigned int	dup_idx;
+	char	*dup;
+	int		i;
 
 	dup = (char *)ft_calloc(n + 1 , sizeof(char));
 	if (!dup)
 		return (NULL);
-	dup_idx = 0;
-	while (dup_idx < n)
+	i = 0;
+	while (i < n)
 	{
-		dup[dup_idx] = src[dup_idx];
-		dup_idx++;
+		dup[i] = src[i];
+		i++;
 	}
 	return (dup);
 }
 
 int	even(int n)
 {
-	if (n%2 == 0)
-		return 1;
+	if (n % 2 == 0)
+	{
+		return TRUE;
+	}
 	else
+	{
 		return FALSE;
-}
-
-char *ws_pass(char *str)
-{
-	while(ft_iswhitesp(*str))
-		str++;
-	return str;
+	}
 }
 
 char *meet_quote(char *str, int *i, char quote) //띄어쓰기까지 모두 문자 취급
 {
-	int idx = *i;
-	int len = 0;
-	char *result;
+	int		idx;
+	int		len;
+	char	*result;
 
-	idx++;
+	idx = *i + 1;
+	len = 0;
 	while(str[idx++] != quote)
 		len++;
 	result = gnl_strndup(str + (*i), len);
 	*i = idx;
-	return result;
+	return (result);
 }
 
 char *meet_char(char *str)
 {
 	int i = 0;
 	int len = 0;
-	char **result;
+	char *result;
 
-	while(!(ft_iswhitesp(str[i]) || is_quote(str[i])))
+	while(!ft_iswhitespace(str[i]) && !ft_isquote(str[i]))
 	{
 		i++;
 		len++;
 	}
 	result = gnl_strndup(str, len);
+	return (result);
 }
 
-char	*organize_quote(char *str)
+char	**organize_quote(char *str)
 {
 	t_list	*head;
 	t_list	*lst_tmp;
@@ -77,9 +71,9 @@ char	*organize_quote(char *str)
 	//일단은 쪼개서 합치는 방식.
 	while(str[i])
 	{
-		while(ft_iswhitesp(str[i]))
+		while(ft_iswhitespace(str[i]))
 			i++;
-		if(is_quote(str[i]))
+		if(ft_isquote(str[i]))
 		{
 			tmp = meet_quote(str, &i, str[i]);
 			ft_lstadd_back(&head, ft_lstnew(tmp));
@@ -117,9 +111,6 @@ int	main(void)
 		}
 		printf("%s",str);
 		organize_quote(str);
-		// tokenize(str);
-		// make_token();
-		// printf("head : %llu\n",head);
 		add_history(str);
 		free(str);
 	}
