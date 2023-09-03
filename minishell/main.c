@@ -44,13 +44,13 @@ char *meet_quote(char *str, int *i, char quote) //띄어쓰기까지 모두 문�
 	return (result);
 }
 
-char *meet_char(char *str)
+char *meet_word(char *str)
 {
 	int i = 0;
 	int len = 0;
 	char *result;
 
-	while(!ft_iswhitespace(str[i]) && !ft_isquote(str[i]))
+	while(!ft_iswhitespace(str[i]) && !ft_isquote(str[i]) && str[i])
 	{
 		i++;
 		len++;
@@ -80,7 +80,7 @@ char	**organize_quote(char *str)
 		}
 		else
 		{
-			tmp = meet_char(str + i);
+			tmp = meet_word(str + i);
 			ft_lstadd_back(&head, ft_lstnew(tmp));
 		}
 		i++;
@@ -109,7 +109,7 @@ int	main(void)
 			printf("exit\n");
 			break ;
 		}
-		printf("%s",str);
+		printf("%s\n",str);
 		organize_quote(str);
 		add_history(str);
 		free(str);
