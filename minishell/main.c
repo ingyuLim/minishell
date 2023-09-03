@@ -55,23 +55,31 @@ char *meet_char(char *str)
 {
 	int i = 0;
 	int len = 0;
-	char **result;
+	char *result;
 
-	while(!(ft_iswhitesp(str[i]) || is_quote(str[i])))
+	while(!(ft_iswhitesp(str[i]) || is_quote(str[i]) || str[i]))
 	{
 		i++;
 		len++;
 	}
 	result = gnl_strndup(str, len);
+	return result;
+}
+
+void ft_strcpy(char *src, char *dst)
+{
+	while(*src)
+		*dst = *src;
 }
 
 char	*organize_quote(char *str)
 {
 	t_list	*head;
 	t_list	*lst_tmp;
+	int len = 0;
 	char	*tmp;
 	int i = 0;
-	char **result;
+	char *result;
 	int size;
 
 	//일단은 쪼개서 합치는 방식.
@@ -91,14 +99,21 @@ char	*organize_quote(char *str)
 		}
 		i++;
 	}
-	size = ft_lstsize(head) + 1;
-	result = (char **)ft_calloc(sizeof(char *), size);
+	lst_tmp = head;
+	while(lst_tmp)
+	{
+		len += ft_strlen(lst_tmp->token);
+		lst_tmp = lst_tmp->next;
+	}
+	result = ft_calloc(len + 1, sizeof(char));
 	lst_tmp = head;
 	i = 0;
 	while(lst_tmp)
 	{
-		result[i++] = lst_tmp->token;
+		ft_strcpy(lst_tmp->token,result);
+		i += ft_strlen(lst_tmp->token);
 		lst_tmp = lst_tmp->next;
+		result += i;
 	}
 	return result;
 }
