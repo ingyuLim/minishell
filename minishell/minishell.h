@@ -4,9 +4,12 @@
 enum e_quote
 {
 	SINGLE = 0,
-	DOUBLE,
+	DOUBLE = 1
 };
-
+# define TRUE 1;
+# define FALSE 0;
+# define SINGLE_QUOTE '\''
+# define DOUBLE_QUOTE '\"'
 # include "./libft/libft.h"
 # include <dirent.h>
 # include <fcntl.h>
