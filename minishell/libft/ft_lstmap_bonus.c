@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: inlim <inlim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:46:05 by seunan            #+#    #+#             */
-/*   Updated: 2023/08/27 23:06:45 by seunan           ###   ########.fr       */
+/*   Updated: 2023/09/03 23:35:05 by inlim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	thead = tmp;
 	while (lst->next != NULL)
 	{
-		tmp->cmd = f(lst->cmd);
+		tmp->token = f(lst->token);
 		tmp->next = ft_calloc(1, sizeof(t_list));
 		if (tmp->next == NULL)
 		{
@@ -33,6 +33,6 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 		tmp = tmp->next;
 		lst = lst->next;
 	}
-	tmp->cmd = f(lst->cmd);
+	tmp->token = f(lst->token);
 	return (thead);
 }

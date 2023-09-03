@@ -80,7 +80,6 @@ char	*organize_quote(char *str)
 	char	*tmp;
 	int i = 0;
 	char *result;
-	int size;
 
 	//일단은 쪼개서 합치는 방식.
 	while(str[i])
