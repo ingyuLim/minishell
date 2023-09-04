@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+
 char	*gnl_strndup(char *src, int n)
 {
 	char	*dup;
@@ -44,30 +45,31 @@ char *meet_quote(char *str, int *i, char quote) //띄어쓰기까지 모두 문�
 	return (result);
 }
 
-char *meet_word(char *str)
+char *meet_word(char *str, int *i)
 {
-	int i = 0;
+	int		idx;
+	idx = *i;
 	int len = 0;
 	char *result;
 
-	while(!ft_iswhitespace(str[i]) && !ft_isquote(str[i]) && str[i])
+	while(!ft_iswhitespace(str[idx]) && !ft_isquote(str[idx]) && str[idx])
 	{
-		i++;
+		idx++;
 		len++;
 	}
+	*i = idx;
 	result = gnl_strndup(str, len);
 	return (result);
 }
 
-char	**organize_quote(char *str)
+char	*organize_quote(char *str)
 {
-	t_list	*head;
+	t_list	*head = NULL;
 	t_list	*lst_tmp;
 	int len = 0;
 	char	*tmp;
 	int i = 0;
 	char *result;
-	int size;
 
 	//일단은 쪼개서 합치는 방식.
 	while(str[i])
@@ -81,27 +83,37 @@ char	**organize_quote(char *str)
 		}
 		else
 		{
-			tmp = meet_word(str + i);
+
+			tmp = meet_word(str, &i);
 			ft_lstadd_back(&head, ft_lstnew(tmp));
+		}
+		if(str[i] == '\0')
+		{
+			printf("break\n");
+			break;
 		}
 		i++;
 	}
+	printf("escape while\n");
 	lst_tmp = head;
+	printf("%s\n",lst_tmp->token);
 	while(lst_tmp)
 	{
 		len += ft_strlen(lst_tmp->token);
 		lst_tmp = lst_tmp->next;
 	}
+	printf("len = %d\n",len);
 	result = ft_calloc(len + 1, sizeof(char));
 	lst_tmp = head;
 	i = 0;
 	while(lst_tmp)
 	{
-		ft_strcpy(lst_tmp->token,result);
+		strcpy(lst_tmp->token,result);
 		i += ft_strlen(lst_tmp->token);
 		lst_tmp = lst_tmp->next;
 		result += i;
 	}
+	printf("result %s\n",result);
 	return result;
 }
 
