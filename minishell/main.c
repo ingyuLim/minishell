@@ -36,7 +36,7 @@ char *meet_quote(char *str, int *i, char quote) //띄어쓰기까지 모두 문�
 	int		len;
 	char	*result;
 
-	idx = *i + 1;
+	idx = *i;
 	len = 0;
 	while(str[idx++] != quote)
 		len++;
@@ -57,8 +57,9 @@ char *meet_word(char *str, int *i)
 		idx++;
 		len++;
 	}
+	result = gnl_strndup(str + (*i), len);
 	*i = idx;
-	result = gnl_strndup(str, len);
+	printf("result in meet_word = %s\n",result);
 	return (result);
 }
 
@@ -70,29 +71,33 @@ char	*organize_quote(char *str)
 	char	*tmp;
 	int i = 0;
 	char *result;
-
+	while(ft_iswhitespace(str[i]))
+		i++;
 	//일단은 쪼개서 합치는 방식.
 	while(str[i])
 	{
-		while(ft_iswhitespace(str[i]))
-			i++;
 		if(ft_isquote(str[i]))
 		{
+			// printf("meet_quote\n");
 			tmp = meet_quote(str, &i, str[i]);
+			ft_lstadd_back(&head, ft_lstnew(tmp));
+		}
+		else if(ft_iswhitespace(str[i]))
+		{
+			// printf("meet_ws\n");
+			while(ft_iswhitespace(str[i]))
+				i++;
+			tmp = " ";
 			ft_lstadd_back(&head, ft_lstnew(tmp));
 		}
 		else
 		{
-
+			// printf("meet_word\n");
+			printf("i = %d\n",i);
 			tmp = meet_word(str, &i);
 			ft_lstadd_back(&head, ft_lstnew(tmp));
 		}
-		if(str[i] == '\0')
-		{
-			printf("break\n");
-			break;
-		}
-		i++;
+		printf("word = %s\n",tmp);
 	}
 	printf("escape while\n");
 	lst_tmp = head;
@@ -105,15 +110,17 @@ char	*organize_quote(char *str)
 	printf("len = %d\n",len);
 	result = ft_calloc(len + 1, sizeof(char));
 	lst_tmp = head;
-	i = 0;
+	tmp = result;
 	while(lst_tmp)
 	{
-		strcpy(lst_tmp->token,result);
+		i = 0;
+		printf("lst_tmp->token = %s\n",lst_tmp->token);
+		strcpy(tmp,lst_tmp->token);
 		i += ft_strlen(lst_tmp->token);
 		lst_tmp = lst_tmp->next;
-		result += i;
+		tmp += i;
 	}
-	printf("result %s\n",result);
+	printf("result  = %s\n",result);
 	return result;
 }
 
