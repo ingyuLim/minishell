@@ -6,7 +6,7 @@ CFLAGS=-Wall -Werror -Wextra
 LIBFT=./libft/libft.a
 DEBUG=-g3 -fsanitize=address
 
-SRCS=main.c parse.c
+SRCS=main.c seunan_parse.c
 OBJS=$(SRCS:.c=.o)
 
 all: $(NAME)
