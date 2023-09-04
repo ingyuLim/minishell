@@ -36,12 +36,14 @@ char *meet_quote(char *str, int *i, char quote) //띄어쓰기까지 모두 문�
 	int		len;
 	char	*result;
 
+	*i = *i + 1;
 	idx = *i;
 	len = 0;
 	while(str[idx++] != quote)
 		len++;
 	result = gnl_strndup(str + (*i), len);
 	*i = idx;
+	printf("result in meet_quote = %s\n",result);
 	return (result);
 }
 
@@ -78,7 +80,7 @@ char	*organize_quote(char *str)
 	{
 		if(ft_isquote(str[i]))
 		{
-			// printf("meet_quote\n");
+			printf("meet_quote\n");
 			tmp = meet_quote(str, &i, str[i]);
 			ft_lstadd_back(&head, ft_lstnew(tmp));
 		}
@@ -97,7 +99,7 @@ char	*organize_quote(char *str)
 			tmp = meet_word(str, &i);
 			ft_lstadd_back(&head, ft_lstnew(tmp));
 		}
-		printf("word = %s\n",tmp);
+		// printf("word = %s\n",tmp);
 	}
 	printf("escape while\n");
 	lst_tmp = head;
@@ -107,14 +109,14 @@ char	*organize_quote(char *str)
 		len += ft_strlen(lst_tmp->token);
 		lst_tmp = lst_tmp->next;
 	}
-	printf("len = %d\n",len);
+	// printf("len = %d\n",len);
 	result = ft_calloc(len + 1, sizeof(char));
 	lst_tmp = head;
 	tmp = result;
 	while(lst_tmp)
 	{
 		i = 0;
-		printf("lst_tmp->token = %s\n",lst_tmp->token);
+		// printf("lst_tmp->token = %s\n",lst_tmp->token);
 		strcpy(tmp,lst_tmp->token);
 		i += ft_strlen(lst_tmp->token);
 		lst_tmp = lst_tmp->next;
