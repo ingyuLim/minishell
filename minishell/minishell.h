@@ -21,5 +21,4 @@ enum e_quote
 # include <sys/stat.h>
 # include <term.h>
 # include <termios.h>
-
 #endif
