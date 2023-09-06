@@ -1,12 +1,12 @@
 #include "minishell.h"
 
-char	*test[100] =
+char	*testcase[100] =
 {
 	"ls",									// ls
 	"\'ls\'",								// 'ls'
 	"\"ls\"",								// "ls"
-	"\'l\'s\'",								// 'l's'
 	"\'l\'\'s\'",							// 'l''s'
+	"\'l\"\"s\'",							// 'l""s'
 	"\'l\'\'\'\'\'\'\'\'s\'",				// 'l''''''''s'
 	"\"l\"\"\"\"\"\"\"\"s\"",				// "l""""""s"
 	"ls -a",								// ls -a
@@ -41,7 +41,7 @@ void	print(t_list *lst)
 int	main(void)
 {
 
-	for (size_t i = 0; test[i] != NULL; i++)
+	for (size_t i = 0; testcase[i] != NULL; i++)
 	{
 		printf("\033[1;32m"); // green
 		printf("=================================\n");
@@ -54,14 +54,14 @@ int	main(void)
 		printf("\033[0m");
 
 		printf("\033[1;37m");
-		printf("%s\n\n", test[i]);
+		printf("%s\n\n", testcase[i]);
 		printf("\033[0m");
 
 		printf("\033[1;31m");
 		printf("Your Parse Function Result:\n");
 		printf("\033[0m");
 
-		print(parse(test[i]));
+		print(tokenize(testcase[i]));
 
 		usleep(700000);
 	}

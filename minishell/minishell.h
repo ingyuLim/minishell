@@ -1,15 +1,14 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-enum e_quote
+enum e_type
 {
-	SINGLE = 0,
-	DOUBLE = 1
+	WORD = 0,
+	PIPE = 1,
+	SEMICOLON = 2,
+	REDIRECT = 3,
 };
-# define TRUE 1;
-# define FALSE 0;
-# define SINGLE_QUOTE '\''
-# define DOUBLE_QUOTE '\"'
+
 # include "./libft/libft.h"
 # include <dirent.h>
 # include <fcntl.h>
