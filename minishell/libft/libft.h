@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:29:31 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/03 23:09:28 by seunan           ###   ########.fr       */
+/*   Updated: 2023/09/04 22:18:15 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int					ft_isalpha(int c);
 int					ft_isdigit(int c);
 int					ft_isalnum(int c);
 int					ft_isquote(char c);
+int					ft_iseven(int n);
 int					ft_isascii(int c);
 int					ft_isprint(int c);
 int					ft_iswhitespace(char c);

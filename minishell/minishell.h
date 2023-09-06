@@ -21,4 +21,9 @@ enum e_quote
 # include <sys/stat.h>
 # include <term.h>
 # include <termios.h>
+
+void	print(t_list *lst);
+void	add_token(t_list *lst, char *str, int *i);
+t_list	*parse(char *str);
+
 #endif

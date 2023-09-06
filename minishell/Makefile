@@ -6,8 +6,10 @@ CFLAGS=-Wall -Werror -Wextra
 LIBFT=./libft/libft.a
 DEBUG=-g3 -fsanitize=address
 
-SRCS=main.c parse.c
+SRCS=main.c seunan_parse.c
+TEST_SRCS=seunan_test.c seunan_parse.c
 OBJS=$(SRCS:.c=.o)
+TEST_OBJS=$(TEST_SRCS:.c=.o)
 
 all: $(NAME)
 
@@ -22,11 +24,11 @@ $(LIBFT):
 
 clean:
 	$(MAKE) fclean -C ./libft
-	rm -f $(OBJS) $(BONUS_OBJS)
+	rm -f $(OBJS) $(TEST_OBJS)
 
 fclean: clean
-	$(MAKE) fclean -C ./libft
-	rm -f $(NAME) $(BONUS)
+	$(MAKE) clean
+	rm -f $(NAME)
 
 re:
 	$(MAKE) fclean
@@ -36,4 +38,7 @@ debug:
 	$(MAKE) fclean
 	$(MAKE) all CFLAGS="$(CFLAGS) $(DEBUG)"
 
-.PHONY: all clean fclean re debug
+test:
+	$(MAKE) 'OBJS=$(TEST_OBJS)' all
+
+.PHONY: all clean fclean re debug test
