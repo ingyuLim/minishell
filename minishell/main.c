@@ -12,7 +12,6 @@ int	main(void)
 			ft_putstr_fd("exit\n", 1);
 			break ;
 		}
-		print(parse(str));
 		add_history(str);
 		free(str);
 	}
