@@ -17,3 +17,6 @@ int	main(void)
 	}
 	return (0);
 }
+// USER=test | env | grep USER => 환경변수 변경 적용 안되는게 맞나?
+
+// "g"r"epadasdasfasd"
