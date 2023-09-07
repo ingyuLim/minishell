@@ -64,6 +64,7 @@ void	test(t_list *lst)
 
 int	main(void)
 {
+	system("clear");
 	for (size_t i = 0; testcase[i] != NULL; i++)
 	{
 		// if (!(START <= i && i <= END)) // if you want to test specific test case, uncomment this line
