@@ -2,6 +2,8 @@
 
 char	*testcase[100] =
 {
+	/* #quote */
+
 	"ls",									// ls
 	"\'ls\'",								// 'ls'
 	"\"ls\"",								// "ls"
@@ -19,10 +21,29 @@ char	*testcase[100] =
 	"ls | grep a",							// ls | grep a
 	"\'l\'\'\'\'\'\'s\'|grep\"\" \"a\"",	// 'l''''''s'|grep"" "a"
 	"\'ls\'|\"grep\" \"a\"",				// 'ls'|"grep" "a"
+
+	/* #environment variable */
+
+	"export a=1 && echo $a",				// export a=1 && echo $a
+	// result : 1
+	"export a=1 | echo $a",					// export a=1 | echo $a
+	// result : '\0'
+	// reason : export a=1는 빌트인 함수이지만 |를 만났기 때문에 자식 프로세스에서 실행되어 환경변수가 적용되지 않음
+
+	// if ABC="ab cd"
+	"cat $ABCabc",							// cat $ABC
+	// cat: ab: No such file or directory
+	// cat: cd: No such file or directory
+	"cat \"$ABC\"",							// cat "$ABC"
+	// cat: ab cd: No such file or directory
+	"cat $ABC\"efg\"",						// cat $ABC"efg"
+	// cat: ab: No such file or directory
+	// cat: cdefg: No such file or directory
+
 	NULL
 };
 
-void	print(t_list *lst)
+void	test(t_list *lst)
 {
 	int	cnt = 0;
 
@@ -38,12 +59,16 @@ void	print(t_list *lst)
 	printf("\033[0m");
 }
 
+#define START 20
+#define END 21
+
 int	main(void)
 {
-
 	for (size_t i = 0; testcase[i] != NULL; i++)
 	{
-		printf("\033[1;32m"); // green
+		// if (!(START <= i && i <= END)) // if you want to test specific test case, uncomment this line
+		// 	continue;
+		printf("\033[1;32m");
 		printf("=================================\n");
 		printf("\t  Test Case #%zu\n", i);
 		printf("=================================\n\n");
@@ -61,7 +86,7 @@ int	main(void)
 		printf("Your Parse Function Result:\n");
 		printf("\033[0m");
 
-		print(tokenize(testcase[i]));
+		test(tokenize(testcase[i])); // your function
 
 		usleep(700000);
 	}

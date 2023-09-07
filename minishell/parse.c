@@ -55,14 +55,13 @@ char *meet_sep(char *str, int *i)
 		len++;
 	}
 	result = ft_substr(str, *i, len);
-	*i = last + 1;
+	*i = last;
 	return result;
 }
 
 char *make_word(char *str, int *i)
 {
 	int		last;
-	char	*end;
 	char	*tmp;
 	char	*result;
 
@@ -71,16 +70,10 @@ char *make_word(char *str, int *i)
 	while(!ft_isseparator(str[last]))
 	{
 		if (ft_isquote(str[last]))
-			end = meet_quote(str, &last, str[last]);
+			tmp = meet_quote(str, &last, str[last]);
 		else
-			end = meet_sep(str, &last);
-		if (end != NULL)
-		{
-			tmp = result;
-			result = ft_strjoin(result,end);
-			free(tmp);
-			free(end);
-		}
+			tmp = meet_sep(str, &last);
+		result = ft_strjoin(result,tmp);
 	}
 	*i = last;
 	return (result);
@@ -127,83 +120,4 @@ t_list	*tokenize(char *str)
 			i++;
 	}
 	return (head);
-}
-
-char	*testcase[100] =
-{
-	"ls",									// ls
-	"\'ls\'",								// 'ls'
-	"\"ls\"",								// "ls"
-	"\'l\'\'s\'",							// 'l''s'
-	"\'l\"\"s\'",							// 'l""s'
-	"\'l\'\'\'\'\'\'\'\'s\'",				// 'l''''''''s'
-	"\"l\"\"\"\"\"\"\"\"s\"",				// "l""""""s"
-	"ls -a",								// ls -a
-	"\"ls -a\"",							// "ls -a"
-	"\"\"gre\"p\" \"a\"",					// ""gre"p" "a"
-	"\"gr\"ep\" a\"",						// "gr"ep" a"
-	"ls|grep a",							// ls|grep a
-	"ls| grep a",							// ls| grep a
-	"ls |grep a",							// ls |grep a
-	"ls | grep a",							// ls | grep a
-	"\'l\'\'\'\'\'\'s\'|grep\"\" \"a\"",	// 'l''''''s'|grep"" "a"
-	"\'ls\'|\"grep\" \"a\"",				// 'ls'|"grep" "a"
-	NULL
-};
-
-void	print(t_list *lst)
-{
-	int	cnt = 0;
-
-	printf("\033[1;37m");
-	while (lst != NULL)
-	{
-		printf("%d: %s\n", cnt, lst->token);
-		lst = lst->next;
-		++cnt;
-	}
-	printf("\033[1;30m");
-	printf("\ndivided into %d tokens\n", cnt);
-	printf("\033[0m");
-}
-
-void	leak(void)
-{
-	system("leaks a.out > leaks_result_temp; cat leaks_result_temp | grep leaked && rm -rf leaks_result_temp");
-}
-
-int	main(void)
-{
-	atexit(leak);
-	t_list	*tmp;
-
-	for (size_t i = 0; testcase[i] != NULL; i++)
-	{
-		if (!(9 <= i && i <= 15))
-			continue ;
-		printf("\033[1;32m"); // green
-		printf("=================================\n");
-		printf("\t  Test Case #%zu\n", i);
-		printf("=================================\n\n");
-		printf("\033[0m");
-
-		printf("\033[1;31m");
-		printf("Input String:\n");
-		printf("\033[0m");
-
-		printf("\033[1;37m");
-		printf("%s\n\n", testcase[i]);
-		printf("\033[0m");
-
-		printf("\033[1;31m");
-		printf("Your Parse Function Result:\n");
-		printf("\033[0m");
-
-		tmp = tokenize(testcase[i]);
-		print(tmp);
-		ft_lstclear(&tmp, free);
-
-		usleep(700000);
-	}
-	return (0);
 }
