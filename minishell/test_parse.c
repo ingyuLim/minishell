@@ -40,6 +40,10 @@ char	*testcase[100] =
 	// cat: ab: No such file or directory
 	// cat: cdefg: No such file or directory
 
+	/* #awk */
+	"awk \'{print}\' file.txt",				// awk '{print}' file.txt
+	"awk \'BEGIN { print \"TITLE : Field value 1,2\"} {print $1, $2} END {print \"Finished\"}\' file.txt", // awk 'BEGIN { print "TITLE : Field value 1,2"} {print $1, $2} END {print "Finished"}' file.txt
+
 	NULL
 };
 
