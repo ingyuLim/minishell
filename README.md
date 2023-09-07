@@ -34,7 +34,7 @@
 		- [sigaddset](#sigaddset)
 		- [kill](#kill)
 		- [exit](#exit)
-		- [gextcwd](#gextcwd)
+		- [getcwd](#getcwd)
 		- [chdir](#chdir)
 		- [stat](#stat)
 		- [lstat](#lstat)
@@ -74,6 +74,23 @@
 - [ ] 환경 변수 출력하기
 
 ## Analyzing a subject
+
+```mermaid
+stateDiagram-v2
+  [*] --> (START)
+  (START) --> (FILENAME) : <, <<, (, command
+  (FILENAME) --> (OPERATOR) : &&, ||, >, >>, ), |
+  (OPERATOR) --> (COMMAND) : (, command
+  (COMMAND) --> (END) : >, >>, ||, &&, |
+  (END) --> [*] : exit, ctrl + D
+```
+
+- [*]: Start state, 프로세스가 시작될 때 오토마타가 어느 상태에서 시작하는지를 나타내는 특별한 상태
+- (START): 파서의 초기 상태, 파서가 파싱 작업을 시작할 때 처음에 이 상태에 있음
+- (FILENAME): 파일을 나타내는 상태, 파서가 파일 이름 부분을 파싱할 때 이 상태에 도달하며 파일 이름은 입력 리다이렉션 연산자(<, <<) 다음에 나오는 문자열 말함
+- (OPERATOR): 논리 연산자(&&, ||)를 나타내는 상태, 논리 연산자를 파싱할 때 이 상태에 도달하며 논리 연산자는 명령어와 명령어 사이에 나타날 수 있음
+- (COMMAND): 명령어를 나타내는 상태, 파서가 명령어 부분을 파싱할 때 이 상태에 도달하며 명령어는 출력 리다이렉션 연산자(>, >>) 또는 논리 연산자(&&, ||) 또는 파이프(|)로 끝날 수 있음
+- (END): 파서의 종료 상태, 파서가 명령어를 성공적으로 파싱하고 유효성 검사를 마치면 이 상태로 전환되며 이 상태는 파싱 작업이 끝났음을 나타냄
 
 - [developing-linux-based-shell](https://www.geeksforgeeks.org/developing-linux-based-shell/)
 - [bash-parser](https://vorpaljs.github.io/bash-parser-playground/)
