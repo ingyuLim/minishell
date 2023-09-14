@@ -1,5 +1,10 @@
 #include "minishell.h"
 
+void	leak(void)
+{
+	system("leaks minishell > leaks_result_temp; cat leaks_result_temp | grep leaked && rm -rf leaks_result_temp");
+}
+
 void	print(t_list *lst)
 {
 	int	cnt = 0;
@@ -18,6 +23,8 @@ void	print(t_list *lst)
 
 int	main(void)
 {
+	atexit(leak);
+	t_list	*lst;
 	char	*str;
 
 	while (1)
@@ -28,7 +35,9 @@ int	main(void)
 			ft_putstr_fd("exit\n", 1);
 			break ;
 		}
-		print(tokenize(str));
+		lst = tokenize(str);
+		syntax_check(lst);
+		print(lst);
 		add_history(str);
 		free(str);
 	}

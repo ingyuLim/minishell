@@ -87,6 +87,8 @@ int	main(void)
 		printf("%s\n\n", testcase[i]);
 		printf("\033[0m");
 
+		syntax_check(tokenize(testcase[i])); // your function
+
 		printf("\033[1;31m");
 		printf("Your Parse Function Result:\n");
 		printf("\033[0m");

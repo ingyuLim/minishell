@@ -1,26 +1,6 @@
 #include "minishell.h"
 
-void	exit_with_msg(char *msg)
-{
-	ft_putstr_fd(msg, STDERR_FILENO);
-	exit(EXIT_FAILURE);
-}
-
-int ft_issymbol(char c)
-{
-	return(c == '|' || c == '<' || c == '>' || c== ';');
-}
-
-int ft_isseparator(char c)
-{
-	return(ft_iswhitespace(c) || ft_issymbol(c) || c == '\0');
-}
-
-int ft_isword(char c)
-{
-	return(!ft_iswhitespace(c) && !ft_issymbol(c) && c != '\0');
-}
-
+// 따옴표를 만날 때까지의 길이를 구한다.
 char *meet_quote(char *str, int *i, char quote)
 {
 	char	*result;
@@ -59,33 +39,40 @@ char *meet_sep(char *str, int *i)
 	return result;
 }
 
+// '|' '<' '>' whitespace가 아닐 경우 => ", ', 문자일 경우
 char *make_word(char *str, int *i)
 {
-	int		last;
+	int		last; // 마지막 인덱스
 	char	*tmp;
+	char	*mem;
 	char	*result;
 
 	result = ft_calloc(1, sizeof(char));
 	last = *i;
-	while(!ft_isseparator(str[last]))
+	while(ft_isword(str[last])) // == !ft_isseparator(str[last])
 	{
-		if (ft_isquote(str[last]))
+		if (ft_isquote(str[last])) // 따옴표일 경우
 			tmp = meet_quote(str, &last, str[last]);
 		else
 			tmp = meet_sep(str, &last);
+		mem = result;
 		result = ft_strjoin(result,tmp);
+		free(mem);
 	}
 	*i = last;
 	return (result);
 }
 
-char *make_symbol(char *str, int *i)
+// '|' '<' '>' 일 경우
+char *make_symbol(char *str, char c, int *i)
 {
 	char	*result;
 	int		len;
 
+	if (str[*i] == '|' && str[*i + 1] == '|')
+		exit_with_msg("syntax error near unexpected token\n");
 	len = 1;
-	while(ft_issymbol(str[*i + len]))
+	while(str[*i + len] == c)
 	{
 		len++;
 		if(len > 2)
@@ -106,12 +93,12 @@ t_list	*tokenize(char *str)
 	head = NULL;
 	while(str[i] != '\0')
 	{
-		if(ft_issymbol(str[i])) // '|' '<' '>' ';' 일 경우
+		if(ft_issymbol(str[i]))
 		{
-			tmp = make_symbol(str, &i);
+			tmp = make_symbol(str, str[i], &i); // leak없음
 			ft_lstadd_back(&head, ft_lstnew(tmp));
 		}
-		else if(ft_isword(str[i])) // '|' '<' '>' ';', whitespace가 아닐 경우 => "이거나 '이거나 문자일 경우
+		else if(ft_isword(str[i]))
 		{
 			tmp = make_word(str, &i);
 			ft_lstadd_back(&head, ft_lstnew(tmp));
