@@ -43,9 +43,11 @@ char	*testcase[100] =
 	// cat: cd: No such file or directory
 	"cat \"$ABC\"",							// cat "$ABC"
 	// cat: ab cd: No such file or directory
-	"cat $ABC\"efg\"",						// cat $ABC"efg"
+	"cat $ABC\"efg\"",						// cat $ABC"efg" => ab cdefg
 	// cat: ab: No such file or directory
 	// cat: cdefg: No such file or directory
+	"cat \"$ABC\"efg",						// cat "$ABC"efg => ab cdefg
+	// cat: ab cdefg: No such file or directory
 
 	/* #awk */
 	"awk \'{print}\' file.txt",				// awk '{print}' file.txt

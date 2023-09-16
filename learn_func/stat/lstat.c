@@ -28,7 +28,7 @@ void printType(const char *name,const struct stat *buf) {
 void printTime(struct stat *buf){
 	struct tm *mtime;
 	mtime=localtime(&buf->st_mtime);
-	printf("%04d-%02d-%02d %02d:%02d\n",
+	printf("%04d-x%02d-%02d %02d:%02d\n",
 		mtime->tm_year+1900, mtime->tm_mon+1,
 		mtime->tm_mday, mtime->tm_hour,
 		mtime->tm_min);

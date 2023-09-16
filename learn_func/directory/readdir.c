@@ -6,7 +6,7 @@
 #include <dirent.h>
 
 
-int main(int argc, char **argv)
+int main(void)
 {
 	DIR				*dir_ptr = NULL;
 	struct dirent	*file = NULL;

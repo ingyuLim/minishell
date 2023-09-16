@@ -9,9 +9,7 @@
 
 int main( )
 {
-	char strChangeDir[_MAX_PATH] = { "/goinfre" };
-
-	int nResult = chdir( strChangeDir );
+	int nResult = chdir("");
 
 	if( nResult == 0 )
 	{
