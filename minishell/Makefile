@@ -6,8 +6,16 @@ CFLAGS=-Wall -Werror -Wextra
 LIBFT=./libft/libft.a
 DEBUG=-g3 -fsanitize=address
 
-SRCS=main.c parse.c syntax.c utils.c
-TEST_SRCS=test_parse.c syntax.c parse.c
+SRCS=
+	main.c \
+	parse.c
+	syntax.c \
+	utils.c
+TEST_SRCS=
+	test_parse.c \
+	syntax.c \
+	parse.c \
+	utils.c
 OBJS=$(SRCS:.c=.o)
 TEST_OBJS=$(TEST_SRCS:.c=.o)
 

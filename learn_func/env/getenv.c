@@ -3,14 +3,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int main(int argc, char **argv)
+void	leak(void)
 {
-	(void) argc;
-	char *value;
-	value = getenv(argv[1]);
+	system("leaks a.out > leaks_result_temp; cat leaks_result_temp | grep leaked && rm -rf leaks_result_temp");
+}
 
-	if (value != NULL)
-		printf("%s=%s\n", argv[1], value);
+int main(void)
+{
+	atexit(leak);
+	char *value = getenv("HOME");
+	printf("%s\n", value);
 
 	return 0;
 }

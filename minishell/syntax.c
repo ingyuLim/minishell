@@ -1,113 +1,98 @@
 #include "minishell.h"
 
+typedef enum	e_state{
+	START,					// 명령어의 시작
+	PIPE,					// |
+	IN_REDIRECT,			// <
+	OUT_REDIRECT,			// >
+	WORD,					// command or argument or file name
+	DOUBLE_IN_REDIRECT,		// <<
+	DOUBLE_OUT_REDIRECT,	// >>
+} t_state;
+
+void	print_green(char *str)
+{
+	printf("\033[1;32m");
+	printf("%s\n", str);
+	printf("\033[0m");
+}
+
+void	print_red(char *str)
+{
+	printf("\033[1;31m");
+	printf("%s\n", str);
+	printf("\033[0m");
+}
+
 int	syntax_check(t_list *head)
 {
-	t_list	*tmp = head;
+	t_list	*tmp;
+	t_state	current_state;
 
-	t_state	current_state = START;
-	t_bool	paren_count = FALSE; // 괄호 쌍 개수를 추적하기 위한 변수
-	t_bool	logical_operator_expected = FALSE; // 논리 연산자(&&, ||)가 기대되는지 여부를 추적하기 위한 변수
-
+	tmp = head;
+	current_state = START;
 	while (tmp != NULL)
 	{
 		if (ft_strncmp(tmp->token, "|", 2) == 0)
 		{
 			if (current_state != WORD)
 			{
-				printf("유효하지 않은 명령어입니다.\n");
+				print_red("Invalid syntax");
 				return (1);
 			}
 			current_state = PIPE;
-			logical_operator_expected = 0;
 		}
 		else if (ft_strncmp(tmp->token, "<", 2) == 0)
 		{
-			if (current_state != WORD)
+			if (current_state != WORD && current_state != PIPE && current_state != START)
 			{
-				printf("유효하지 않은 명령어입니다.\n");
+				print_red("Invalid syntax");
 				return (1);
 			}
 			current_state = IN_REDIRECT;
-			logical_operator_expected = 0;
 		}
 		else if (ft_strncmp(tmp->token, ">", 2) == 0)
 		{
-			if (current_state != WORD)
+			if (current_state != WORD && current_state != PIPE && current_state != START)
 			{
-				printf("유효하지 않은 명령어입니다.\n");
+				print_red("Invalid syntax");
 				return (1);
 			}
 			current_state = OUT_REDIRECT;
-			logical_operator_expected = 0;
 		}
-		 else if (ft_strncmp(tmp->token, "<<", 3) == 0)
-		 {
-			if (current_state != WORD)
+		else if (ft_strncmp(tmp->token, "<<", 2) == 0)
+		{
+			if (current_state != WORD && current_state != PIPE && current_state != START)
 			{
-				printf("유효하지 않은 명령어입니다.\n");
+				print_red("Invalid syntax");
 				return (1);
 			}
 			current_state = DOUBLE_IN_REDIRECT;
-			logical_operator_expected = 0;
 		}
-		else if (ft_strncmp(tmp->token, ">>", 3) == 0)
+		else if (ft_strncmp(tmp->token, ">>", 2) == 0)
 		{
-			if (current_state != WORD)
+			if (current_state != WORD && current_state != PIPE && current_state != START)
 			{
-				printf("유효하지 않은 명령어입니다.\n");
+				print_red("Invalid syntax");
 				return (1);
 			}
 			current_state = DOUBLE_OUT_REDIRECT;
-			logical_operator_expected = 0;
-		}
-		else if (ft_strncmp(tmp->token, "(", 2) == 0)
-		{
-			if (logical_operator_expected)
-			{
-				printf("유효하지 않은 명령어입니다.\n");
-				return (1);
-			}
-			current_state = OPEN_PAREN;
-			paren_count++;
-		}
-		else if (ft_strncmp(tmp->token, ")", 2) == 0)
-		{
-			if (current_state != WORD)
-			{
-				printf("유효하지 않은 명령어입니다.\n");
-				return (1);
-			}
-			current_state = CLOSE_PAREN;
-			paren_count--;
-		}
-		else if (ft_strncmp(tmp->token, "&&", 3) == 0 || ft_strncmp(tmp->token, "||", 3) == 0)
-		{
-			if (!logical_operator_expected || current_state != WORD)
-			{
-				printf("유효하지 않은 명령어입니다.\n");
-				return (1);
-			}
-			current_state = (ft_strncmp(tmp->token, "&&", 3) == 0) ? AND_OPERATOR : OR_OPERATOR;
-			logical_operator_expected = 0;
 		}
 		else
 		{
-			if (logical_operator_expected)
-			{
-				printf("유효하지 않은 명령어입니다.\n");
-				return (1);
-			}
 			current_state = WORD;
-			logical_operator_expected = 1;
 		}
 		tmp = tmp->next;
 	}
-
-	if (paren_count != 0 || !logical_operator_expected) {
-		printf("유효하지 않은 명령어입니다.\n");
+	if (current_state == PIPE ||
+		current_state == IN_REDIRECT ||
+		current_state == OUT_REDIRECT ||
+		current_state == DOUBLE_IN_REDIRECT ||
+		current_state == DOUBLE_OUT_REDIRECT)
+	{
+		print_red("WORD must appear after the pipe or redirect");
 		return (1);
 	}
-
-	printf("유효한 명령어입니다.\n");
+	print_green("Valid syntax");
 	return (0);
 }

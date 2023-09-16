@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <fcntl.h>
 #include <time.h>
 
 int main(int argc, char *argv[])
@@ -17,7 +18,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	if((fd = open(argv[1], "r")) == -1) {
+	if((fd = open(argv[1], O_RDWR)) == -1) {
 		perror("open error");
 		return 1;
 	}

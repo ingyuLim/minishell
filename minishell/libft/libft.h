@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:29:31 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/06 23:29:30 by seunan           ###   ########.fr       */
+/*   Updated: 2023/09/16 17:40:36 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,16 @@ typedef struct s_list
 	struct s_list	*next;
 }					t_list;
 
-int					ft_isalpha(int c);
-int					ft_isdigit(int c);
 int					ft_isalnum(int c);
-int					ft_isquote(char c);
-int					ft_iseven(int n);
+int					ft_isalpha(int c);
 int					ft_isascii(int c);
+int					ft_isdigit(int c);
+int					ft_iseven(int n);
 int					ft_isprint(int c);
+int					ft_isquote(char c);
+int					ft_issymbol(char c);
+int					ft_isseparator(char c);
+int					ft_isword(char c);
 int					ft_iswhitespace(char c);
 size_t				ft_strlen(const char *s);
 void				*ft_memset(void *b, int c, size_t len);
