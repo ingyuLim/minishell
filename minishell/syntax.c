@@ -93,8 +93,6 @@ int	syntax_check(t_list *head)
 		print_red("WORD must appear after the pipe or redirect");
 		return (1);
 	}
-	printf("\033[1;32m");
-	printf("Valid syntax\n");
-	printf("\033[1;32m");
+	print_green("Valid syntax");
 	return (0);
 }
