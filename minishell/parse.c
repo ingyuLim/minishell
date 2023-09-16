@@ -12,7 +12,7 @@ char *meet_quote(char *str, int *i, char quote)
 	while(str[last] != quote) // 짝이 맞는 따옴표를 만날 때까지의 길이를 구한다.
 	{
 		if(str[last] == '\0')
-			exit_with_msg("It doesn't match\n");
+			exit_with_msg("It doesn't match");
 		len++;
 		last++;
 	}
@@ -70,13 +70,13 @@ char *make_symbol(char *str, char c, int *i)
 	int		len;
 
 	if (str[*i] == '|' && str[*i + 1] == '|')
-		exit_with_msg("syntax error near unexpected token\n");
+		exit_with_msg("syntax error near unexpected token");
 	len = 1;
 	while(str[*i + len] == c)
 	{
 		len++;
 		if(len > 2)
-			exit_with_msg("syntax error near unexpected token\n");
+			exit_with_msg("syntax error near unexpected token");
 	}
 	result = ft_substr(str, *i, len);
 	*i += len;

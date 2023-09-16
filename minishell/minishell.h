@@ -26,9 +26,19 @@ char	*make_word(char *str, int *i);
 char	*make_symbol(char *str, char c, int *i);
 t_list	*tokenize(char *str);
 
-void	print(t_list *lst);
-
 // syntax.c
 int	syntax_check(t_list *head);
+
+// execute.c
+void	execute(t_list *lst);
+
+// seunan/cd.c
+void	cd(t_list *cmd);
+
+// seunan/pwd.c
+void	pwd(void);
+
+// seunan/echo.c
+void	echo(t_list *cmd);
 
 #endif

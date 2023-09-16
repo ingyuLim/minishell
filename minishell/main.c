@@ -38,6 +38,7 @@ int	main(void)
 		lst = tokenize(str);
 		syntax_check(lst);
 		print(lst);
+		execute(lst);
 		add_history(str);
 		free(str);
 	}

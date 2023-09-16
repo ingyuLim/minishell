@@ -6,12 +6,16 @@ CFLAGS=-Wall -Werror -Wextra
 LIBFT=./libft/libft.a
 DEBUG=-g3 -fsanitize=address
 
-SRCS=
+SRCS=\
 	main.c \
-	parse.c
+	parse.c \
 	syntax.c \
-	utils.c
-TEST_SRCS=
+	utils.c \
+	execute.c \
+	seunan/cd.c \
+	seunan/pwd.c \
+	seunan/echo.c
+TEST_SRCS=\
 	test_parse.c \
 	syntax.c \
 	parse.c \
