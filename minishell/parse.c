@@ -69,14 +69,18 @@ char *make_symbol(char *str, char c, int *i)
 	char	*result;
 	int		len;
 
-	if (str[*i] == '|' && str[*i + 1] == '|')
-		exit_with_msg("syntax error near unexpected token");
 	len = 1;
+	if (c == '|')
+	{
+		result = ft_substr(str, *i, len);
+		*i += len;
+		return (result);
+	}
 	while(str[*i + len] == c)
 	{
 		len++;
 		if(len > 2)
-			exit_with_msg("syntax error near unexpected token");
+			break;
 	}
 	result = ft_substr(str, *i, len);
 	*i += len;

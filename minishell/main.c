@@ -43,9 +43,9 @@ int	main(void)
 			free(str);
 			continue ;
 		}
+		add_history(str);
 		print(lst);
 		execute(lst);
-		add_history(str);
 		ft_lstclear(&lst, free);
 		free(str);
 	}
