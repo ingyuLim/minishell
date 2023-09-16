@@ -4,23 +4,30 @@ char	*testcase[100] =
 {
 	/* #quote */
 
-	"ls",									// ls
-	"\'ls\'",								// 'ls'
-	"\"ls\"",								// "ls"
-	"\'l\'\'s\'",							// 'l''s'
-	"\'l\"\"s\'",							// 'l""s'
-	"\'l\'\'\'\'\'\'\'\'s\'",				// 'l''''''''s'
-	"\"l\"\"\"\"\"\"\"\"s\"",				// "l""""""s"
-	"ls -a",								// ls -a
-	"\"ls -a\"",							// "ls -a"
-	"\"\"gre\"p\" \"a\"",					// ""gre"p" "a"
-	"\"gr\"ep\" a\"",						// "gr"ep" a"
-	"ls|grep a",							// ls|grep a
-	"ls| grep a",							// ls| grep a
-	"ls |grep a",							// ls |grep a
-	"ls | grep a",							// ls | grep a
-	"\'l\'\'\'\'\'\'s\'|grep\"\" \"a\"",	// 'l''''''s'|grep"" "a"
-	"\'ls\'|\"grep\" \"a\"",				// 'ls'|"grep" "a"
+	"ls",																		// ls
+	"\'ls\'",																	// 'ls'
+	"\"ls\"",																	// "ls"
+	"\'l\'\'s\'",																// 'l''s'
+	"\'l\"\"s\'",																// 'l""s'
+	"\'l\'\'\'\'\'\'\'\'s\'",													// 'l''''''''s'
+	"\"l\"\"\"\"\"\"\"\"s\"",													// "l""""""s"
+	"ls -a",																	// ls -a
+	"\"ls -a\"",																// "ls -a"
+	"\"\"gre\"p\" \"a\"",														// ""gre"p" "a"
+	"\"gr\"ep\" a\"",															// "gr"ep" a"
+	"ls|grep a",																// ls|grep a
+	"ls| grep a",																// ls| grep a
+	"ls |grep a",																// ls |grep a
+	"ls | grep a",																// ls | grep a
+	"\'l\'\'\'\'\'\'s\'|grep\"\" \"a\"",										// 'l''''''s'|grep"" "a"
+	"\'ls\'|\"grep\" \"a\"",													// 'ls'|"grep" "a"
+	"\'ls\'|\"grep\" \"a\"|\"cat\"",											// 'ls'|"grep" "a"|"cat"
+	"\'ls\'|\"grep\" \"a\"|\"cat\"|\"wc\"",										// 'ls'|"grep" "a"|"cat"|"wc"
+	"\'ls\'|\"grep\" \"a\"|\"cat\"|\"wc\"|\"wc\"",								// 'ls'|"grep" "a"|"cat"|"wc"|"wc"
+
+	/* #redirection */
+	"> infile ls | > outfile ls",												// > infile ls | > outfile ls
+	"< infile ls | < outfile ls",												// < infile ls | < outfile ls
 
 	/* #environment variable */
 
@@ -73,13 +80,13 @@ int	main(void)
 	{
 		// if (!(START <= i && i <= END)) // if you want to test specific test case, uncomment this line
 		// 	continue;
-		printf("\033[1;32m");
+		printf("\033[1;36m");
 		printf("=================================\n");
 		printf("\t  Test Case #%zu\n", i);
 		printf("=================================\n\n");
 		printf("\033[0m");
 
-		printf("\033[1;31m");
+		printf("\033[1;33m");
 		printf("Input String:\n");
 		printf("\033[0m");
 
@@ -87,13 +94,12 @@ int	main(void)
 		printf("%s\n\n", testcase[i]);
 		printf("\033[0m");
 
-		syntax_check(tokenize(testcase[i])); // your function
-
-		printf("\033[1;31m");
+		printf("\033[1;33m");
 		printf("Your Parse Function Result:\n");
 		printf("\033[0m");
 
-		test(tokenize(testcase[i])); // your function
+		test(tokenize(testcase[i]));			// your function
+		syntax_check(tokenize(testcase[i]));	// syntax check
 
 		usleep(700000);
 	}
