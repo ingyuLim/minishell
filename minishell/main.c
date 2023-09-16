@@ -47,6 +47,7 @@ int	main(void)
 		print(lst);
 		execute(lst);
 		ft_lstclear(&lst, free);
+		printf("%s\n", str);
 		free(str);
 	}
 	return (0);
