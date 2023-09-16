@@ -5,7 +5,7 @@ CC=gcc
 CFLAGS=-Wall -Wextra -Werror
 DEBUG=-g3 -fsanitize=address
 
-MANDATORY_SRC=
+MANDATORY_SRC=\
 	ft_isalpha.c \
 	ft_isdigit.c \
 	ft_isalnum.c \
@@ -45,9 +45,9 @@ MANDATORY_SRC=
 	ft_putchar_fd.c \
 	ft_putstr_fd.c \
 	ft_putendl_fd.c \
-	ft_putnbr_fd.c \
+	ft_putnbr_fd.c
 MANDATORY_OBJS=$(MANDATORY_SRC:.c=.o)
-BONUS_SRC=
+BONUS_SRC=\
 	ft_lstnew_bonus.c \
 	ft_lstadd_front_bonus.c \
 	ft_lstsize_bonus.c \
@@ -56,7 +56,7 @@ BONUS_SRC=
 	ft_lstdelone_bonus.c \
 	ft_lstclear_bonus.c \
 	ft_lstiter_bonus.c \
-	ft_lstmap_bonus.c\
+	ft_lstmap_bonus.c
 BONUS_OBJS=$(BONUS_SRC:.c=.o)
 
 all: $(NAME)

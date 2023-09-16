@@ -15,9 +15,6 @@
 
 // utils.c
 void	exit_with_msg(char *msg);
-int		ft_issymbol(char c);
-int		ft_isseparator(char c);
-int		ft_isword(char c);
 
 // parse.c
 char	*meet_quote(char *str, int *i, char quote);
@@ -26,9 +23,21 @@ char	*make_word(char *str, int *i);
 char	*make_symbol(char *str, char c, int *i);
 t_list	*tokenize(char *str);
 
-void	print(t_list *lst);
-
 // syntax.c
-int	syntax_check(t_list *head);
+void	print_green(char *str);
+void	print_red(char *str);
+int		syntax_check(t_list *head);
+
+// execute.c
+void	execute(t_list *lst);
+
+// seunan/cd.c
+void	cd(t_list *cmd);
+
+// seunan/pwd.c
+void	pwd(void);
+
+// seunan/echo.c
+void	echo(t_list *cmd);
 
 #endif
