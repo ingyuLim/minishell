@@ -2,7 +2,7 @@
 
 char	*testcase[100] =
 {
-	/* #quote */
+	/* # quote */
 
 	"ls",																		// ls
 	"\'ls\'",																	// 'ls'
@@ -25,11 +25,11 @@ char	*testcase[100] =
 	"\'ls\'|\"grep\" \"a\"|\"cat\"|\"wc\"",										// 'ls'|"grep" "a"|"cat"|"wc"
 	"\'ls\'|\"grep\" \"a\"|\"cat\"|\"wc\"|\"wc\"",								// 'ls'|"grep" "a"|"cat"|"wc"|"wc"
 
-	/* #redirection */
+	/* # redirection */
 	"> infile ls | > outfile ls",												// > infile ls | > outfile ls
 	"< infile ls | < outfile ls",												// < infile ls | < outfile ls
 
-	/* #environment variable */
+	/* # environment variable */
 
 	"export a=1 && echo $a",				// export a=1 && echo $a
 	// result : 1

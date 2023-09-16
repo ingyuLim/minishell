@@ -10,6 +10,20 @@ typedef enum	e_state{
 	DOUBLE_OUT_REDIRECT,	// >>
 } t_state;
 
+void	print_green(char *str)
+{
+	printf("\033[1;32m");
+	printf("%s\n", str);
+	printf("\033[0m");
+}
+
+void	print_red(char *str)
+{
+	printf("\033[1;31m");
+	printf("%s\n", str);
+	printf("\033[0m");
+}
+
 int	syntax_check(t_list *head)
 {
 	t_list	*tmp;
@@ -23,26 +37,46 @@ int	syntax_check(t_list *head)
 		{
 			if (current_state != WORD)
 			{
-				printf("\033[1;31m");
-				printf("Invalid syntax.\n");
-				printf("\033[0m");
+				print_red("Invalid syntax");
 				return (1);
 			}
 			current_state = PIPE;
 		}
-		else if (ft_strncmp(tmp->token, "<", 2) == 0 ||
-					ft_strncmp(tmp->token, ">", 2) == 0 ||
-					ft_strncmp(tmp->token, "<<", 3) == 0 ||
-					ft_strncmp(tmp->token, ">>", 3) == 0)
+		else if (ft_strncmp(tmp->token, "<", 2) == 0)
 		{
-			if (current_state != WORD)
+			if (current_state != WORD && current_state != PIPE && current_state != START)
 			{
-				printf("\033[1;31m");
-				printf("Invalid syntax\n");
-				printf("\033[0m");
+				print_red("Invalid syntax");
 				return (1);
 			}
 			current_state = IN_REDIRECT;
+		}
+		else if (ft_strncmp(tmp->token, ">", 2) == 0)
+		{
+			if (current_state != WORD && current_state != PIPE && current_state != START)
+			{
+				print_red("Invalid syntax");
+				return (1);
+			}
+			current_state = OUT_REDIRECT;
+		}
+		else if (ft_strncmp(tmp->token, "<<", 2) == 0)
+		{
+			if (current_state != WORD && current_state != PIPE && current_state != START)
+			{
+				print_red("Invalid syntax");
+				return (1);
+			}
+			current_state = DOUBLE_IN_REDIRECT;
+		}
+		else if (ft_strncmp(tmp->token, ">>", 2) == 0)
+		{
+			if (current_state != WORD && current_state != PIPE && current_state != START)
+			{
+				print_red("Invalid syntax");
+				return (1);
+			}
+			current_state = DOUBLE_OUT_REDIRECT;
 		}
 		else
 		{
@@ -56,7 +90,7 @@ int	syntax_check(t_list *head)
 		current_state == DOUBLE_IN_REDIRECT ||
 		current_state == DOUBLE_OUT_REDIRECT)
 	{
-		printf("WORD must appear after the pipe or redirect\n");
+		print_red("WORD must appear after the pipe or redirect");
 		return (1);
 	}
 	printf("\033[1;32m");
