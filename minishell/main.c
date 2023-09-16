@@ -32,14 +32,21 @@ int	main(void)
 		str = readline("\033[0;36mminishell$\033[0m ");
 		if (ft_strncmp(str, "exit", 5) == 0)
 		{
+			free(str);
 			ft_putstr_fd("exit\n", 1);
 			break ;
 		}
 		lst = tokenize(str);
-		syntax_check(lst);
+		if (syntax_check(lst) == 1)
+		{
+			ft_lstclear(&lst, free);
+			free(str);
+			continue ;
+		}
 		print(lst);
 		execute(lst);
 		add_history(str);
+		ft_lstclear(&lst, free);
 		free(str);
 	}
 	return (0);

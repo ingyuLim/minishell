@@ -37,7 +37,7 @@ int	syntax_check(t_list *head)
 		{
 			if (current_state != WORD)
 			{
-				print_red("Invalid syntax");
+				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
 			current_state = PIPE;
@@ -46,7 +46,7 @@ int	syntax_check(t_list *head)
 		{
 			if (current_state != WORD && current_state != PIPE && current_state != START)
 			{
-				print_red("Invalid syntax");
+				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
 			current_state = IN_REDIRECT;
@@ -55,7 +55,7 @@ int	syntax_check(t_list *head)
 		{
 			if (current_state != WORD && current_state != PIPE && current_state != START)
 			{
-				print_red("Invalid syntax");
+				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
 			current_state = OUT_REDIRECT;
@@ -64,7 +64,7 @@ int	syntax_check(t_list *head)
 		{
 			if (current_state != WORD && current_state != PIPE && current_state != START)
 			{
-				print_red("Invalid syntax");
+				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
 			current_state = DOUBLE_IN_REDIRECT;
@@ -73,7 +73,7 @@ int	syntax_check(t_list *head)
 		{
 			if (current_state != WORD && current_state != PIPE && current_state != START)
 			{
-				print_red("Invalid syntax");
+				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
 			current_state = DOUBLE_OUT_REDIRECT;
@@ -84,15 +84,15 @@ int	syntax_check(t_list *head)
 		}
 		tmp = tmp->next;
 	}
-	if (current_state == PIPE ||
-		current_state == IN_REDIRECT ||
-		current_state == OUT_REDIRECT ||
-		current_state == DOUBLE_IN_REDIRECT ||
-		current_state == DOUBLE_OUT_REDIRECT)
+	if (current_state == START)
 	{
-		print_red("WORD must appear after the pipe or redirect");
 		return (1);
 	}
-	print_green("Valid syntax");
+	if (current_state != WORD)
+	{
+		print_red("minishell: syntax error near unexpected token");
+		return (1);
+	}
+	// print_green("Valid syntax");
 	return (0);
 }
