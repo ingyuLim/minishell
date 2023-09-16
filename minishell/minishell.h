@@ -13,8 +13,15 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
-// utils.c
+// error.c
+void	error(char *err);
 void	exit_with_msg(char *msg);
+void	exit_with_err(char *err);
+
+// utils.c
+void	leak(void);
+void	print_tokens(t_list *lst);
+void	free_strtok(char *str, t_list **lst);
 
 // parse.c
 char	*meet_quote(char *str, int *i, char quote);
@@ -29,7 +36,7 @@ void	print_red(char *str);
 int		syntax_check(t_list *head);
 
 // execute.c
-void	execute(t_list *lst);
+void	execute(t_list *lst, char *envp[]);
 
 // seunan/cd.c
 void	cd(t_list *cmd);

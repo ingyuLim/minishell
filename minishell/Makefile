@@ -11,6 +11,7 @@ SRCS=\
 	parse.c \
 	syntax.c \
 	utils.c \
+	error.c \
 	execute.c \
 	seunan/cd.c \
 	seunan/pwd.c \
@@ -19,6 +20,7 @@ TEST_SRCS=\
 	test_parse.c \
 	syntax.c \
 	parse.c \
+	error.c \
 	utils.c
 OBJS=$(SRCS:.c=.o)
 TEST_OBJS=$(TEST_SRCS:.c=.o)

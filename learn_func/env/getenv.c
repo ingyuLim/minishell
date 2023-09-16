@@ -11,7 +11,7 @@ void	leak(void)
 int main(void)
 {
 	atexit(leak);
-	char *value = getenv("HOME");
+	char *value = getenv();
 	printf("%s\n", value);
 
 	return 0;

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:29:31 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/16 17:40:36 by seunan           ###   ########.fr       */
+/*   Updated: 2023/09/16 20:54:44 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ typedef struct s_list
 {
 	char			*token;
 	struct s_list	*next;
+
 }					t_list;
 
 int					ft_isalnum(int c);

@@ -1,27 +1,6 @@
 #include "minishell.h"
 
-void	leak(void)
-{
-	system("leaks minishell > leaks_result_temp; cat leaks_result_temp | grep leaked && rm -rf leaks_result_temp");
-}
-
-void	print(t_list *lst)
-{
-	int	cnt = 0;
-
-	printf("\033[1;37m");
-	while (lst != NULL)
-	{
-		printf("%d: %s\n", cnt, lst->token);
-		lst = lst->next;
-		++cnt;
-	}
-	printf("\033[1;30m");
-	printf("\ndivided into %d tokens\n", cnt);
-	printf("\033[0m");
-}
-
-int	main(void)
+int	main(char *envp[])
 {
 	atexit(leak);
 	t_list	*lst;
@@ -39,16 +18,13 @@ int	main(void)
 		lst = tokenize(str);
 		if (syntax_check(lst) == 1)
 		{
-			ft_lstclear(&lst, free);
-			free(str);
+			free_strtok(str, &lst);
 			continue ;
 		}
 		add_history(str);
-		print(lst);
-		execute(lst);
-		ft_lstclear(&lst, free);
-		printf("%s\n", str);
-		free(str);
+		// print_tokens(lst);
+		execute(lst, envp);
+		free_strtok(str, &lst);
 	}
 	return (0);
 }

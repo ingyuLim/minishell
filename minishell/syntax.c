@@ -60,7 +60,7 @@ int	syntax_check(t_list *head)
 			}
 			current_state = OUT_REDIRECT;
 		}
-		else if (ft_strncmp(tmp->token, "<<", 2) == 0)
+		else if (ft_strncmp(tmp->token, "<<", 3) == 0)
 		{
 			if (current_state != WORD && current_state != PIPE && current_state != START)
 			{
@@ -69,7 +69,7 @@ int	syntax_check(t_list *head)
 			}
 			current_state = DOUBLE_IN_REDIRECT;
 		}
-		else if (ft_strncmp(tmp->token, ">>", 2) == 0)
+		else if (ft_strncmp(tmp->token, ">>", 3) == 0)
 		{
 			if (current_state != WORD && current_state != PIPE && current_state != START)
 			{

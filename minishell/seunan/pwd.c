@@ -2,5 +2,9 @@
 
 void	pwd(void)
 {
-	printf("%s\n", getcwd(NULL, BUFSIZ));
+	char *path;
+
+	path = getcwd(NULL, BUFSIZ);
+	printf("%s\n", path);
+	free(path);
 }
