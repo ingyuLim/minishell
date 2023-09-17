@@ -13,9 +13,7 @@ SRCS=\
 	utils.c \
 	error.c \
 	execute.c \
-	seunan/cd.c \
-	seunan/pwd.c \
-	seunan/echo.c
+	builtin.c
 TEST_SRCS=\
 	test_parse.c \
 	syntax.c \

@@ -1,11 +1,15 @@
 #include "minishell.h"
 
-int	main(char *envp[])
+int	main(int argc, char *argv[], char *envp[])
 {
+	(void)argc;
+	(void)argv;
 	atexit(leak);
-	t_list	*lst;
+	t_vars	*vars;
 	char	*str;
 
+	vars = (t_vars *)ft_calloc(1, sizeof(t_vars));
+	vars->env = dup_env(envp);
 	while (1)
 	{
 		str = readline("\033[0;36mminishell$\033[0m ");
@@ -15,16 +19,16 @@ int	main(char *envp[])
 			ft_putstr_fd("exit\n", 1);
 			break ;
 		}
-		lst = tokenize(str);
-		if (syntax_check(lst) == 1)
+		vars->lst = tokenize(str);
+		if (syntax_check(vars->lst) == 1)
 		{
-			free_strtok(str, &lst);
+			free_strtok(str, &(vars->lst));
 			continue ;
 		}
 		add_history(str);
-		// print_tokens(lst);
-		execute(lst, envp);
-		free_strtok(str, &lst);
+		// print_tokens(vars->lst);
+		execute(vars);
+		free_strtok(str, &(vars->lst));
 	}
 	return (0);
 }
