@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 // 따옴표를 만날 때까지의 길이를 구한다.
 char *meet_quote(char *str, int *i, char quote)

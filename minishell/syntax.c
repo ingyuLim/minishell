@@ -1,15 +1,5 @@
 #include "minishell.h"
 
-typedef enum	e_state{
-	START,					// 명령어의 시작
-	PIPE,					// |
-	IN_REDIRECT,			// <
-	OUT_REDIRECT,			// >
-	WORD,					// command or argument or file name
-	DOUBLE_IN_REDIRECT,		// <<
-	DOUBLE_OUT_REDIRECT,	// >>
-} t_state;
-
 void	print_green(char *str)
 {
 	printf("\033[1;32m");

@@ -8,18 +8,19 @@ DEBUG=-g3 -fsanitize=address
 
 SRCS=\
 	main.c \
-	parse.c \
-	syntax.c \
 	utils.c \
 	error.c \
-	execute.c \
-	builtin.c
+	syntax.c \
+	builtin.c \
+	$(wildcard ./execute/*.c) \
+	$(wildcard ./parse/*.c)
 TEST_SRCS=\
 	test_parse.c \
-	syntax.c \
-	parse.c \
+	utils.c \
 	error.c \
-	utils.c
+	syntax.c \
+	$(wildcard ./parse/*.c) \
+	$(wildcard ./excute/*.c)
 OBJS=$(SRCS:.c=.o)
 TEST_OBJS=$(TEST_SRCS:.c=.o)
 

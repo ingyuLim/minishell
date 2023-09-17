@@ -2,7 +2,7 @@
 
 void	leak(void)
 {
-	system("leaks minishell > leaks_result_temp; cat leaks_result_temp | grep leaked && rm -rf leaks_result_temp");
+	system("leaks minishell | grep leaked");
 }
 
 void	free_strtok(char *str, t_list **lst)

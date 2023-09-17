@@ -13,6 +13,16 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
+typedef enum	e_state{
+	START,					// 명령어의 시작
+	PIPE,					// |
+	IN_REDIRECT,			// <
+	OUT_REDIRECT,			// >
+	WORD,					// command or argument or file name
+	DOUBLE_IN_REDIRECT,		// <<
+	DOUBLE_OUT_REDIRECT,	// >>
+} t_state;
+
 typedef struct s_env
 {
 	char			*key;
@@ -25,6 +35,13 @@ typedef struct s_vars
 	t_list	*lst;
 	t_env	*env;
 }				t_vars;
+
+typedef struct s_execve
+{
+    char    **envp;
+    char    **path;
+    char    **cmd;
+}t_execve;
 
 // error.c
 void	error(char *err);
@@ -63,5 +80,44 @@ int		b_echo(t_list *lst);
 int		b_export(t_list *lst, t_env *env);
 int		b_env(t_list *lst, t_env *env);
 int		b_exit(t_list *lst);
+
+// inlim/change_in_and_out.c
+void	change_stdin_to_pipe(int *pipe_fd);
+void	change_stdout_to_pipe(int *pipe_fd);
+
+// inlim/children.c
+void	just_one_cmd(char **cmd, char **envp);
+void	first_cmd(int **pipe_fd, char **cmd, char **envp);
+void	middle_cmd(int pid_index, int **pipe_fd, char **cmd, char **envp);
+void	last_cmd(int pid_index, int **pipe_fd, char **cmd, char **envp);
+void	child(int pid_index, int last_pid_index, int **pipe_fd, char **cmd, char **envp);
+
+// inlim/execute.c
+int		process_count(t_list *lst);
+int		size_count(t_list *lst);
+char	**make_cmd(t_list **lst, int size);
+int		**pipe_malloc(int pipe_count);
+void	check_xfile(char **cmd, char **path);
+void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path);
+void	execute(t_vars *vars);
+
+// inlim/use_function1.c
+void	use_execve(const char *path, char *const argv[], char *const envp[]);
+void	use_pipe(int *fd);
+pid_t	use_fork(void);
+
+// inlim/use_function2.c
+pid_t	use_waitpid(pid_t pid, int *stat_loc, int options);
+void	use_dup2(int fd1, int fd2);
+void	use_close(int fd);
+int		infile_open(const char *path, int oflag);
+int		outfile_open(const char *path, int status);
+
+// inlim/check_all_files.c
+int		check_slash(char *cmd);
+char	*plus_slash(char *cmd);
+int		absolute_path(char **cmd);
+int		relative_path(char	**cmd, char	**path);
+void	check_xfile(char **cmd, char **path);
 
 #endif

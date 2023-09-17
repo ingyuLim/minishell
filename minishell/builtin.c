@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "minishell.h"
 
 t_env	*ft_envlast(t_env *env)
 {
@@ -28,16 +28,17 @@ void	ft_envadd_back(t_env **head, t_env *new)
 t_env	*make_env(char *contents)
 {
 	t_env	*env;
+	char	*tmp;
 	char	*cut;
 
+	tmp = ft_strdup(contents);
 	env = (t_env *)ft_calloc(1, sizeof(t_env));
-	cut = ft_strchr(contents, '=');
+	cut = ft_strchr(tmp, '=');
 	env->value = ft_strdup(cut + 1);
 	*cut = '\0';
-	env->key = ft_strdup(contents);
+	env->key = ft_strdup(tmp);
 	env->next = NULL;
-	printf("key: %s\n", env->key);
-	printf("value: %s\n", env->value);
+	free(tmp);
 	return (env);
 }
 
@@ -62,9 +63,13 @@ int	b_cd(t_list *lst)
 
 	lst = lst->next;
 	if (lst == NULL || ft_strncmp(lst->token, "~", 2) == 0)
+	{
+		printf("HOME: %s\n", getenv("USER"));
 		path = getenv("HOME");
+	}
 	else
 		path = lst->token;
+	printf("path: %s\n", path);
 	if (chdir(path) == -1)
 	{
 		error(path);
