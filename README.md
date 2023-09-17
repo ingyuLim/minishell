@@ -66,12 +66,14 @@
 ## TODO
 
 - [x] parsing
-- [ ] syntax check
+- [x] syntax check
 - [ ] execute
-	- [ ] 다중 파이프
-	- [ ] 환경 변수 변환?
-	- [ ] awk 문법(파싱할 때 변수가 제일 많음)
-- [ ] 환경 변수 출력하기
+	- [x] 다중 파이프
+	- [ ] 환경 변수 변환
+	- [ ] leak 잡기
+	- [ ] redirection 처리
+	- [ ] HERE_DOC
+- [ ] process 상태값
 
 ## Analyzing a subject
 

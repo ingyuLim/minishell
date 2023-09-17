@@ -34,8 +34,6 @@ int	absolute_path(char **cmd)
 {
 	if (access(cmd[0], X_OK) == 0)
 	{
-		free(cmd[0]);
-		cmd[0] = ft_strdup(cmd[0]);
 		if (cmd[0] == NULL)
 			exit(1);
 		return (1);
@@ -74,10 +72,18 @@ int	relative_path(char	**cmd, char	**path)
 
 void	check_xfile(char **cmd, char **path)
 {
+	// char **tmp = cmd;
+	// while(*tmp)
+	// {
+	// 	printf("%s\n", *tmp);
+	// 	tmp++;
+	// }
 	if (check_slash(cmd[0]) != 0)
 	{
 		if (relative_path(cmd, path))
+		{
 			return ;
+		}
 	}
 	else
 	{

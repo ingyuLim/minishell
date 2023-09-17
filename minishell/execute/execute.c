@@ -24,7 +24,7 @@ int	size_count(t_list *lst)
 		size++;
 		lst = lst->next;
 	}
-	 return size;
+	 return (size);
 }
 
 char	**make_cmd(t_list **lst, int size)
@@ -38,8 +38,11 @@ char	**make_cmd(t_list **lst, int size)
 	{
 		cmd[i] = (*lst)->token;
 		*lst = (*lst)->next;
+		i++;
 	}
-	return cmd;
+	if (*lst != NULL)
+		*lst = (*lst)->next;
+	return (cmd);
 }
 
 int	**pipe_malloc(int pipe_count)
@@ -167,6 +170,19 @@ char	**parse_path(t_env *env)
 	return (NULL);
 }
 
+void	free_path(char **path)
+{
+	int	i;
+
+	i = 0;
+	while (path[i] != NULL)
+	{
+		free(path[i]);
+		i++;
+	}
+	free(path);
+}
+
 void	execute(t_vars *vars)
 {
 	char		**path;
@@ -180,6 +196,7 @@ void	execute(t_vars *vars)
 	connect_pipe(vars, pid, process, path);
 	use_waitpid(pid[process - 1], &stat, 0);
 	while(wait(NULL) != -1);
+	free_path(path);
 }
 
 // 리다이렉션 여러개일 때 어떻게 할건지 토의 필요.
