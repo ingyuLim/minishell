@@ -1,23 +1,24 @@
 #include "minishell.h"
 
-void	free_env(t_env *env)
+void	free_vars(t_vars *vars, int a, char *b[])
 {
 	t_env	*tmp;
+	(void) a;
+	(void) b;
 
-	while (env != NULL)
+	while (vars->env != NULL)
 	{
-		tmp = env;
+		tmp = vars->env;
 		free(tmp->key);
 		free(tmp->value);
-		env = env->next;
+		vars->env = vars->env->next;
 		free(tmp);
 	}
+	free(vars);
 }
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	(void)argc;
-	(void)argv;
 	atexit(leak);
 	t_vars	*vars;
 	char	*str;
@@ -44,7 +45,7 @@ int	main(int argc, char *argv[], char *envp[])
 		execute(vars);
 		free_strtok(str, &(vars->lst));
 	}
-	free_env(vars->env);
+	free_vars(vars, argc, argv);
 	return (0);
 }
 // USER=test | env | grep USER => 환경변수 변경 적용 안되는게 맞나?

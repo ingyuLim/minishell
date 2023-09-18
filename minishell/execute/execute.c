@@ -97,6 +97,40 @@ char	**make_envp(t_env *env)
 	return (envp);
 }
 
+char	*path_join(char **path, char *cmd)
+{
+	char	*tmp;
+	int		i;
+
+	if (path == NULL)
+		return (cmd);
+	i = 0;
+	while (path[i] != NULL)
+	{
+		tmp = ft_strjoin(path[i], cmd);
+		if (access(tmp, X_OK) == 0)
+			break ;
+		free(tmp);
+		++i;
+	}
+	if (path[i] == NULL)
+		return (cmd);
+	return (tmp);
+}
+
+void	free_envp(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		free(envp[i]);
+		++i;
+	}
+	free(envp);
+}
+
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 {
 	int		**pipe_fd;
@@ -118,7 +152,8 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		pid[i] = fork();
 		if (pid[i] == 0)
 		{
-			check_xfile(cmd, path);
+			// builtin_fuc(vars);
+			cmd[0] = path_join(path, cmd[0]);
 			child(i, process - 1, pipe_fd, cmd, envp);//status추가.
 		}
 		free(cmd);
@@ -129,30 +164,30 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		}
 		i++;
 	}
+	free_envp(envp);
 }
 
-// void	builtin_fuc(t_vars *vars)
-// {
-// 	t_list	*lst;
+int	builtin_fuc(t_vars *vars)
+{
+	t_list	*lst;
 
-// 	lst = vars->lst;
-// 	if (ft_strncmp(lst->token, "cd", 3) == 0)
-// 		b_cd(lst);
-// 	else if (ft_strncmp(lst->token, "pwd", 4) == 0)
-// 		b_pwd();
-// 	else if (ft_strncmp(lst->token, "echo", 5) == 0)
-// 		b_echo(lst);
-// 	else if (ft_strncmp(lst->token, "export", 7) == 0)
-// 		b_export(lst, vars->env);
-// 	else if (ft_strncmp(lst->token, "env", 4) == 0)
-// 		b_env(lst, vars->env);
-// 	// else if (ft_strncmp(lst->token, "unset", 6) == 0)
-// 	// 	b_unset(lst, vars->env);
-// 	else if (ft_strncmp(lst->token, "exit", 5) == 0)
-// 		b_exit(0);
-// 	else
-// 		execve_cmd(vars, lst);
-// }
+	lst = vars->lst;
+	if (ft_strncmp(lst->token, "cd", 3) == 0)
+		b_cd(lst);
+	else if (ft_strncmp(lst->token, "pwd", 4) == 0)
+		b_pwd();
+	else if (ft_strncmp(lst->token, "echo", 5) == 0)
+		b_echo(lst);
+	else if (ft_strncmp(lst->token, "export", 7) == 0)
+		b_export(lst, vars->env);
+	else if (ft_strncmp(lst->token, "env", 4) == 0)
+		b_env(lst, vars->env);
+	// else if (ft_strncmp(lst->token, "unset", 6) == 0)
+	// 	b_unset(lst, vars->env);
+	else if (ft_strncmp(lst->token, "exit", 5) == 0)
+		b_exit(0);
+	return (1);
+}
 
 char	**parse_path(t_env *env)
 {
@@ -162,7 +197,7 @@ char	**parse_path(t_env *env)
 	{
 		if (ft_strncmp(env->key, "PATH", 5) == 0)
 		{
-			path = ft_split(env->value, ':');
+			path = ft_split(env->value, ':', '/');
 			return (path);
 		}
 		env = env->next;

@@ -65,10 +65,6 @@ void	print_green(char *str);
 void	print_red(char *str);
 int		syntax_check(t_list *head);
 
-// execute.c
-void	builtin_fuc(t_vars *vars, t_list *lst);
-void	execute(t_vars *vars);
-
 // builtin.c
 t_env	*ft_envlast(t_env *env);
 void	ft_envadd_back(t_env **head, t_env *new);
@@ -97,12 +93,13 @@ int		process_count(t_list *lst);
 int		size_count(t_list *lst);
 char	**make_cmd(t_list **lst, int size);
 int		**pipe_malloc(int pipe_count);
-void	check_xfile(char **cmd, char **path);
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path);
 void	execute(t_vars *vars);
+char	*path_join(char **path, char *cmd);
+int		builtin_fuc(t_vars *vars);
 
 // inlim/use_function1.c
-void	use_execve(const char *path, char *const argv[], char *const envp[]);
+void	use_execve(char *path, char *argv[], char *envp[]);
 void	use_pipe(int *fd);
 pid_t	use_fork(void);
 
@@ -112,12 +109,5 @@ void	use_dup2(int fd1, int fd2);
 void	use_close(int fd);
 int		infile_open(const char *path, int oflag);
 int		outfile_open(const char *path, int status);
-
-// inlim/check_all_files.c
-int		check_slash(char *cmd);
-char	*plus_slash(char *cmd);
-int		absolute_path(char **cmd);
-int		relative_path(char	**cmd, char	**path);
-void	check_xfile(char **cmd, char **path);
 
 #endif
