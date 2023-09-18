@@ -57,19 +57,18 @@ t_env	*dup_env(char *envp[])
 	return (env);
 }
 
-int	b_cd(t_list *lst)
+int	b_cd(t_list **lst)
 {
 	char	*path;
 
-	lst = lst->next;
-	if (lst == NULL || ft_strncmp(lst->token, "~", 2) == 0)
+	*lst = (*lst)->next;
+	if (*lst == NULL || ft_strncmp((*lst)->token, "~", 2) == 0 || ft_isspecialtok((*lst)->token) == 1)
 	{
 		printf("HOME: %s\n", getenv("USER"));
 		path = getenv("HOME");
 	}
 	else
-		path = lst->token;
-	printf("path: %s\n", path);
+		path = (*lst)->token;
 	if (chdir(path) == -1)
 	{
 		error(path);
@@ -187,6 +186,7 @@ int	b_unset(t_list **lst, t_env *env)
 				tmp->key = NULL;
 				tmp->value = NULL;
 			}
+			prev = enode;
 			enode = enode->next;
 		}
 		*lst = (*lst)->next;

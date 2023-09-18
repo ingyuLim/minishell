@@ -14,6 +14,13 @@ void	print_red(char *str)
 	printf("\033[0m");
 }
 
+int	is_word(t_state state)
+{
+	if (state == CMD || state == FNAME)
+		return (1);
+	return (0);
+}
+
 int	syntax_check(t_list *head)
 {
 	t_list	*tmp;
@@ -25,64 +32,69 @@ int	syntax_check(t_list *head)
 	{
 		if (ft_strncmp(tmp->token, "|", 2) == 0)
 		{
-			if (current_state != WORD)
+			if (is_word(current_state) == 0)
 			{
 				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
+			tmp->state = PIPE;
 			current_state = PIPE;
 		}
 		else if (ft_strncmp(tmp->token, "<", 2) == 0)
 		{
-			if (current_state != WORD && current_state != PIPE && current_state != START)
+			if (is_word(current_state) == 0 && current_state != PIPE && current_state != START)
 			{
 				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
-			current_state = IN_REDIRECT;
+			tmp->state = IN_REDIR;
+			current_state = IN_REDIR;
 		}
 		else if (ft_strncmp(tmp->token, ">", 2) == 0)
 		{
-			if (current_state != WORD && current_state != PIPE && current_state != START)
+			if (is_word(current_state) == 0 && current_state != PIPE && current_state != START)
 			{
 				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
-			current_state = OUT_REDIRECT;
+			tmp->state = OUT_REDIR;
+			current_state = OUT_REDIR;
 		}
 		else if (ft_strncmp(tmp->token, "<<", 3) == 0)
 		{
-			if (current_state != WORD && current_state != PIPE && current_state != START)
+			if (is_word(current_state) == 0 && current_state != PIPE && current_state != START)
 			{
 				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
-			current_state = DOUBLE_IN_REDIRECT;
+			tmp->state = PAIR_IN_REDIR;
+			current_state = PAIR_IN_REDIR;
 		}
 		else if (ft_strncmp(tmp->token, ">>", 3) == 0)
 		{
-			if (current_state != WORD && current_state != PIPE && current_state != START)
+			if (is_word(current_state) == 0 && current_state != PIPE && current_state != START)
 			{
 				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
-			current_state = DOUBLE_OUT_REDIRECT;
+			tmp->state = PAIR_OUT_REDIR;
+			current_state = PAIR_OUT_REDIR;
 		}
 		else
 		{
-			current_state = WORD;
+			if (current_state == START || current_state == PIPE)
+				tmp->state = CMD;
+			else
+				tmp->state = FNAME;
 		}
 		tmp = tmp->next;
 	}
 	if (current_state == START)
-	{
 		return (1);
-	}
-	if (current_state != WORD)
+	if (is_word(current_state) == 0)
 	{
 		print_red("minishell: syntax error near unexpected token");
 		return (1);
 	}
-	// print_green("Valid syntax");
 	return (0);
 }
