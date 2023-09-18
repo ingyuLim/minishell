@@ -65,12 +65,13 @@
 
 ## TODO
 
-- [x] parsing
-- [x] syntax check
+- [ ] parsing
+    - [ ] Assign Type
+    - [x] syntax check
 - [ ] execute
 	- [x] 다중 파이프
+	- [x] leak 잡기
 	- [ ] 환경 변수 변환
-	- [ ] leak 잡기
 	- [ ] redirection 처리
 	- [ ] HERE_DOC
 - [ ] process 상태값
