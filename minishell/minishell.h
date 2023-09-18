@@ -76,6 +76,7 @@ int		b_echo(t_list *lst);
 int		b_export(t_list *lst, t_env *env);
 int		b_env(t_list *lst, t_env *env);
 int		b_exit(t_list *lst);
+int		ft_isspecialtok(char *s);
 
 // inlim/change_in_and_out.c
 void	change_stdin_to_pipe(int *pipe_fd);
