@@ -11,7 +11,6 @@ SRCS=\
 	utils.c \
 	error.c \
 	syntax.c \
-	builtin.c \
 	$(wildcard ./execute/*.c) \
 	$(wildcard ./parse/*.c)
 TEST_SRCS=\

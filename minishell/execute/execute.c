@@ -131,7 +131,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		{
 			// builtin_fuc(vars);
 			cmd[0] = path_join(path, cmd[0]);
-			child(i, process - 1, (int **)pipe_fd, cmd, envp);//status추가.
+			child(i, process - 1, pipe_fd, cmd, envp);//status추가.
 		}
 		free(cmd);
 		if(i != 0)

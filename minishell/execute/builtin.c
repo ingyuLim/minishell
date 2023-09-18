@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 t_env	*ft_envlast(t_env *env)
 {
@@ -153,7 +153,42 @@ int	b_exit(t_list *lst)
 	exit(ft_atoi(lst->token));
 }
 
-// int	b_unset(int status)
-// {
-// 	exit(status);
-// }
+int	ft_isspecialtok(char *s)
+{
+	if (ft_strncmp(s, "|", 2) == 0)
+		return (1);
+	else if (ft_strncmp(s, ">", 2) == 0)
+		return (1);
+	else if (ft_strncmp(s, ">>", 3) == 0)
+		return (1);
+	else if (ft_strncmp(s, "<", 2) == 0)
+		return (1);
+	else if (ft_strncmp(s, "<<", 3) == 0)
+		return (1);
+	return (0);
+}
+
+int	b_unset(t_list **lst, t_env *env)
+{
+	t_env	*enode;
+	t_env	*prev;
+	t_env	*tmp;
+
+	*lst = (*lst)->next;
+	while (*lst != NULL && ft_isspecialtok((*lst)->token) == 0)
+	{
+		enode = env;
+		while (enode != NULL)
+		{
+			if (ft_strncmp(tmp->key, (*lst)->token, ft_strlen((*lst)->token)) == 0)
+			{
+				free(tmp->key);
+				free(tmp->value);
+				tmp->key = NULL;
+				tmp->value = NULL;
+			}
+			enode = enode->next;
+		}
+		*lst = (*lst)->next;
+	}
+}
