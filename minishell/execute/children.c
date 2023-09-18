@@ -5,7 +5,7 @@ void	just_one_cmd(char **cmd, char **envp)
 	use_execve(cmd[0], cmd, envp);
 }
 
-void	first_cmd(int **pipe_fd, char **cmd, char **envp)
+void	first_cmd(int (*pipe_fd)[2], char **cmd, char **envp)
 {
 	use_close(pipe_fd[0][0]);
 	// stdout을 pipe_fd[process_index][1]로 변경.
@@ -13,7 +13,7 @@ void	first_cmd(int **pipe_fd, char **cmd, char **envp)
 	use_execve(cmd[0], cmd, envp);
 }
 
-void	middle_cmd(int pid_index, int **pipe_fd, char **cmd, char **envp)
+void	middle_cmd(int pid_index, int (*pipe_fd)[2], char **cmd, char **envp)
 {
 	use_close(pipe_fd[pid_index - 1][1]);
 	use_close(pipe_fd[pid_index][0]);
@@ -24,7 +24,7 @@ void	middle_cmd(int pid_index, int **pipe_fd, char **cmd, char **envp)
 	use_execve(cmd[0], cmd, envp);
 }
 
-void	last_cmd(int pid_index, int **pipe_fd, char **cmd, char **envp)
+void	last_cmd(int pid_index, int (*pipe_fd)[2], char **cmd, char **envp)
 {
 	use_close(pipe_fd[pid_index -1][1]);
 	// stdin을 pipe_fd[pid_index - 1][0]으로 변경.
@@ -33,7 +33,7 @@ void	last_cmd(int pid_index, int **pipe_fd, char **cmd, char **envp)
 }
 
 
-void	child(int pid_index, int last_pid_index, int **pipe_fd, char **cmd, char **envp)
+void	child(int pid_index, int last_pid_index, int (*pipe_fd)[2], char **cmd, char **envp)
 {
 	if(pid_index == 0 && pid_index == last_pid_index)
 		just_one_cmd(cmd, envp);

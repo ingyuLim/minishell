@@ -45,31 +45,6 @@ char	**make_cmd(t_list **lst, int size)
 	return (cmd);
 }
 
-int	**pipe_malloc(int pipe_count)
-{
-	int	**pipe_fd;
-	int	i;
-
-	pipe_fd = malloc(sizeof(int *) * pipe_count);
-	if(pipe_fd == NULL)
-	{
-		perror("malloc");
-		exit(1);
-	}
-	i = 0;
-	while(i < pipe_count)
-	{
-		pipe_fd[i] = malloc(sizeof(int) * 2);
-		if(pipe_fd[i] == NULL)
-		{
-			perror("malloc");
-			exit(1);
-		}
-		i++;
-	}
-	return (pipe_fd);
-}
-
 char	**make_envp(t_env *env)
 {
 	char	**envp;
@@ -133,20 +108,22 @@ void	free_envp(char **envp)
 
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 {
-	int		**pipe_fd;
+	int		(*pipe_fd)[2];
 	int		i;
 	int		size;
 	char	**cmd;
 	char	**envp;
+	t_list	*tmp;
 
+	tmp = vars->lst;
 	envp = make_envp(vars->env);
 	if(process > 1)
-		pipe_fd = pipe_malloc(process - 1);
+		pipe_fd = ft_calloc(process - 1, sizeof(int [2]));
 	i = 0;
 	while (process > i) //cmd가 있는 경우.
 	{
-		size = size_count(vars->lst);
-		cmd = make_cmd(&(vars->lst), size);
+		size = size_count(tmp);
+		cmd = make_cmd(&tmp, size);
 		if(i != process - 1)
 			pipe(pipe_fd[i]);
 		pid[i] = fork();
@@ -154,7 +131,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		{
 			// builtin_fuc(vars);
 			cmd[0] = path_join(path, cmd[0]);
-			child(i, process - 1, pipe_fd, cmd, envp);//status추가.
+			child(i, process - 1, (int **)pipe_fd, cmd, envp);//status추가.
 		}
 		free(cmd);
 		if(i != 0)
@@ -165,6 +142,8 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		i++;
 	}
 	free_envp(envp);
+	if (process > 1)
+		free(pipe_fd);
 }
 
 int	builtin_fuc(t_vars *vars)
@@ -232,6 +211,7 @@ void	execute(t_vars *vars)
 	use_waitpid(pid[process - 1], &stat, 0);
 	while(wait(NULL) != -1);
 	free_path(path);
+	free(pid);
 }
 
 // 리다이렉션 여러개일 때 어떻게 할건지 토의 필요.
