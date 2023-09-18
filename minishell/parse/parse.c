@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 // 따옴표를 만날 때까지의 길이를 구한다.
 char *meet_quote(char *str, int *i, char quote)
@@ -57,6 +57,7 @@ char *make_word(char *str, int *i)
 			tmp = meet_sep(str, &last);
 		mem = result;
 		result = ft_strjoin(result,tmp);
+		free(tmp);
 		free(mem);
 	}
 	*i = last;

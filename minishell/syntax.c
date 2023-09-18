@@ -1,15 +1,5 @@
 #include "minishell.h"
 
-typedef enum	e_state{
-	START,					// 명령어의 시작
-	PIPE,					// |
-	IN_REDIRECT,			// <
-	OUT_REDIRECT,			// >
-	WORD,					// command or argument or file name
-	DOUBLE_IN_REDIRECT,		// <<
-	DOUBLE_OUT_REDIRECT,	// >>
-} t_state;
-
 void	print_green(char *str)
 {
 	printf("\033[1;32m");
@@ -60,7 +50,7 @@ int	syntax_check(t_list *head)
 			}
 			current_state = OUT_REDIRECT;
 		}
-		else if (ft_strncmp(tmp->token, "<<", 2) == 0)
+		else if (ft_strncmp(tmp->token, "<<", 3) == 0)
 		{
 			if (current_state != WORD && current_state != PIPE && current_state != START)
 			{
@@ -69,7 +59,7 @@ int	syntax_check(t_list *head)
 			}
 			current_state = DOUBLE_IN_REDIRECT;
 		}
-		else if (ft_strncmp(tmp->token, ">>", 2) == 0)
+		else if (ft_strncmp(tmp->token, ">>", 3) == 0)
 		{
 			if (current_state != WORD && current_state != PIPE && current_state != START)
 			{

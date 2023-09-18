@@ -56,22 +56,6 @@ char	*testcase[100] =
 	NULL
 };
 
-void	test(t_list *lst)
-{
-	int	cnt = 0;
-
-	printf("\033[1;37m");
-	while (lst != NULL)
-	{
-		printf("%d: %s\n", cnt, lst->token);
-		lst = lst->next;
-		++cnt;
-	}
-	printf("\033[1;30m");
-	printf("\ndivided into %d tokens\n", cnt);
-	printf("\033[0m");
-}
-
 #define START 20
 #define END 21
 
@@ -100,7 +84,7 @@ int	main(void)
 		printf("Your Parse Function Result:\n");
 		printf("\033[0m");
 
-		test(tokenize(testcase[i]));			// your function
+		print_tokens(tokenize(testcase[i]));			// your function
 		syntax_check(tokenize(testcase[i]));	// syntax check
 
 		usleep(700000);

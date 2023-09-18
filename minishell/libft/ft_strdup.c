@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anseungwon <anseungwon@student.42.fr>      +#+  +:+       +#+        */
+/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 18:08:57 by seunan            #+#    #+#             */
-/*   Updated: 2023/07/18 11:11:47 by anseungwon       ###   ########.fr       */
+/*   Updated: 2023/09/17 18:58:10 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ char	*ft_strdup(const char *s1)
 	size_t	i;
 
 	answer = ft_calloc(ft_strlen(s1) + 1, sizeof(char));
-	if (!answer)
-		return (0);
 	i = 0;
 	while (s1[i] != '\0')
 	{
