@@ -13,16 +13,6 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
-typedef enum	e_state{
-	START,					// 명령어의 시작
-	PIPE,					// |
-	IN_REDIRECT,			// <
-	OUT_REDIRECT,			// >
-	WORD,					// command or argument or file name
-	DOUBLE_IN_REDIRECT,		// <<
-	DOUBLE_OUT_REDIRECT,	// >>
-} t_state;
-
 typedef struct s_env
 {
 	char			*key;
@@ -35,13 +25,6 @@ typedef struct s_vars
 	t_list	*lst;
 	t_env	*env;
 }				t_vars;
-
-typedef struct s_execve
-{
-    char    **envp;
-    char    **path;
-    char    **cmd;
-}t_execve;
 
 // error.c
 void	error(char *err);

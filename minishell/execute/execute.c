@@ -129,7 +129,6 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		pid[i] = fork();
 		if (pid[i] == 0)
 		{
-			// builtin_fuc(vars);
 			cmd[0] = path_join(path, cmd[0]);
 			child(i, process - 1, pipe_fd, cmd, envp);//status추가.
 		}
@@ -148,22 +147,19 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 
 int	builtin_fuc(t_vars *vars)
 {
-	t_list	*lst;
-
-	lst = vars->lst;
-	if (ft_strncmp(lst->token, "cd", 3) == 0)
+	if (ft_strncmp((*lst)->token, "cd", 3) == 0)
 		b_cd(lst);
-	else if (ft_strncmp(lst->token, "pwd", 4) == 0)
+	else if (ft_strncmp((*lst)->token, "pwd", 4) == 0)
 		b_pwd();
-	else if (ft_strncmp(lst->token, "echo", 5) == 0)
-		b_echo(lst);
-	else if (ft_strncmp(lst->token, "export", 7) == 0)
-		b_export(lst, vars->env);
-	else if (ft_strncmp(lst->token, "env", 4) == 0)
-		b_env(lst, vars->env);
-	// else if (ft_strncmp(lst->token, "unset", 6) == 0)
-	// 	b_unset(lst, vars->env);
-	else if (ft_strncmp(lst->token, "exit", 5) == 0)
+	else if (ft_strncmp((*lst)->token, "echo", 5) == 0)
+		b_echo((*lst));
+	else if (ft_strncmp((*lst)->token, "export", 7) == 0)
+		b_export((*lst), vars->env);
+	else if (ft_strncmp((*lst)->token, "env", 4) == 0)
+		b_env((*lst), vars->env);
+	else if (ft_strncmp((*lst)->token, "unset", 6) == 0)
+		b_unset((*lst), vars->env);
+	else if (ft_strncmp((*lst)->token, "exit", 5) == 0)
 		b_exit(0);
 	return (1);
 }

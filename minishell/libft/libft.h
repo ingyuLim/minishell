@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:29:31 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/18 14:04:35 by seunan           ###   ########.fr       */
+/*   Updated: 2023/09/18 19:14:44 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,21 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+typedef enum	e_state{
+	START,				// 명령어의 시작
+	CMD,
+	FNAME,
+	PIPE,				// |
+	IN_REDIR,			// <
+	OUT_REDIR,			// >
+	PAIR_IN_REDIR,		// <<
+	PAIR_OUT_REDIR,		// >>
+} 				t_state;
+
 typedef struct s_list
 {
 	char			*token;
+	t_state			state;
 	struct s_list	*next;
 
 }					t_list;
