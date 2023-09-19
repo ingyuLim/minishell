@@ -80,7 +80,7 @@ int	syntax_check(t_list *lst)
 		}
 		else
 		{
-			if (current_state == START || current_state == PIPE || current_state == CMD)
+			if (current_state == START || current_state == PIPE || current_state == CMD || current_state == FNAME)
 			{
 				lst->state = CMD;
 				current_state = CMD;

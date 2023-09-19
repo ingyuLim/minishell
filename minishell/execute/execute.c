@@ -14,7 +14,7 @@ int	process_count(t_list *lst)
 	return (process);
 }
 
-int	size_count(t_list *lst)
+int	cmd_size_count(t_list *lst)
 {
 	int	size;
 
@@ -27,21 +27,40 @@ int	size_count(t_list *lst)
 	 return (size);
 }
 
-char	**make_cmd(t_list **lst, int size)
+int	count_cmd_count(t_list *lst)
+{
+	int	len;
+
+	len = 1;
+	while(lst != NULL && ft_strncmp((lst)->token, "|", 2) != 0)
+	{
+		if(lst->state == CMD)
+			len++;
+		lst = (lst)->next;
+	}
+	return len;
+}
+
+char	**make_cmd(t_list *lst)
 {
 	int		i;
+	int		cmd_len;
 	char	**cmd;
 
 	i = 0;
-	cmd = ft_calloc(size, sizeof(char *));
-	while(*lst != NULL && ft_strncmp((*lst)->token, "|", 2) != 0)
+	cmd_len = count_cmd_count(lst);
+	cmd = ft_calloc(cmd_len + 1, sizeof(char *));
+	while(lst != NULL && lst->state != PIPE)
 	{
-		cmd[i] = (*lst)->token;
-		*lst = (*lst)->next;
-		i++;
+		// printf("token : %s, state : %d\n",lst->token, lst->state);
+		if(lst->state == CMD)
+		{
+			cmd[i] = (lst)->token;
+			// printf("cmd[%d] : %s\n",i,lst->token);
+			i++;
+		}
+		lst = (lst)->next;
 	}
-	if (*lst != NULL)
-		*lst = (*lst)->next;
 	return (cmd);
 }
 
@@ -106,39 +125,93 @@ void	free_envp(char **envp)
 	free(envp);
 }
 
+void	move_next_syntax(t_list **lst)
+{
+	while(*lst != NULL && ft_strncmp((*lst)->token, "|", 2) != 0)
+		*lst = (*lst)->next;
+	if (*lst != NULL)
+		*lst = (*lst)->next;
+}
+
+void	find_redirect(t_list *lst)
+{
+	int	infile_fd;
+	int	outfile_fd;
+
+	while(lst != NULL && lst->state != PIPE)
+	{
+		if(lst->state == IN_REDIR) // <
+		{
+			lst = lst->next;
+			infile_fd = open(lst->token, O_RDONLY);
+			use_dup2(infile_fd, STDIN_FILENO);
+			close(infile_fd);
+		}
+		else if(lst->state == OUT_REDIR) // >
+		{
+			lst = lst->next;
+			outfile_fd = open(lst->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			use_dup2(outfile_fd, STDOUT_FILENO);
+			close(outfile_fd);
+		}
+		// else if(lst->state == PAIR_IN_REDIR)
+		// {
+			
+		// }
+		else if(lst->state == PAIR_OUT_REDIR)
+		{
+			lst = lst->next;
+			outfile_fd = open(lst->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			use_dup2(outfile_fd, STDOUT_FILENO);
+			close(outfile_fd);
+		}
+		lst = (lst)->next;
+	}
+}
+
+
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 {
 	int		(*pipe_fd)[2];
-	int		i;
-	int		size;
+	int		pid_index;
 	char	**cmd;
 	char	**envp;
-	t_list	*tmp;
+	t_list	*lst;
 
-	tmp = vars->lst;
+	lst = vars->lst;
 	envp = make_envp(vars->env);
 	if(process > 1)
 		pipe_fd = ft_calloc(process - 1, sizeof(int [2]));
-	i = 0;
-	while (process > i) //cmd가 있는 경우.
+	pid_index = 0;
+	while (process > pid_index) //cmd가 있는 경우.
 	{
-		size = size_count(tmp);
-		cmd = make_cmd(&tmp, size);
-		if(i != process - 1)
-			pipe(pipe_fd[i]);
-		pid[i] = fork();
-		if (pid[i] == 0)
+		if(pid_index != process - 1)
+			pipe(pipe_fd[pid_index]);
+		pid[pid_index] = fork();
+		if (pid[pid_index] == 0)
 		{
+			find_redirect(lst);
+			// builtin_fuc(vars);
+			cmd = make_cmd(lst);
 			cmd[0] = path_join(path, cmd[0]);
-			child(i, process - 1, pipe_fd, cmd, envp);//status추가.
+			// child(i, process - 1, pipe_fd, cmd, envp);//status추가.
+			if(pid_index == 0 && pid_index == process - 1)
+				just_one_cmd(cmd, envp);
+			else if(pid_index == 0)
+				first_cmd(pipe_fd, cmd, envp);
+			else if(pid_index != process - 1)
+				middle_cmd(pid_index, pipe_fd, cmd, envp);
+			else
+				last_cmd(pid_index, pipe_fd, cmd, envp);
 		}
-		free(cmd);
-		if(i != 0)
+		// free(cmd);
+		if(pid_index != 0)
 		{
-			close(pipe_fd[i - 1][0]);     //근데 close 실패하면 원래 exit이 맞나? 글고 애초에 실패할 일이 있으려나 일케 하면...?
-			close(pipe_fd[i - 1][1]);
+			close(pipe_fd[pid_index - 1][0]);     //근데 close 실패하면 원래 exit이 맞나? 글고 애초에 실패할 일이 있으려나 일케 하면...?
+			close(pipe_fd[pid_index - 1][1]);
 		}
-		i++;
+		move_next_syntax(&lst);
+		pid_index++;
 	}
 	free_envp(envp);
 	if (process > 1)
@@ -151,19 +224,19 @@ int	builtin_fuc(t_vars *vars)
 
 	lst = vars->lst;
 	if (ft_strncmp(lst->token, "cd", 3) == 0)
-		return (b_cd(lst));
+		b_cd(lst);
 	else if (ft_strncmp(lst->token, "pwd", 4) == 0)
-		return (b_pwd());
+		b_pwd();
 	else if (ft_strncmp(lst->token, "echo", 5) == 0)
-		return (b_echo(lst));
+		b_echo(lst);
 	else if (ft_strncmp(lst->token, "export", 7) == 0)
-		return (b_export(lst, vars->env));
+		b_export(lst, vars->env);
 	else if (ft_strncmp(lst->token, "env", 4) == 0)
-		return (b_env(lst, vars->env));
-	else if (ft_strncmp(lst->token, "unset", 6) == 0)
-		return (b_unset(lst, &(vars->env)));
+		b_env(lst, vars->env);
+	// else if (ft_strncmp(lst->token, "unset", 6) == 0)
+	// 	b_unset(lst, vars->env);
 	else if (ft_strncmp(lst->token, "exit", 5) == 0)
-		return (b_exit(lst));
+		b_exit(0);
 	return (1);
 }
 

@@ -27,19 +27,37 @@ int	cmd_size_count(t_list *lst)
 	 return (size);
 }
 
+int	count_cmd_count(t_list *lst)
+{
+	int	len;
+
+	len = 1;
+	while(lst != NULL && ft_strncmp((lst)->token, "|", 2) != 0)
+	{
+		if(lst->state == CMD)
+			len++;
+		lst = (lst)->next;
+	}
+	return len;
+}
+
 char	**make_cmd(t_list *lst)
 {
 	int		i;
-	int		size;
+	int		cmd_len;
 	char	**cmd;
 
 	i = 0;
-	cmd = ft_calloc(size, sizeof(char *));
+	cmd_len = count_cmd_count(lst);
+	cmd = ft_calloc(cmd_len + 1, sizeof(char *));
 	while(lst != NULL && ft_strncmp((lst)->token, "|", 2) != 0)
 	{
-		cmd[i] = (lst)->token;
+		if(lst->state == CMD)
+		{
+			cmd[i] = (lst)->token;
+			i++;
+		}
 		lst = (lst)->next;
-		i++;
 	}
 	if (lst != NULL)
 		lst = (lst)->next;
@@ -107,6 +125,17 @@ void	free_envp(char **envp)
 	free(envp);
 }
 
+void	move_next_syntax(t_list **lst)
+{
+	int		i;
+	char	**cmd;
+
+	while(*lst != NULL && ft_strncmp((*lst)->token, "|", 2) != 0)
+		*lst = (*lst)->next;
+	if (*lst != NULL)
+		*lst = (*lst)->next;
+}
+
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 {
 	int		(*pipe_fd)[2];
@@ -114,16 +143,16 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 	int		size;
 	char	**cmd;
 	char	**envp;
-	t_list	*tmp;
+	t_list	*lst;
 
-	tmp = vars->lst;
+	lst = vars->lst;
 	envp = make_envp(vars->env);
 	if(process > 1)
 		pipe_fd = ft_calloc(process - 1, sizeof(int [2]));
 	i = 0;
 	while (process > i) //cmd가 있는 경우.
 	{
-		cmd = make_cmd(tmp);
+		cmd = make_cmd(lst);
 		if(i != process - 1)
 			pipe(pipe_fd[i]);
 		pid[i] = fork();
@@ -139,6 +168,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 			close(pipe_fd[i - 1][0]);     //근데 close 실패하면 원래 exit이 맞나? 글고 애초에 실패할 일이 있으려나 일케 하면...?
 			close(pipe_fd[i - 1][1]);
 		}
+		move_next_syntax(&lst);
 		i++;
 	}
 	free_envp(envp);

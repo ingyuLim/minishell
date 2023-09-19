@@ -41,8 +41,8 @@ int	main(int argc, char *argv[], char *envp[])
 		}
 		add_history(str);
 		// print_tokens(vars->lst);
-		// execute(vars);
-		builtin_fuc(vars);
+		execute(vars);
+		// builtin_fuc(vars);
 		free_strtok(str, &(vars->lst));
 	}
 	free_vars(vars, argc, argv);
