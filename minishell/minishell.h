@@ -76,7 +76,7 @@ void	child(int pid_index, int last_pid_index, int (*pipe_fd)[2], char **cmd, cha
 // inlim/execute.c
 int		process_count(t_list *lst);
 int		size_count(t_list *lst);
-char	**make_cmd(t_list **lst, int size);
+char	**make_cmd(t_list *lst);
 int		**pipe_malloc(int pipe_count);
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path);
 void	execute(t_vars *vars);
