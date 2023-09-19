@@ -156,7 +156,7 @@ void	find_redirect(t_list *lst)
 		}
 		// else if(lst->state == PAIR_IN_REDIR)
 		// {
-			
+
 		// }
 		else if(lst->state == PAIR_OUT_REDIR)
 		{
@@ -224,19 +224,19 @@ int	builtin_fuc(t_vars *vars)
 
 	lst = vars->lst;
 	if (ft_strncmp(lst->token, "cd", 3) == 0)
-		b_cd(lst);
+		b_cd(&lst);
 	else if (ft_strncmp(lst->token, "pwd", 4) == 0)
 		b_pwd();
 	else if (ft_strncmp(lst->token, "echo", 5) == 0)
-		b_echo(lst);
+		b_echo(&lst);
 	else if (ft_strncmp(lst->token, "export", 7) == 0)
-		b_export(lst, vars->env);
+		b_export(&lst, vars->env);
 	else if (ft_strncmp(lst->token, "env", 4) == 0)
-		b_env(lst, vars->env);
-	// else if (ft_strncmp(lst->token, "unset", 6) == 0)
-	// 	b_unset(lst, vars->env);
+		b_env(&lst, vars->env);
+	else if (ft_strncmp(lst->token, "unset", 6) == 0)
+		b_unset(&lst, &(vars->env));
 	else if (ft_strncmp(lst->token, "exit", 5) == 0)
-		b_exit(0);
+		b_exit(&lst);
 	return (1);
 }
 

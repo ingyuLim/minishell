@@ -53,13 +53,13 @@ t_env	*ft_envlast(t_env *env);
 void	ft_envadd_back(t_env **head, t_env *new);
 t_env	*make_env(char *contents);
 t_env	*dup_env(char *envp[]);
-int		b_cd(t_list *lst);
+int		b_cd(t_list **lst);
 int		b_pwd(void);
-int		b_echo(t_list *lst);
-int		b_export(t_list *lst, t_env *env);
-int		b_env(t_list *lst, t_env *env);
-int		b_exit(t_list *lst);
-int		b_unset(t_list *lst, t_env **env);
+int		b_echo(t_list **lst);
+int		b_export(t_list **lst, t_env *env);
+int		b_env(t_list **lst, t_env *env);
+int		b_exit(t_list **lst);
+int		b_unset(t_list **lst, t_env **env);
 int		ft_isspecialtok(t_state state);
 
 // inlim/change_in_and_out.c
