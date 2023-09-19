@@ -21,77 +21,79 @@ int	is_word(t_state state)
 	return (0);
 }
 
-int	syntax_check(t_list *head)
+int	syntax_check(t_list *lst)
 {
-	t_list	*tmp;
 	t_state	current_state;
 
-	tmp = head;
 	current_state = START;
-	while (tmp != NULL)
+	while (lst != NULL)
 	{
-		if (ft_strncmp(tmp->token, "|", 2) == 0)
+		if (ft_strncmp(lst->token, "|", 2) == 0)
 		{
-			if (is_word(current_state) == 0)
+			if (!is_word(current_state))
 			{
 				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
-			tmp->state = PIPE;
+			lst->state = PIPE;
 			current_state = PIPE;
 		}
-		else if (ft_strncmp(tmp->token, "<", 2) == 0)
+		else if (ft_strncmp(lst->token, "<", 2) == 0)
 		{
-			if (is_word(current_state) == 0 && current_state != PIPE && current_state != START)
+			if (!is_word(current_state) && current_state != PIPE && current_state != START)
 			{
 				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
-			tmp->state = IN_REDIR;
+			lst->state = IN_REDIR;
 			current_state = IN_REDIR;
 		}
-		else if (ft_strncmp(tmp->token, ">", 2) == 0)
+		else if (ft_strncmp(lst->token, ">", 2) == 0)
 		{
-			if (is_word(current_state) == 0 && current_state != PIPE && current_state != START)
+			if (!is_word(current_state) && current_state != PIPE && current_state != START)
 			{
 				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
-			tmp->state = OUT_REDIR;
+			lst->state = OUT_REDIR;
 			current_state = OUT_REDIR;
 		}
-		else if (ft_strncmp(tmp->token, "<<", 3) == 0)
+		else if (ft_strncmp(lst->token, "<<", 3) == 0)
 		{
-			if (is_word(current_state) == 0 && current_state != PIPE && current_state != START)
+			if (!is_word(current_state) && current_state != PIPE && current_state != START)
 			{
 				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
-			tmp->state = PAIR_IN_REDIR;
+			lst->state = PAIR_IN_REDIR;
 			current_state = PAIR_IN_REDIR;
 		}
-		else if (ft_strncmp(tmp->token, ">>", 3) == 0)
+		else if (ft_strncmp(lst->token, ">>", 3) == 0)
 		{
-			if (is_word(current_state) == 0 && current_state != PIPE && current_state != START)
+			if (!is_word(current_state) && current_state != PIPE && current_state != START)
 			{
 				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
-			tmp->state = PAIR_OUT_REDIR;
+			lst->state = PAIR_OUT_REDIR;
 			current_state = PAIR_OUT_REDIR;
 		}
 		else
 		{
-			if (current_state == START || current_state == PIPE)
-				tmp->state = CMD;
+			if (current_state == START || current_state == PIPE || current_state == CMD)
+			{
+				lst->state = CMD;
+				current_state = CMD;
+			}
 			else
-				tmp->state = FNAME;
+			{
+				lst->state = FNAME;
+				current_state = FNAME;
+			}
 		}
-		tmp = tmp->next;
+		lst = lst->next;
 	}
-	if (current_state == START)
-		return (1);
-	if (is_word(current_state) == 0)
+	if (current_state == START || !is_word(current_state))
 	{
 		print_red("minishell: syntax error near unexpected token");
 		return (1);
