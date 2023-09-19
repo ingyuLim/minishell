@@ -147,6 +147,9 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 
 int	builtin_fuc(t_vars *vars)
 {
+	t_list	**lst;
+
+	lst = &(vars->lst);
 	if (ft_strncmp((*lst)->token, "cd", 3) == 0)
 		b_cd(lst);
 	else if (ft_strncmp((*lst)->token, "pwd", 4) == 0)
