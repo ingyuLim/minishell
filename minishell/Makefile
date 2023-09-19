@@ -4,7 +4,7 @@ NAME=minishell
 CC=gcc
 CFLAGS=-Wall -Werror -Wextra
 LIBFT=./libft/libft.a
-DEBUG=-g3 -fsanitize=address
+DEBUG=-g
 
 SRCS=\
 	main.c \
