@@ -59,7 +59,7 @@ int		b_echo(t_list *lst);
 int		b_export(t_list *lst, t_env *env);
 int		b_env(t_list *lst, t_env *env);
 int		b_exit(t_list *lst);
-int		b_unset(t_list *lst, t_env *env);
+int		b_unset(t_list *lst, t_env **env);
 int		ft_isspecialtok(t_state state);
 
 // inlim/change_in_and_out.c

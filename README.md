@@ -65,8 +65,8 @@
 
 ## TODO
 
-- [ ] parsing
-    - [ ] Assign Type
+- [x] parsing
+    - [x] Assign Type
     - [x] syntax check
 - [ ] execute
 	- [x] 다중 파이프

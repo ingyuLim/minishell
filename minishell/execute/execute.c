@@ -161,9 +161,9 @@ int	builtin_fuc(t_vars *vars)
 	else if (ft_strncmp(lst->token, "env", 4) == 0)
 		return (b_env(lst, vars->env));
 	else if (ft_strncmp(lst->token, "unset", 6) == 0)
-		return (b_unset(lst, vars->env));
+		return (b_unset(lst, &(vars->env)));
 	else if (ft_strncmp(lst->token, "exit", 5) == 0)
-		b_exit(0);
+		return (b_exit(lst));
 	return (1);
 }
 

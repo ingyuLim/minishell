@@ -28,10 +28,9 @@ int	main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		str = readline("\033[0;36mminishell$\033[0m ");
-		if (ft_strncmp(str, "exit", 5) == 0)
+		if (str == NULL)
 		{
-			free(str);
-			ft_putstr_fd("exit\n", 1);
+			printf("exit\n");
 			break ;
 		}
 		vars->lst = tokenize(str);

@@ -126,10 +126,15 @@ int	b_export(t_list *lst, t_env *env)
 	{
 		while (env != NULL)
 		{
+			ft_putstr_fd("declare -x ", STDOUT_FILENO);
 			ft_putstr_fd(env->key, STDOUT_FILENO);
 			ft_putchar_fd('=', STDOUT_FILENO);
 			if (env->value[0] != '\0')
+			{
+				ft_putchar_fd('\"', STDOUT_FILENO);
 				ft_putstr_fd(env->value, STDOUT_FILENO);
+				ft_putchar_fd('\"', STDOUT_FILENO);
+			}
 			else
 				ft_putstr_fd("\"\"", STDOUT_FILENO);
 			ft_putchar_fd('\n', STDOUT_FILENO);
@@ -230,7 +235,7 @@ int	ft_isspecialtok(t_state state)
 	return (0);
 }
 
-int	b_unset(t_list *lst, t_env *env)
+int	b_unset(t_list *lst, t_env **env)
 {
 	t_env	*prev;
 	t_env	*tmp;
@@ -238,7 +243,18 @@ int	b_unset(t_list *lst, t_env *env)
 	lst = lst->next;
 	while (lst != NULL && ft_isspecialtok(lst->state) == 0)
 	{
-		tmp = env;
+		if (ft_strncmp((*env)->key, lst->token, ft_strlen(lst->token) + 1) == 0)
+		{
+			free((*env)->key);
+			free((*env)->value);
+			(*env)->key = NULL;
+			(*env)->value = NULL;
+			tmp = (*env);
+			(*env) = (*env)->next;
+			free(tmp);
+			printf("head key: %s\n", (*env)->key);
+		}
+		tmp = *env;
 		while (tmp->next != NULL)
 		{
 			prev = tmp;
