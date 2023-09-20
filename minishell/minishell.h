@@ -48,21 +48,24 @@ void	print_green(char *str);
 void	print_red(char *str);
 int		syntax_check(t_list *head);
 
-// builtin.c
+// builtin/builtin_utils.c
+int		ft_isspecialtok(t_state state);
 t_env	*ft_envlast(t_env *env);
 void	ft_envadd_back(t_env **head, t_env *new);
+int		ft_isvalidid(char *content);
 t_env	*make_env(char *contents);
 t_env	*dup_env(char *envp[]);
-int		b_cd(t_list *lst);
-int		b_pwd(void);
-int		b_echo(t_list *lst);
-int		b_export(t_list *lst, t_env *env);
-int		b_env(t_list *lst, t_env *env);
-int		b_exit(t_list *lst);
-int		b_unset(t_list *lst, t_env **env);
-int		ft_isspecialtok(t_state state);
 
-// inlim/change_in_and_out.c
+// builtin/*.c
+int		b_cd(t_list **lst);
+int		b_pwd(void);
+int		b_echo(t_list **lst);
+int		b_export(t_list **lst, t_env *env);
+int		b_env(t_list **lst, t_env *env);
+int		b_exit(t_list **lst);
+int		b_unset(t_list **lst, t_env **env);
+
+// execve/change_in_and_out.c
 void	change_stdin_to_pipe(int *pipe_fd);
 void	change_stdout_to_pipe(int *pipe_fd);
 
@@ -73,15 +76,20 @@ void	middle_cmd(int pid_index, int (*pipe_fd)[2], char **cmd, char **envp);
 void	last_cmd(int pid_index, int (*pipe_fd)[2], char **cmd, char **envp);
 void	child(int pid_index, int last_pid_index, int (*pipe_fd)[2], char **cmd, char **envp);
 
-// inlim/execute.c
+// execute/execute.c
 int		process_count(t_list *lst);
-int		size_count(t_list *lst);
+int		cmd_size_count(t_list *lst);
 char	**make_cmd(t_list *lst);
-int		**pipe_malloc(int pipe_count);
-void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path);
-void	execute(t_vars *vars);
+char	**make_envp(t_env *env);
 char	*path_join(char **path, char *cmd);
+void	free_envp(char **envp);
+void	move_next_syntax(t_list **lst);
+void	find_redirect(t_list *lst);
+void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path);
 int		builtin_fuc(t_vars *vars);
+char	**parse_path(t_env *env);
+void	free_path(char **path);
+void	execute(t_vars *vars);
 
 // inlim/use_function1.c
 void	use_execve(char *path, char *argv[], char *envp[]);
