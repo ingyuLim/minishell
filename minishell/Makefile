@@ -12,14 +12,16 @@ SRCS=\
 	error.c \
 	syntax.c \
 	$(wildcard ./execute/*.c) \
+	$(wildcard ./builtin/*.c) \
 	$(wildcard ./parse/*.c)
 TEST_SRCS=\
 	test_parse.c \
 	utils.c \
 	error.c \
 	syntax.c \
-	$(wildcard ./parse/*.c) \
-	$(wildcard ./excute/*.c)
+	$(wildcard ./execute/*.c) \
+	$(wildcard ./builtin/*.c) \
+	$(wildcard ./parse/*.c)
 OBJS=$(SRCS:.c=.o)
 TEST_OBJS=$(TEST_SRCS:.c=.o)
 

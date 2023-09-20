@@ -48,18 +48,21 @@ void	print_green(char *str);
 void	print_red(char *str);
 int		syntax_check(t_list *head);
 
-// execve/builtin.c
+// builtin/builtin_utils.c
+int		ft_isspecialtok(t_state state);
 t_env	*ft_envlast(t_env *env);
 void	ft_envadd_back(t_env **head, t_env *new);
+int		ft_isvalidid(char *content);
 t_env	*make_env(char *contents);
 t_env	*dup_env(char *envp[]);
+
+// builtin/*.c
 int		b_cd(t_list **lst);
 int		b_pwd(void);
 int		b_echo(t_list **lst);
 int		b_export(t_list **lst, t_env *env);
 int		b_env(t_list **lst, t_env *env);
 int		b_exit(t_list **lst);
-int		ft_isspecialtok(t_state state);
 int		b_unset(t_list **lst, t_env **env);
 
 // execve/change_in_and_out.c
