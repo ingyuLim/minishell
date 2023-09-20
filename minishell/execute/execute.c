@@ -133,6 +133,53 @@ void	move_next_syntax(t_list **lst)
 		*lst = (*lst)->next;
 }
 
+char *	make_tmp_file(char *tmp_file)
+{
+	char *result;
+	int	num = 0;
+	char	*letter_num;
+
+	letter_num = ft_itoa(num);
+	result = ft_strjoin(tmp_file,letter_num);
+
+	while(access(result,F_OK) != -1)
+	{
+		free(letter_num);
+		free(result);
+		letter_num = ft_itoa(++num);
+		result = ft_strjoin(tmp_file,letter_num);
+	}
+	// if(access(result,F_OK) != -1)
+		//error
+	free(letter_num);
+	open(result, O_WRONLY | O_CREAT, 0644);
+	return result;
+}
+
+void	here_doc(char *limiter)
+{
+	// size_t	buffer_size = ft_strlen(limiter) + 1;
+	// char	*buf = malloc(sizeof(char) * buffer_size);
+	// int	nl_flag = 1;
+	char *tmp_file;
+	tmp_file = make_tmp_file("tmp");
+	limiter = NULL;
+	// tmp 안에 써야한다.
+	// while(read(0, buf, buffer_size)) fd를 2(STDERR)로 해야하나...
+	// {
+	// 	if(!ft_strncmp(limiter, buf, buffer_size - 1) && buf[buffer_size - 1] == '\n' && nl_flag)
+	// 		break;
+	// 	else if(exist_nl(buf))
+	// 		nl_flag = 1;
+	// 	else
+	// 		nl_flag = 0;
+	// }
+
+	//나중에
+	// unlink(tmp_file);
+	// free(tmp_file);
+}
+
 void	find_redirect(t_list *lst)
 {
 	int	infile_fd;
@@ -152,12 +199,13 @@ void	find_redirect(t_list *lst)
 			lst = lst->next;
 			outfile_fd = open(lst->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			use_dup2(outfile_fd, STDOUT_FILENO);
+			use_dup2(STDOUT_FILENO, outfile_fd);
 			close(outfile_fd);
 		}
-		// else if(lst->state == PAIR_IN_REDIR)
-		// {
-
-		// }
+		else if(lst->state == PAIR_IN_REDIR)
+		{
+			// here_doc(lst->next->token);
+		}
 		else if(lst->state == PAIR_OUT_REDIR)
 		{
 			lst = lst->next;
@@ -190,19 +238,21 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		pid[pid_index] = fork();
 		if (pid[pid_index] == 0)
 		{
-			find_redirect(lst);
+			// find_redirect(lst); 삭제하고 ~cmd 함수로 옮김.
 			// builtin_fuc(vars);
 			cmd = make_cmd(lst);
 			cmd[0] = path_join(path, cmd[0]);
 			// child(i, process - 1, pipe_fd, cmd, envp);//status추가.
 			if(pid_index == 0 && pid_index == process - 1)
-				just_one_cmd(cmd, envp);
+				;
 			else if(pid_index == 0)
-				first_cmd(pipe_fd, cmd, envp);
+				first_cmd(pipe_fd);
 			else if(pid_index != process - 1)
-				middle_cmd(pid_index, pipe_fd, cmd, envp);
+				middle_cmd(pid_index, pipe_fd);
 			else
-				last_cmd(pid_index, pipe_fd, cmd, envp);
+				last_cmd(pid_index, pipe_fd);
+			find_redirect(lst);
+			use_execve(cmd[0], cmd, envp);
 		}
 		// free(cmd);
 		if(pid_index != 0)

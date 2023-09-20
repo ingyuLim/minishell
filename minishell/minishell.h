@@ -70,11 +70,10 @@ void	change_stdin_to_pipe(int *pipe_fd);
 void	change_stdout_to_pipe(int *pipe_fd);
 
 // inlim/children.c
-void	just_one_cmd(char **cmd, char **envp);
-void	first_cmd(int (*pipe_fd)[2], char **cmd, char **envp);
-void	middle_cmd(int pid_index, int (*pipe_fd)[2], char **cmd, char **envp);
-void	last_cmd(int pid_index, int (*pipe_fd)[2], char **cmd, char **envp);
-void	child(int pid_index, int last_pid_index, int (*pipe_fd)[2], char **cmd, char **envp);
+void	first_cmd(int (*pipe_fd)[2]);
+void	middle_cmd(int pid_index, int (*pipe_fd)[2]);
+void	last_cmd(int pid_index, int (*pipe_fd)[2]);
+void	child(int pid_index, int last_pid_index, int (*pipe_fd)[2]);
 
 // execute/execute.c
 int		process_count(t_list *lst);
