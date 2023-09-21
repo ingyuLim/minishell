@@ -6,7 +6,7 @@
 /*   By: inlim <inlim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:29:31 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/21 14:04:04 by inlim            ###   ########.fr       */
+/*   Updated: 2023/09/22 01:26:58 by inlim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,6 @@ typedef struct s_list
 	struct s_list	*next;
 
 }					t_list;
-
-typedef struct s_file
-{
-	int		fd;
-	char	*file_name;
-}					t_file;
 
 int					ft_isalnum(int c);
 int					ft_isalpha(int c);
