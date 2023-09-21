@@ -125,20 +125,23 @@ void	free_envp(char **envp)
 	free(envp);
 }
 
-void	move_next_syntax(t_list **lst)
+void	move_next_syntax(t_list **lst, int *tmp_arr_index)
 {
 	while(*lst != NULL && ft_strncmp((*lst)->token, "|", 2) != 0)
+	{
+		if((*lst)->state == HEREDOC)
+			(*tmp_arr_index)++;
 		*lst = (*lst)->next;
+	}
 	if (*lst != NULL)
 		*lst = (*lst)->next;
 }
 
 
-void	find_redirect(t_list *lst, t_file *tmp_arr)// + int	tmp_arr_index 추가하기. 일단은 i로 선언해서 쓰자.
+void	find_redirect(t_list *lst, char **tmp_arr, int tmp_arr_index)// + int	tmp_arr_index 추가하기. 일단은 i로 선언해서 쓰자.
 {
 	int	infile_fd;
 	int	outfile_fd;
-	int	i = 0;
 
 	while(lst != NULL && lst->state != PIPE)
 	{
@@ -158,9 +161,11 @@ void	find_redirect(t_list *lst, t_file *tmp_arr)// + int	tmp_arr_index 추가하
 		}
 		else if(lst->state == HEREDOC)
 		{
-			use_dup2(tmp_arr[i].fd, STDIN_FILENO);
-			close(tmp_arr[i].fd);
-			i++;
+			infile_fd = open(tmp_arr[tmp_arr_index], O_RDONLY);
+			use_dup2(infile_fd, STDIN_FILENO);
+			close(infile_fd);
+			unlink(tmp_arr[tmp_arr_index]);
+			tmp_arr_index++;
 		}
 		else if(lst->state == PAIR_OUT_REDIR)
 		{
@@ -173,9 +178,9 @@ void	find_redirect(t_list *lst, t_file *tmp_arr)// + int	tmp_arr_index 추가하
 	}
 }
 
-t_file	*malloc_tmp_arr(t_list *lst)
+char	**malloc_tmp_arr(t_list *lst)
 {
-	t_file	*tmp_arr;
+	char	**tmp_arr;
 	int		i;
 
 	i = 0;
@@ -185,7 +190,7 @@ t_file	*malloc_tmp_arr(t_list *lst)
 			i++;
 		lst = (lst)->next;
 	}
-	tmp_arr = ft_calloc(i + 1, sizeof(t_file));
+	tmp_arr = ft_calloc(i + 1, sizeof(char *));
 	return (tmp_arr);
 }
 
@@ -215,7 +220,7 @@ size_t	gnl_strlen(char *str)
 	return (result_len);
 }
 
-void	fill_tmp_arr(char *tmp_file, t_file *tmp_arr, t_list *lst)
+void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
 {
 	int		num = 0;
 	int		i = 0;
@@ -223,6 +228,7 @@ void	fill_tmp_arr(char *tmp_file, t_file *tmp_arr, t_list *lst)
 	char	*letter_num;
 	char	*limiter;
 	char	*buf;
+	int		tmp_fd;
 	size_t	buffer_size;
 	int	nl_flag = 1;
 
@@ -243,8 +249,8 @@ void	fill_tmp_arr(char *tmp_file, t_file *tmp_arr, t_list *lst)
 			}
 			// if (access(tmp_filename, F_OK) == -1)
 				// error
-			tmp_arr[i].fd = open(tmp_filename, O_RDWR | O_CREAT, 0644);
-			tmp_arr[i].file_name = tmp_filename;
+			tmp_fd = open(tmp_filename, O_RDWR | O_CREAT, 0644);
+			tmp_arr[i] = tmp_filename;
 			limiter = lst->next->token;
 			buffer_size = ft_strlen(limiter) + 1;
 			buf = ft_calloc(buffer_size, sizeof(char));
@@ -256,8 +262,9 @@ void	fill_tmp_arr(char *tmp_file, t_file *tmp_arr, t_list *lst)
 					nl_flag = 1;
 				else
 					nl_flag = 0;
-				write(tmp_arr[i].fd, buf, gnl_strlen(buf));
+				write(tmp_fd, buf, gnl_strlen(buf));
 			}
+			use_close(tmp_fd);
 			i++;
 			free(buf);
 		}
@@ -269,7 +276,8 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 {
 	int		(*pipe_fd)[2];
 	int		pid_index;
-	t_file	*tmp_arr;
+	char	**tmp_arr;
+	int		tmp_arr_index = 0;
 	char	**cmd;
 	char	**envp;
 	t_list	*lst;
@@ -280,7 +288,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		pipe_fd = ft_calloc(process - 1, sizeof(int [2]));
 	pid_index = 0;
 	tmp_arr = malloc_tmp_arr(lst);
-	fill_tmp_arr("tmp", tmp_arr, lst);//fill_tmp_arr
+	fill_tmp_arr(".tmp", tmp_arr, lst);//fill_tmp_arr
 	while (process > pid_index) //cmd가 있는 경우.
 	{
 		if (pid_index != process - 1)
@@ -288,7 +296,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		if (is_builtin(lst))
 		{
 			builtin_fuc(vars);
-			move_next_syntax(&lst);
+			move_next_syntax(&lst, &tmp_arr_index);
 			pid_index++;
 			continue ;
 		}
@@ -306,7 +314,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 				middle_cmd(pid_index, pipe_fd);
 			else
 				last_cmd(pid_index, pipe_fd);
-			find_redirect(lst, tmp_arr);
+			find_redirect(lst, tmp_arr,tmp_arr_index);
 			use_execve(cmd[0], cmd, envp);
 		}
 		// free(cmd);
@@ -315,7 +323,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 			close(pipe_fd[pid_index - 1][0]);     //근데 close 실패하면 원래 exit이 맞나? 글고 애초에 실패할 일이 있으려나 일케 하면...?
 			close(pipe_fd[pid_index - 1][1]);
 		}
-		move_next_syntax(&lst);
+		move_next_syntax(&lst, &tmp_arr_index);
 		pid_index++;
 	}
 	free_envp(envp);
