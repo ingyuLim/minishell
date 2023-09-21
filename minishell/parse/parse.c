@@ -100,7 +100,7 @@ t_list	*tokenize(char *str)
 	{
 		if(ft_issymbol(str[i]))
 		{
-			tmp = make_symbol(str, str[i], &i); // leak없음
+			tmp = make_symbol(str, str[i], &i);
 			ft_lstadd_back(&head, ft_lstnew(tmp));
 		}
 		else if(ft_isword(str[i]))

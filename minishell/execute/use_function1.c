@@ -3,7 +3,10 @@
 void	use_execve(char *path, char *argv[], char *envp[])
 {
 	if (execve(path, argv, envp) == -1)
+	{
+		g_status = 1;
 		exit_with_err((char *)path);
+	}
 }
 
 void	use_pipe(int *fd)

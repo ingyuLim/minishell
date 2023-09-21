@@ -254,12 +254,17 @@ void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
 			limiter = lst->next->token;
 			buffer_size = ft_strlen(limiter) + 1;
 			buf = ft_calloc(buffer_size, sizeof(char));
-			while(read(0, buf, buffer_size))
+			ft_putstr_fd("\033[0;30m", 1);
+			ft_putstr_fd("> ", 1);
+			while (read(0, buf, buffer_size))
 			{
-				if(!ft_strncmp(limiter, buf, buffer_size - 1) && buf[buffer_size - 1] == '\n' && nl_flag)
+				if (!ft_strncmp(limiter, buf, buffer_size - 1) && buf[buffer_size - 1] == '\n' && nl_flag)
 					break;
-				else if(exist_nl(buf))
+				else if (exist_nl(buf))
+				{
 					nl_flag = 1;
+					ft_putstr_fd("> ", 1);
+				}
 				else
 					nl_flag = 0;
 				write(tmp_fd, buf, gnl_strlen(buf));
@@ -270,6 +275,7 @@ void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
 		}
 		lst = lst->next;
 	}
+	ft_putstr_fd("\033[0m", 1);
 }
 
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
@@ -293,6 +299,13 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 	{
 		if (pid_index != process - 1)
 			pipe(pipe_fd[pid_index]);
+		if (is_builtin(lst))
+		{
+			builtin_fuc(vars);
+			move_next_syntax(&lst, &tmp_arr_index);
+			pid_index++;
+			continue ;
+		}
 		pid[pid_index] = fork();
 		if (pid[pid_index] == 0)
 		{
@@ -324,26 +337,44 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		free(pipe_fd);
 }
 
-int	builtin_fuc(t_vars *vars)
+int	is_builtin(t_list *lst)
+{
+	if (ft_strncmp(lst->token, "cd", 3) == 0)
+		return (1);
+	else if (ft_strncmp(lst->token, "pwd", 4) == 0)
+		return (1);
+	else if (ft_strncmp(lst->token, "echo", 5) == 0)
+		return (1);
+	else if (ft_strncmp(lst->token, "export", 7) == 0)
+		return (1);
+	else if (ft_strncmp(lst->token, "env", 4) == 0)
+		return (1);
+	else if (ft_strncmp(lst->token, "unset", 6) == 0)
+		return (1);
+	else if (ft_strncmp(lst->token, "exit", 5) == 0)
+		return (1);
+	return (0);
+}
+
+void	builtin_fuc(t_vars *vars)
 {
 	t_list	*lst;
 
 	lst = vars->lst;
 	if (ft_strncmp(lst->token, "cd", 3) == 0)
-		b_cd(&lst);
+		g_status = b_cd(&lst);
 	else if (ft_strncmp(lst->token, "pwd", 4) == 0)
-		b_pwd();
+		g_status = b_pwd();
 	else if (ft_strncmp(lst->token, "echo", 5) == 0)
-		b_echo(&lst);
+		g_status = b_echo(&lst);
 	else if (ft_strncmp(lst->token, "export", 7) == 0)
-		b_export(&lst, vars->env);
+		g_status = b_export(&lst, vars->env);
 	else if (ft_strncmp(lst->token, "env", 4) == 0)
-		b_env(&lst, vars->env);
+		g_status = b_env(&lst, vars->env);
 	else if (ft_strncmp(lst->token, "unset", 6) == 0)
-		b_unset(&lst, &(vars->env));
+		g_status = b_unset(&lst, &(vars->env));
 	else if (ft_strncmp(lst->token, "exit", 5) == 0)
-		b_exit(&lst);
-	return (1);
+		g_status = b_exit(&lst);
 }
 
 char	**parse_path(t_env *env)
@@ -380,13 +411,12 @@ void	execute(t_vars *vars)
 	char		**path;
 	int			process;
 	pid_t		*pid;
-	int			stat;
+	// int			stat;
 
 	path = parse_path(vars->env);
 	process = process_count(vars->lst);
 	pid = ft_calloc(process, sizeof(pid_t));
 	connect_pipe(vars, pid, process, path);
-	use_waitpid(pid[process - 1], &stat, 0);
 	while(wait(NULL) != -1);
 	free_path(path);
 	free(pid);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inlim <inlim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:29:31 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/22 01:26:58 by inlim            ###   ########.fr       */
+/*   Updated: 2023/09/22 01:51:30 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef enum	e_state{
 	PIPE,				// |
 	IN_REDIR,			// <
 	OUT_REDIR,			// >
-	HEREDOC,		// << limiter
+	HEREDOC,			// << limiter
 	PAIR_OUT_REDIR,		// >>
 } 				t_state;
 
