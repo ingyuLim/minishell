@@ -254,12 +254,17 @@ void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
 			limiter = lst->next->token;
 			buffer_size = ft_strlen(limiter) + 1;
 			buf = ft_calloc(buffer_size, sizeof(char));
-			while(read(0, buf, buffer_size))
+			ft_putstr_fd("\033[0;30m", 1);
+			ft_putstr_fd("> ", 1);
+			while (read(0, buf, buffer_size))
 			{
-				if(!ft_strncmp(limiter, buf, buffer_size - 1) && buf[buffer_size - 1] == '\n' && nl_flag)
+				if (!ft_strncmp(limiter, buf, buffer_size - 1) && buf[buffer_size - 1] == '\n' && nl_flag)
 					break;
-				else if(exist_nl(buf))
+				else if (exist_nl(buf))
+				{
 					nl_flag = 1;
+					ft_putstr_fd("> ", 1);
+				}
 				else
 					nl_flag = 0;
 				write(tmp_fd, buf, gnl_strlen(buf));
@@ -270,6 +275,7 @@ void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
 		}
 		lst = lst->next;
 	}
+	ft_putstr_fd("\033[0m", 1);
 }
 
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
