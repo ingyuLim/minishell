@@ -83,7 +83,7 @@ char	**make_envp(t_env *env);
 char	*path_join(char **path, char *cmd);
 void	free_envp(char **envp);
 void	move_next_syntax(t_list **lst);
-void	find_redirect(t_list *lst);
+void	find_redirect(t_list *lst, t_file *tmp_arr);
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path);
 int		builtin_fuc(t_vars *vars);
 char	**parse_path(t_env *env);
