@@ -13,6 +13,8 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
+int	g_status;
+
 typedef struct s_env
 {
 	char			*key;
@@ -73,7 +75,6 @@ void	change_stdout_to_pipe(int *pipe_fd);
 void	first_cmd(int (*pipe_fd)[2]);
 void	middle_cmd(int pid_index, int (*pipe_fd)[2]);
 void	last_cmd(int pid_index, int (*pipe_fd)[2]);
-void	child(int pid_index, int last_pid_index, int (*pipe_fd)[2]);
 
 // execute/execute.c
 int		process_count(t_list *lst);
@@ -85,7 +86,8 @@ void	free_envp(char **envp);
 void	move_next_syntax(t_list **lst);
 void	find_redirect(t_list *lst, t_file *tmp_arr);
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path);
-int		builtin_fuc(t_vars *vars);
+void	builtin_fuc(t_vars *vars);
+int		is_builtin(t_list *lst);
 char	**parse_path(t_env *env);
 void	free_path(char **path);
 void	execute(t_vars *vars);

@@ -46,7 +46,7 @@ int	main(int argc, char *argv[], char *envp[])
 		free_strtok(str, &(vars->lst));
 	}
 	free_vars(vars, argc, argv);
-	return (0);
+	return (g_status);
 }
 // USER=test | env | grep USER => 환경변수 변경 적용 안되는게 맞나?
 
