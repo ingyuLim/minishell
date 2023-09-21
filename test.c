@@ -1,7 +1,10 @@
 #include<stdio.h>
 #include <stdlib.h>
-int main(int argc, char const *argv[])
+#include <unistd.h>
+#include <fcntl.h>
+
+int main(void)
 {
-	printf("%s\n",getenv("PATH"));
+	open("tmp 2639", O_WRONLY | O_CREAT, 0644);
 	return 0;
 }

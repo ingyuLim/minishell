@@ -8,7 +8,7 @@ int	ft_isspecialtok(t_state state)
 		return (1);
 	else if (state == OUT_REDIR)
 		return (1);
-	else if (state == PAIR_IN_REDIR)
+	else if (state == HEREDOC)
 		return (1);
 	else if (state == PAIR_OUT_REDIR)
 		return (1);

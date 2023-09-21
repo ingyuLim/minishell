@@ -133,10 +133,12 @@ void	move_next_syntax(t_list **lst)
 		*lst = (*lst)->next;
 }
 
-void	find_redirect(t_list *lst)
+
+void	find_redirect(t_list *lst, t_file *tmp_arr)// + int	tmp_arr_index 추가하기. 일단은 i로 선언해서 쓰자.
 {
 	int	infile_fd;
 	int	outfile_fd;
+	int	i = 0;
 
 	while(lst != NULL && lst->state != PIPE)
 	{
@@ -154,10 +156,12 @@ void	find_redirect(t_list *lst)
 			use_dup2(outfile_fd, STDOUT_FILENO);
 			close(outfile_fd);
 		}
-		// else if(lst->state == PAIR_IN_REDIR)
-		// {
-
-		// }
+		else if(lst->state == HEREDOC)
+		{
+			use_dup2(tmp_arr[i].fd, STDIN_FILENO);
+			close(tmp_arr[i].fd);
+			i++;
+		}
 		else if(lst->state == PAIR_OUT_REDIR)
 		{
 			lst = lst->next;
@@ -169,11 +173,103 @@ void	find_redirect(t_list *lst)
 	}
 }
 
+t_file	*malloc_tmp_arr(t_list *lst)
+{
+	t_file	*tmp_arr;
+	int		i;
+
+	i = 0;
+	while(lst != NULL)
+	{
+		if(lst->state == HEREDOC)
+			i++;
+		lst = (lst)->next;
+	}
+	tmp_arr = ft_calloc(i + 1, sizeof(t_file));
+	return (tmp_arr);
+}
+
+int	exist_nl(char *buf)
+{
+	while(*buf)
+	{
+		if(*buf == '\n')
+			return 1;
+		buf++;
+	}
+	return 0;
+}
+
+size_t	gnl_strlen(char *str)
+{
+	int	result_len;
+
+	result_len = 0;
+	while (*str)
+	{
+		result_len++;
+		if (*str == '\n')
+			break ;
+		str++;
+	}
+	return (result_len);
+}
+
+void	fill_tmp_arr(char *tmp_file, t_file *tmp_arr, t_list *lst)
+{
+	int		num = 0;
+	int		i = 0;
+	char	*tmp_filename = NULL;
+	char	*letter_num;
+	char	*limiter;
+	char	*buf;
+	size_t	buffer_size;
+	int	nl_flag = 1;
+
+	while(lst != NULL)
+	{
+		if(lst->state == HEREDOC)
+		{
+			letter_num = ft_itoa(num++);
+			tmp_filename = ft_strjoin(tmp_file,letter_num);
+			free(letter_num);
+			while(access(tmp_filename,F_OK) != -1)
+			{
+				if(tmp_filename != NULL)
+					free(tmp_filename);
+				letter_num = ft_itoa(num++);
+				tmp_filename = ft_strjoin(tmp_file,letter_num);
+				free(letter_num);
+			}
+			// if (access(tmp_filename, F_OK) == -1)
+				// error
+			tmp_arr[i].fd = open(tmp_filename, O_RDWR | O_CREAT, 0644);
+			tmp_arr[i].file_name = tmp_filename;
+			limiter = lst->next->token;
+			buffer_size = ft_strlen(limiter) + 1;
+			buf = ft_calloc(buffer_size, sizeof(char));
+			while(read(0, buf, buffer_size))
+			{
+				if(!ft_strncmp(limiter, buf, buffer_size - 1) && buf[buffer_size - 1] == '\n' && nl_flag)
+					break;
+				else if(exist_nl(buf))
+					nl_flag = 1;
+				else
+					nl_flag = 0;
+				write(tmp_arr[i].fd, buf, gnl_strlen(buf));
+			}
+			i++;
+			free(buf);
+		}
+		lst = lst->next;
+	}
+}
 
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 {
 	int		(*pipe_fd)[2];
 	int		pid_index;
+	t_file	*tmp_arr;
 	char	**cmd;
 	char	**envp;
 	t_list	*lst;
@@ -183,26 +279,28 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 	if(process > 1)
 		pipe_fd = ft_calloc(process - 1, sizeof(int [2]));
 	pid_index = 0;
+	tmp_arr = malloc_tmp_arr(lst);
+	fill_tmp_arr("tmp", tmp_arr, lst);//fill_tmp_arr
 	while (process > pid_index) //cmd가 있는 경우.
 	{
-		if(pid_index != process - 1)
+		if (pid_index != process - 1)
 			pipe(pipe_fd[pid_index]);
 		pid[pid_index] = fork();
 		if (pid[pid_index] == 0)
 		{
-			find_redirect(lst);
 			// builtin_fuc(vars);
 			cmd = make_cmd(lst);
 			cmd[0] = path_join(path, cmd[0]);
-			// child(i, process - 1, pipe_fd, cmd, envp);//status추가.
 			if(pid_index == 0 && pid_index == process - 1)
-				just_one_cmd(cmd, envp);
+				;
 			else if(pid_index == 0)
-				first_cmd(pipe_fd, cmd, envp);
+				first_cmd(pipe_fd);
 			else if(pid_index != process - 1)
-				middle_cmd(pid_index, pipe_fd, cmd, envp);
+				middle_cmd(pid_index, pipe_fd);
 			else
-				last_cmd(pid_index, pipe_fd, cmd, envp);
+				last_cmd(pid_index, pipe_fd);
+			find_redirect(lst, tmp_arr);
+			use_execve(cmd[0], cmd, envp);
 		}
 		// free(cmd);
 		if(pid_index != 0)
@@ -286,6 +384,6 @@ void	execute(t_vars *vars)
 	free(pid);
 }
 
-// 리다이렉션 여러개일 때 어떻게 할건지 토의 필요.
-// cat < outfile < infile > infile 하면 infile이 빈 파일이 되는데
-// cat < outfile < infile > infile2 하면 infile2 제대로 입력됨.
+
+// sleep 1 << limiter1 < infile > outfile | ls << limiter2 < infile2 <infile3
+// 히어독 먼저 세고 그만큼 tmp파일의 fd를 담을 배열 malloc한 후 순서대로 입력을 담아주고 그 후 find rediection을 통해 입출력 방향 바꾸기. 그 후 tmp 파일 삭제.

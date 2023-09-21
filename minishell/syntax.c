@@ -65,8 +65,8 @@ int	syntax_check(t_list *lst)
 				print_red("minishell: syntax error near unexpected token");
 				return (1);
 			}
-			lst->state = PAIR_IN_REDIR;
-			current_state = PAIR_IN_REDIR;
+			lst->state = HEREDOC;
+			current_state = HEREDOC;
 		}
 		else if (ft_strncmp(lst->token, ">>", 3) == 0)
 		{

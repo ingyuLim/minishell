@@ -70,11 +70,10 @@ void	change_stdin_to_pipe(int *pipe_fd);
 void	change_stdout_to_pipe(int *pipe_fd);
 
 // inlim/children.c
-void	just_one_cmd(char **cmd, char **envp);
-void	first_cmd(int (*pipe_fd)[2], char **cmd, char **envp);
-void	middle_cmd(int pid_index, int (*pipe_fd)[2], char **cmd, char **envp);
-void	last_cmd(int pid_index, int (*pipe_fd)[2], char **cmd, char **envp);
-void	child(int pid_index, int last_pid_index, int (*pipe_fd)[2], char **cmd, char **envp);
+void	first_cmd(int (*pipe_fd)[2]);
+void	middle_cmd(int pid_index, int (*pipe_fd)[2]);
+void	last_cmd(int pid_index, int (*pipe_fd)[2]);
+void	child(int pid_index, int last_pid_index, int (*pipe_fd)[2]);
 
 // execute/execute.c
 int		process_count(t_list *lst);
@@ -84,7 +83,7 @@ char	**make_envp(t_env *env);
 char	*path_join(char **path, char *cmd);
 void	free_envp(char **envp);
 void	move_next_syntax(t_list **lst);
-void	find_redirect(t_list *lst);
+void	find_redirect(t_list *lst, t_file *tmp_arr);
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path);
 int		builtin_fuc(t_vars *vars);
 char	**parse_path(t_env *env);
