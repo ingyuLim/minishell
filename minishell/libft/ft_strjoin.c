@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 21:07:32 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/06 23:58:34 by seunan           ###   ########.fr       */
+/*   Updated: 2023/09/22 02:25:31 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	answer = ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1), sizeof(char));
 	i = 0;
 	j = 0;
-	while (s1[j] != '\0')
+	while (s1 && s1[j] != '\0')
 		answer[i++] = s1[j++];
 	j = 0;
-	while (s2[j] != '\0')
+	while (s2 && s2[j] != '\0')
 		answer[i++] = s2[j++];
 	return (answer);
 }

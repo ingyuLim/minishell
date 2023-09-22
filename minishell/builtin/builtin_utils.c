@@ -1,5 +1,22 @@
 #include "../minishell.h"
 
+int	ft_isvalidkey(char *key)
+{
+	int	i;
+
+	if (!ft_isalpha(*key) && *key != '_')
+		return (0);
+	i = 0;
+	while (key[i] != '=' && key[i] != '\0')
+	{
+		printf("key[%d] : %c\n", i, key[i]);
+		if (!ft_isalnum(key[i]) && key[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	ft_isspecialtok(t_state state)
 {
 	if (state == PIPE)
@@ -40,34 +57,13 @@ void	ft_envadd_back(t_env **head, t_env *new)
 	tmp->next = new;
 }
 
-int	ft_isvalidid(char *content)
-{
-	int	i;
-
-	if (!ft_isalpha(content[0]) && content[0] != '_')
-		return (0);
-	i = 0;
-	while (content[i] != '\0')
-	{
-		if (!ft_isalnum(content[i]) && content[i] != '_')
-			return (0);
-		++i;
-	}
-	return (1);
-}
-
-t_env	*make_env(char *contents)
+t_env	*make_env(char *content)
 {
 	t_env	*env;
 	char	*tmp;
 	char	*cut;
 
-	// if (ft_isvalidid(contents) == 0)
-	// {
-	// 	error("not a valid identifier");
-	// 	return (NULL);
-	// }
-	tmp = ft_strdup(contents);
+	tmp = ft_strdup(content);
 	env = (t_env *)ft_calloc(1, sizeof(t_env));
 	cut = ft_strchr(tmp, '=');
 	if (cut == NULL)
