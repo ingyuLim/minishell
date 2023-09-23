@@ -59,7 +59,7 @@ t_env	*make_env(char *content);
 t_env	*dup_env(char *envp[]);
 
 // builtin/*.c
-int		b_cd(t_list **lst);
+int		b_cd(char **cmd);
 int		b_pwd(void);
 int		b_echo(t_list **lst);
 int		b_export(t_list **lst, t_env *env);
@@ -84,10 +84,10 @@ char	**make_envp(t_env *env);
 char	*path_join(char **path, char *cmd);
 void	free_envp(char **envp);
 void	move_next_syntax(t_list **lst, int *tmp_arr_index);
-void	find_redirect(t_list *lst, char **tmp_arr, int tmp_arr_index);// + int	tmp_arr_index 추가하기. 일단은 i로 선언해서 쓰자.
+void	find_redirect(t_list *lst, char **tmp_arr, int tmp_arr_index);
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path);
-void	builtin_fuc(t_vars *vars);
-int		is_builtin(t_list *lst);
+int		builtin_fuc(t_vars *vars, char **cmd);
+int		is_builtin(char **cmd);
 char	**parse_path(t_env *env);
 void	free_path(char **path);
 void	execute(t_vars *vars);

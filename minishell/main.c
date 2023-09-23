@@ -42,6 +42,7 @@ int	main(int argc, char *argv[], char *envp[])
 		add_history(str);
 		print_tokens(vars->lst);
 		execute(vars);
+		write(2,"escape\n",7);
 		free_strtok(str, &(vars->lst));
 	}
 	free_vars(vars, argc, argv);

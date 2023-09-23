@@ -1,22 +1,23 @@
 #include "../minishell.h"
 
-int	b_echo(t_list **lst)
+int	b_echo(char **cmd)
 {
 	int	flag;
+	int	i;
 
 	flag = 0;
-	*lst = (*lst)->next;
-	if(*lst != NULL && ft_strncmp("-n", (*lst)->token, 3) == 0)
+	i = 1;
+	if(cmd[1] != NULL && ft_strncmp("-n", cmd[1], 3) == 0)
 	{
-		*lst = (*lst)->next;
 		flag = 1;
+		i = 2;
 	}
-	while(*lst != NULL && ft_isspecialtok((*lst)->state) == 0)
+	while(cmd[i] != NULL && !ft_isspecialtok(cmd[i]))
 	{
-		ft_putstr_fd((*lst)->token, 1);
-		if((*lst)->next != NULL)
+		ft_putstr_fd(cmd[i], 1);
+		if(cmd[i + 1] != NULL)
 			ft_putchar_fd(' ', 1);
-		*lst = (*lst)->next;
+		++i;
 	}
 	if(flag == 0)
 		ft_putchar_fd('\n', 1);
