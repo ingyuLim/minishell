@@ -51,11 +51,11 @@ void	print_red(char *str);
 int		syntax_check(t_list *head);
 
 // builtin/builtin_utils.c
+int		ft_isvalidkey(char *key);
 int		ft_isspecialtok(t_state state);
 t_env	*ft_envlast(t_env *env);
 void	ft_envadd_back(t_env **head, t_env *new);
-int		ft_isvalidid(char *content);
-t_env	*make_env(char *contents);
+t_env	*make_env(char *content);
 t_env	*dup_env(char *envp[]);
 
 // builtin/*.c

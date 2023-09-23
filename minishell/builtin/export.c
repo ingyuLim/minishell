@@ -1,12 +1,21 @@
 #include "../minishell.h"
 
+// export a : declare -x a
+// => key: a, value: NULL
+
+// export a= : declare -x a=""
+// => key: a, value: '\0'
+
+// export a=b : declare -x a="b"
+// => key: a, value: b
+
 int	b_export(t_list **lst, t_env *env)
 {
-	t_env	*tmp;
-	t_list	*head;
+	t_env	*e_tmp;
+	t_list	*l_tmp;
 
 	*lst = (*lst)->next;
-	if (*lst == NULL || ft_isspecialtok((*lst)->state))
+	if (*lst == NULL || ft_isspecialtok((*lst)->state))	// export, export | ... , export [REDIRECTION] ...
 	{
 		while (env != NULL)
 		{
@@ -22,28 +31,35 @@ int	b_export(t_list **lst, t_env *env)
 			env = env->next;
 		}
 	}
-	else
+	else // export [NAME[=VALUE]] ...
 	{
-		head = *lst;
-		while (head != NULL && ft_isspecialtok(head->state) == 0)
+		l_tmp = *lst;
+		while (l_tmp != NULL && ft_isspecialtok(l_tmp->state) == 0)
 		{
-			tmp = env;
-			while (tmp != NULL)
+			e_tmp = env;
+			while (e_tmp != NULL)
 			{
-				if (ft_strncmp(tmp->key, head->token, ft_strlen(tmp->key)) == 0)
+				if (ft_strncmp(e_tmp->key, l_tmp->token, ft_strlen(e_tmp->key)) == 0)
 				{
-					if (head->token[ft_strlen(tmp->key)] == '=')
+					if (l_tmp->token[ft_strlen(e_tmp->key)] == '=')
 					{
-						free(tmp->value);
-						tmp->value = ft_strdup(head->token + ft_strlen(tmp->key) + 1);
+						free(e_tmp->value);
+						e_tmp->value = ft_strdup(l_tmp->token + ft_strlen(e_tmp->key) + 1);
+						break ;
 					}
-					break ;
+					else if (l_tmp->token[ft_strlen(e_tmp->key)] == '\0')
+						break ;
 				}
-				tmp = tmp->next;
+				e_tmp = e_tmp->next;
 			}
-			if (tmp == NULL)
-				ft_envadd_back(&env, make_env(head->token));
-			head = head->next;
+			if (e_tmp == NULL)
+			{
+				if (!ft_isvalidkey(l_tmp->token))
+					printf("minishell: export: `%s': not a valid identifier\n", l_tmp->token);
+				else
+					ft_envadd_back(&env, make_env(l_tmp->token));
+			}
+			l_tmp = l_tmp->next;
 		}
 	}
 	return (0);

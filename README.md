@@ -66,15 +66,20 @@
 ## TODO
 
 - [x] parsing
-    - [x] Assign Type
-    - [x] syntax check
+	- [x] Assign Type
+	- [x] syntax check
 - [ ] execute
 	- [x] 다중 파이프
 	- [x] leak 잡기
+	- [x] redirection 처리
+	- [x] HERE_DOC
 	- [ ] 환경 변수 변환
-	- [ ] redirection 처리
-	- [ ] HERE_DOC
+	- [ ] quote trim 처리
 - [ ] process 상태값
+- [ ] signal 처리
+	- [x] ctrl + D
+	- [ ] ctrl + C
+	- [ ] ctrl + \
 
 ## Analyzing a subject
 
