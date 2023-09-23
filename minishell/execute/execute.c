@@ -230,7 +230,7 @@ void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
 	char	*buf;
 	int		tmp_fd;
 	size_t	buffer_size;
-	int	nl_flag = 1;
+	int		nl_flag = 1;
 
 	while(lst != NULL)
 	{
@@ -420,6 +420,74 @@ void	free_path(char **path)
 	free(path);
 }
 
+int	is_include_dollar(char *str)
+{
+	int	i;
+	int	flag;	// 0 : 따옴표 밖, 1 : 따옴표 안
+
+	i = 0;
+	flag = 0;
+	while (str[i] != '\0')
+	{
+		if (flag && str[i] == '\'')
+			flag = 0;
+		else if (!flag && str[i] == '\'')
+			flag = 1;
+		else if (!flag && str[i] == '$' && str[i + 1] != '\0' && str[i + 1] != ' ')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char	*find_env(char *key, t_env *env)
+{
+	char	*tmp;
+
+	while (env != NULL)
+	{
+		if (ft_strncmp(key, env->key, ft_strlen(key) + 1) == 0)
+			return (env->value);
+		env = env->next;
+	}
+	tmp = ft_strdup("");
+	return (tmp);
+}
+
+// "$USER $USER" => "seunan seunan"
+char	*replace_tokens(char *content, t_env *env)
+{
+	int		i;
+	char	*result;
+	char	*cut;
+	char	*tmp;
+
+	result = ft_strdup("");
+	i = 0;
+	while (content[i] != '\0')
+	{
+		if (content[i] != '$' && content[i + 1] != '\0' && content[i + 1] != ' '&& !ft_isquote(content[i]))
+		{
+
+		}
+		++i;
+	}
+
+}
+
+void	replace_envvar(t_vars *vars)
+{
+	t_list	*lst;
+
+	lst = vars->lst;
+	while (lst != NULL)
+	{
+		if (is_include_dollar(lst->token))
+			lst->token = replace_tokens(lst->token, vars->env);
+		lst = lst->next;
+	}
+}
+
 void	execute(t_vars *vars)
 {
 	char		**path;
@@ -427,6 +495,8 @@ void	execute(t_vars *vars)
 	pid_t		*pid;
 	// int			stat;
 
+	// vars->env에서 환경변수 찾아 치환해주기.
+	// lst에서 따옴표 처리
 	path = parse_path(vars->env);
 	process = process_count(vars->lst);
 	pid = ft_calloc(process, sizeof(pid_t));
