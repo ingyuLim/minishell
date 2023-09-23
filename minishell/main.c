@@ -40,8 +40,9 @@ int	main(int argc, char *argv[], char *envp[])
 			continue ;
 		}
 		add_history(str);
+		replace_envvar(vars);
 		print_tokens(vars->lst);
-		execute(vars);
+		// execute(vars);
 		free_strtok(str, &(vars->lst));
 	}
 	free_vars(vars, argc, argv);

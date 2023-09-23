@@ -1,7 +1,7 @@
 #include "../minishell.h"
 
 // 따옴표를 만날 때까지의 길이를 구한다.
-char *meet_quote(char *str, int *i, char quote)
+char	*meet_quote(char *str, int *i, char quote)
 {
 	char	*result;
 	int		last;
@@ -106,6 +106,8 @@ t_list	*tokenize(char *str)
 		else if(ft_isword(str[i]))
 		{
 			tmp = make_word(str, &i);
+			if (tmp == NULL)
+				return (NULL);
 			ft_lstadd_back(&head, ft_lstnew(tmp));
 		}
 		else // whitespace일 경우

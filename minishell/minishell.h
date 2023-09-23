@@ -104,4 +104,10 @@ void	use_close(int fd);
 int		infile_open(const char *path, int oflag);
 int		outfile_open(const char *path, int status);
 
+// env_vars
+int		is_include_dollar(char *str);
+char	*replace_tokens(char *content, t_env *env);
+void	replace_envvar(t_vars *vars);
+void	execute(t_vars *vars);
+
 #endif
