@@ -17,17 +17,17 @@ int	ft_isvalidkey(char *key)
 	return (1);
 }
 
-int	ft_isspecialtok(t_state state)
+int	ft_isspecialtok(char *token)
 {
-	if (state == PIPE)
+	if (ft_strncmp(token, "|", 2) == 0)
 		return (1);
-	else if (state == IN_REDIR)
+	if (ft_strncmp(token, "<", 2) == 0)
 		return (1);
-	else if (state == OUT_REDIR)
+	if (ft_strncmp(token, "<<", 3) == 0)
 		return (1);
-	else if (state == HEREDOC)
+	if (ft_strncmp(token, ">", 2) == 0)
 		return (1);
-	else if (state == PAIR_OUT_REDIR)
+	if (ft_strncmp(token, ">>", 3) == 0)
 		return (1);
 	return (0);
 }

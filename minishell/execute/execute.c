@@ -278,6 +278,17 @@ void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
 	ft_putstr_fd("\033[0m", 1);
 }
 
+ int	ft_is_redirection(t_list *lst)
+ {
+	while(lst != NULL && lst->state != PIPE)
+	{
+		if(lst->state ==IN_REDIR || lst->state== OUT_REDIR|| lst->state==HEREDOC||lst->state==PAIR_OUT_REDIR)
+			return (1);
+		lst=lst->next;
+	}
+	return 0;
+ }
+
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 {
 	int		(*pipe_fd)[2];
@@ -299,31 +310,37 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 	{
 		if (pid_index != process - 1)
 			pipe(pipe_fd[pid_index]);
-		if (is_builtin(lst))
+		cmd = make_cmd(lst);
+		if(is_builtin(cmd) && pid_index == process - 1 && !ft_is_redirection(lst))
 		{
-			builtin_fuc(vars);
-			move_next_syntax(&lst, &tmp_arr_index);
-			pid_index++;
-			continue ;
-		}
-		pid[pid_index] = fork();
-		if (pid[pid_index] == 0)
-		{
-			// builtin_fuc(vars);
-			cmd = make_cmd(lst);
-			cmd[0] = path_join(path, cmd[0]);
-			if(pid_index == 0 && pid_index == process - 1)
-				;
-			else if(pid_index == 0)
-				first_cmd(pipe_fd);
-			else if(pid_index != process - 1)
-				middle_cmd(pid_index, pipe_fd);
-			else
+			if(pid_index != 0)
 				last_cmd(pid_index, pipe_fd);
-			find_redirect(lst, tmp_arr,tmp_arr_index);
-			use_execve(cmd[0], cmd, envp);
+			builtin_fuc(vars, cmd);
 		}
-		// free(cmd);
+		else
+		{
+			pid[pid_index] = fork();
+			if (pid[pid_index] == 0)
+			{
+				if(pid_index == 0 && pid_index == process - 1)
+					;
+				else if(pid_index == 0)
+					first_cmd(pipe_fd);
+				else if(pid_index != process - 1)
+					middle_cmd(pid_index, pipe_fd);
+				else
+					last_cmd(pid_index, pipe_fd);
+				find_redirect(lst, tmp_arr,tmp_arr_index);
+				if(is_builtin(cmd))
+					exit(builtin_fuc(vars, cmd));
+				else
+				{
+					cmd[0] = path_join(path, cmd[0]);
+					use_execve(cmd[0], cmd, envp);
+				}
+			}
+		}
+		free(cmd);
 		if(pid_index != 0)
 		{
 			close(pipe_fd[pid_index - 1][0]);     //근데 close 실패하면 원래 exit이 맞나? 글고 애초에 실패할 일이 있으려나 일케 하면...?
@@ -337,44 +354,41 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		free(pipe_fd);
 }
 
-int	is_builtin(t_list *lst)
+int	is_builtin(char **cmd)
 {
-	if (ft_strncmp(lst->token, "cd", 3) == 0)
+	if (ft_strncmp(cmd[0], "cd", 3) == 0)
 		return (1);
-	else if (ft_strncmp(lst->token, "pwd", 4) == 0)
+	else if (ft_strncmp(cmd[0], "pwd", 4) == 0)
 		return (1);
-	else if (ft_strncmp(lst->token, "echo", 5) == 0)
+	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
 		return (1);
-	else if (ft_strncmp(lst->token, "export", 7) == 0)
+	else if (ft_strncmp(cmd[0], "export", 7) == 0)
 		return (1);
-	else if (ft_strncmp(lst->token, "env", 4) == 0)
+	else if (ft_strncmp(cmd[0], "env", 4) == 0)
 		return (1);
-	else if (ft_strncmp(lst->token, "unset", 6) == 0)
+	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
 		return (1);
-	else if (ft_strncmp(lst->token, "exit", 5) == 0)
+	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
 		return (1);
 	return (0);
 }
 
-void	builtin_fuc(t_vars *vars)
+int	builtin_fuc(t_vars *vars, char **cmd)
 {
-	t_list	*lst;
-
-	lst = vars->lst;
-	if (ft_strncmp(lst->token, "cd", 3) == 0)
-		g_status = b_cd(&lst);
-	else if (ft_strncmp(lst->token, "pwd", 4) == 0)
+	if (ft_strncmp(cmd[0], "cd", 3) == 0)
+		g_status = b_cd(cmd);
+	else if (ft_strncmp(cmd[0], "pwd", 4) == 0)
 		g_status = b_pwd();
-	else if (ft_strncmp(lst->token, "echo", 5) == 0)
-		g_status = b_echo(&lst);
-	else if (ft_strncmp(lst->token, "export", 7) == 0)
-		g_status = b_export(&lst, vars->env);
-	else if (ft_strncmp(lst->token, "env", 4) == 0)
-		g_status = b_env(&lst, vars->env);
-	else if (ft_strncmp(lst->token, "unset", 6) == 0)
-		g_status = b_unset(&lst, &(vars->env));
-	else if (ft_strncmp(lst->token, "exit", 5) == 0)
-		g_status = b_exit(&lst);
+	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
+		g_status = b_echo(cmd);
+	else if (ft_strncmp(cmd[0], "export", 7) == 0)
+		g_status = b_export(cmd, vars->env);
+	else if (ft_strncmp(cmd[0], "env", 4) == 0)
+		g_status = b_env(cmd, vars->env);
+	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
+		g_status = b_unset(cmd, &(vars->env));
+	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
+		g_status = b_exit(cmd);
 }
 
 char	**parse_path(t_env *env)
