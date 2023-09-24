@@ -33,6 +33,7 @@ int	main(int argc, char *argv[], char *envp[])
 			printf("exit\n");
 			break ;
 		}
+		str = replace_tokens(str, vars->env);
 		vars->lst = tokenize(str);
 		if (syntax_check(vars->lst) == 1)
 		{
@@ -40,7 +41,6 @@ int	main(int argc, char *argv[], char *envp[])
 			continue ;
 		}
 		add_history(str);
-		replace_envvar(vars);
 		print_tokens(vars->lst);
 		execute(vars);
 		free_strtok(str, &(vars->lst));

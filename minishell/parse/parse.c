@@ -16,7 +16,7 @@ char	*meet_quote(char *str, int *i, char quote)
 		len++;
 		last++;
 	}
-	result = ft_substr(str, *i, len);
+	result = ft_substr(str, *i + 1, len - 2);
 	*i = last + 1;
 	return (result);
 }

@@ -508,54 +508,41 @@ char	*replace_tokens(char *content, t_env *env)
 	return (result);
 }
 
-void	replace_envvar(t_vars *vars)
-{
-	t_list	*lst;
-
-	lst = vars->lst;
-	while (lst != NULL)
-	{
-		if (is_include_dollar(lst->token))
-			lst->token = replace_tokens(lst->token, vars->env);
-		lst = lst->next;
-	}
-}
-
 // "seunan seunan" => seunan seunan
 // seunan seunan => seunan, seunan
 // 공백 기준 스플릿, 따옴표 안에 있을 경우 스플릿 X
-void	trim_quotes(t_vars *vars)
-{
-	t_list	*lst;
-	int		i;
-	int		flag[2];
+// void	trim_quotes(t_vars *vars)
+// {
+// 	t_list	*lst;
+// 	int		i;
+// 	int		flag[2];
 
-	lst = vars->lst;
-	while (lst != NULL)
-	{
-		flag[0] = 0;
-		flag[1] = 0;
-		i = 0;
-		while ((lst->token)[i] != '\0')
-		{
-			if (flag[0] == 0 && (lst->token)[i] == '\'')
-				flag[0] = 1;
-			else if (flag[0] == 1 && (lst->token)[i] == '\'')
-			{
+// 	lst = vars->lst;
+// 	while (lst != NULL)
+// 	{
+// 		flag[0] = 0;
+// 		flag[1] = 0;
+// 		i = 0;
+// 		while ((lst->token)[i] != '\0')
+// 		{
+// 			if (flag[0] == 0 && (lst->token)[i] == '\'')
+// 				flag[0] = 1;
+// 			else if (flag[0] == 1 && (lst->token)[i] == '\'')
+// 			{
 
-			}
-			else if (flag[1] == 0 && (lst->token)[i] == '\"')
-				flag[1] = 1;
-			else if (flag[1] == 1 && (lst->token)[i] == '\"')
-			{
+// 			}
+// 			else if (flag[1] == 0 && (lst->token)[i] == '\"')
+// 				flag[1] = 1;
+// 			else if (flag[1] == 1 && (lst->token)[i] == '\"')
+// 			{
 
-			}
-			++i;
-		}
-		lst = lst->next;
-	}
+// 			}
+// 			++i;
+// 		}
+// 		lst = lst->next;
+// 	}
 
-}
+// }
 
 void	execute(t_vars *vars)
 {
