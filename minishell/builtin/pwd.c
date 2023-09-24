@@ -6,6 +6,6 @@ int	b_pwd(void)
 
 	path = getcwd(NULL, BUFSIZ);
 	printf("%s\n", path);
-	free(path);
+	use_free(path);
 	return (0);
 }

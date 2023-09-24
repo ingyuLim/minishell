@@ -53,8 +53,8 @@ char	*make_word(char *str, int *i)
 			tmp = meet_sep(str, &last);
 		mem = result;
 		result = ft_strjoin(result,tmp);
-		free(tmp);
-		free(mem);
+		use_free(tmp);
+		use_free(mem);
 	}
 	*i = last;
 	return (result);

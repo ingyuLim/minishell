@@ -24,3 +24,9 @@ pid_t	use_fork(void)
 		exit_with_err("fork");
 	return (pid);
 }
+
+void	use_free(void *mem)
+{
+	ft_bzero((char *)mem, ft_strlen(mem));
+	free(mem);
+}

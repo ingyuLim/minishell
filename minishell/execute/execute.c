@@ -84,7 +84,7 @@ char	**make_envp(t_env *env)
 	{
 		mem = ft_strjoin(env->key, "=");
 		envp[i] = ft_strjoin(mem, env->value);
-		free(mem);
+		use_free(mem);
 		env = env->next;
 		++i;
 	}
@@ -104,7 +104,7 @@ char	*path_join(char **path, char *cmd)
 		tmp = ft_strjoin(path[i], cmd);
 		if (access(tmp, X_OK) == 0)
 			break ;
-		free(tmp);
+		use_free(tmp);
 		++i;
 	}
 	if (path[i] == NULL)
@@ -119,10 +119,10 @@ void	free_envp(char **envp)
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		free(envp[i]);
+		use_free(envp[i]);
 		++i;
 	}
-	free(envp);
+	use_free(envp);
 }
 
 void	move_next_syntax(t_list **lst, int *tmp_arr_index)
@@ -238,14 +238,14 @@ void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
 		{
 			letter_num = ft_itoa(num++);
 			tmp_filename = ft_strjoin(tmp_file,letter_num);
-			free(letter_num);
+			use_free(letter_num);
 			while(access(tmp_filename,F_OK) != -1)
 			{
 				if(tmp_filename != NULL)
-					free(tmp_filename);
+					use_free(tmp_filename);
 				letter_num = ft_itoa(num++);
 				tmp_filename = ft_strjoin(tmp_file,letter_num);
-				free(letter_num);
+				use_free(letter_num);
 			}
 			// if (access(tmp_filename, F_OK) == -1)
 				// error
@@ -271,7 +271,7 @@ void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
 			}
 			use_close(tmp_fd);
 			i++;
-			free(buf);
+			use_free(buf);
 		}
 		lst = lst->next;
 	}
@@ -340,7 +340,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 				}
 			}
 		}
-		free(cmd);
+		use_free(cmd);
 		if(pid_index != 0)
 		{
 			close(pipe_fd[pid_index - 1][0]);     //근데 close 실패하면 원래 exit이 맞나? 글고 애초에 실패할 일이 있으려나 일케 하면...?
@@ -351,7 +351,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 	}
 	free_envp(envp);
 	if (process > 1)
-		free(pipe_fd);
+		use_free(pipe_fd);
 }
 
 int	is_builtin(char **cmd)
@@ -415,10 +415,10 @@ void	free_path(char **path)
 	i = 0;
 	while (path[i] != NULL)
 	{
-		free(path[i]);
+		use_free(path[i]);
 		i++;
 	}
-	free(path);
+	use_free(path);
 }
 
 int	is_include_dollar(char *str)
@@ -468,7 +468,7 @@ char	*ft_strjoin_char(char *s1, char c)
 		++i;
 	}
 	result[i] = c;
-	free(s1);
+	use_free(s1);
 	return (result);
 }
 
@@ -494,8 +494,8 @@ char	*replace_env_vars(char *content, t_env *env)
 			find_env(key, env);
 			tmp = result;
 			result = ft_strjoin(result, find_env(key, env));
-			free(tmp);
-			free(key);
+			use_free(tmp);
+			use_free(key);
 			i = j;
 		}
 		else
@@ -504,7 +504,7 @@ char	*replace_env_vars(char *content, t_env *env)
 			++i;
 		}
 	}
-	free(content);
+	use_free(content);
 	return (result);
 }
 
@@ -520,7 +520,7 @@ void	execute(t_vars *vars)
 	connect_pipe(vars, pid, process, path);
 	while(wait(NULL) != -1);
 	free_path(path);
-	free(pid);
+	use_free(pid);
 }
 
 

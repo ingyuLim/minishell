@@ -33,7 +33,7 @@ int	b_env(char **cmd, t_env *env)
 				{
 					if (cmd[i][ft_strlen(e_tmp->key)] == '=')
 					{
-						free(e_tmp->value);
+						use_free(e_tmp->value);
 						e_tmp->value = ft_strdup(cmd[i] + ft_strlen(e_tmp->key) + 1);
 						break ;
 					}

@@ -61,7 +61,7 @@ t_env	*make_env(char *content)
 	*cut = '\0';
 	env->key = ft_strdup(tmp);
 	env->next = NULL;
-	free(tmp);
+	use_free(tmp);
 	return (env);
 }
 

@@ -11,13 +11,13 @@ int	b_unset(char **cmd, t_env **env)
 	{
 		if (ft_strncmp((*env)->key, cmd[i], ft_strlen(cmd[i]) + 1) == 0)
 		{
-			free((*env)->key);
-			free((*env)->value);
+			use_free((*env)->key);
+			use_free((*env)->value);
 			(*env)->key = NULL;
 			(*env)->value = NULL;
 			tmp = (*env);
 			(*env) = (*env)->next;
-			free(tmp);
+			use_free(tmp);
 		}
 		tmp = *env;
 		while (tmp->next != NULL)
@@ -26,12 +26,12 @@ int	b_unset(char **cmd, t_env **env)
 			tmp = tmp->next;
 			if (ft_strncmp(tmp->key, cmd[i], ft_strlen(cmd[i]) + 1) == 0)
 			{
-				free(tmp->key);
-				free(tmp->value);
+				use_free(tmp->key);
+				use_free(tmp->value);
 				tmp->key = NULL;
 				tmp->value = NULL;
 				prev->next = tmp->next;
-				free(tmp);
+				use_free(tmp);
 			}
 		}
 		++i;

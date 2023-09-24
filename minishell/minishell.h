@@ -100,6 +100,7 @@ void	last_cmd(int pid_index, int (*pipe_fd)[2]);
 void	use_execve(char *path, char *argv[], char *envp[]);
 void	use_pipe(int *fd);
 pid_t	use_fork(void);
+void	use_free(void *mem);
 
 // execute/use_function2.c
 pid_t	use_waitpid(pid_t pid, int *stat_loc, int options);

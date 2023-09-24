@@ -15,9 +15,9 @@ void	minishell(t_vars *vars)
 		add_history(str);
 		if (replace_and_check(&str, vars) == 0)
 			continue ;
-		vars->lst = tokenize(str);				// 토큰화
+		vars->lst = tokenize(str);
 		print_tokens(vars->lst);
-		if (syntax_check(vars->lst) == 1)		// 문법 체크
+		if (syntax_check(vars->lst) == 1)
 		{
 			free_str_tok(str, &(vars->lst));
 			continue ;
@@ -33,7 +33,7 @@ int	replace_and_check(char **str, t_vars *vars)
 	*str = replace_env_vars(*str, vars->env);	// 환경변수 치환
 	if (is_valid_quotes(*str) == 0)			// 따옴표 검사
 	{
-		free(*str);
+		use_free(*str);
 		error_msg("Invalid quotes");
 		return (0);
 	}
