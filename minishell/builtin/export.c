@@ -9,7 +9,7 @@
 // export a=b : declare -x a="b"
 // => key: a, value: b
 
-int	b_env(char **cmd, t_env *env)
+int	b_export(char **cmd, t_env *env)
 {
 	t_env	*e_tmp;
 	int		i;

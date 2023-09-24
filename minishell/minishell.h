@@ -61,11 +61,11 @@ t_env	*dup_env(char *envp[]);
 // builtin/*.c
 int		b_cd(char **cmd);
 int		b_pwd(void);
-int		b_echo(t_list **lst);
-int		b_export(t_list **lst, t_env *env);
-int		b_env(t_list **lst, t_env *env);
-int		b_exit(t_list **lst);
-int		b_unset(t_list **lst, t_env **env);
+int		b_echo(char **cmd);
+int		b_export(char **cmd, t_env *env);
+int		b_env(char **cmd, t_env *env);
+int		b_exit(char **cmd);
+int		b_unset(char **cmd, t_env **env);
 
 // execve/change_in_and_out.c
 void	change_stdin_to_pipe(int *pipe_fd);
@@ -86,7 +86,7 @@ void	free_envp(char **envp);
 void	move_next_syntax(t_list **lst, int *tmp_arr_index);
 void	find_redirect(t_list *lst, char **tmp_arr, int tmp_arr_index);
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path);
-int		builtin_fuc(t_vars *vars, char **cmd);
+int		builtin_func(t_vars *vars, char **cmd);
 int		is_builtin(char **cmd);
 char	**parse_path(t_env *env);
 void	free_path(char **path);

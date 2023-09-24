@@ -315,7 +315,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		{
 			if(pid_index != 0)
 				last_cmd(pid_index, pipe_fd);
-			builtin_fuc(vars, cmd);
+			builtin_func(vars, cmd);
 		}
 		else
 		{
@@ -332,7 +332,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 					last_cmd(pid_index, pipe_fd);
 				find_redirect(lst, tmp_arr,tmp_arr_index);
 				if(is_builtin(cmd))
-					exit(builtin_fuc(vars, cmd));
+					exit(builtin_func(vars, cmd));
 				else
 				{
 					cmd[0] = path_join(path, cmd[0]);
@@ -373,7 +373,7 @@ int	is_builtin(char **cmd)
 	return (0);
 }
 
-int	builtin_fuc(t_vars *vars, char **cmd)
+int	builtin_func(t_vars *vars, char **cmd)
 {
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
 		g_status = b_cd(cmd);
@@ -389,6 +389,7 @@ int	builtin_fuc(t_vars *vars, char **cmd)
 		g_status = b_unset(cmd, &(vars->env));
 	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
 		g_status = b_exit(cmd);
+	return (g_status);
 }
 
 char	**parse_path(t_env *env)
@@ -454,25 +455,56 @@ char	*find_env(char *key, t_env *env)
 	return (tmp);
 }
 
+char	*ft_strjoin_char(char *s1, char c)
+{
+	char	*result;
+	int		i;
+
+	result = ft_calloc(ft_strlen(s1) + 2, sizeof(char));
+	i = 0;
+	while (s1[i] != '\0')
+	{
+		result[i] = s1[i];
+		++i;
+	}
+	result[i] = c;
+	free(s1);
+	return (result);
+}
+
 // "$USER $USER" => "seunan seunan"
 char	*replace_tokens(char *content, t_env *env)
 {
-	int		i;
 	char	*result;
-	char	*cut;
+	char	*key;
 	char	*tmp;
+	int		i;
+	int		j;
 
 	result = ft_strdup("");
 	i = 0;
 	while (content[i] != '\0')
 	{
-		if (content[i] != '$' && content[i + 1] != '\0' && content[i + 1] != ' '&& !ft_isquote(content[i]))
+		if (content[i] == '$' && content[i + 1] != '\0' && content[i + 1] != ' '&& !ft_isquote(content[i + 1]))
 		{
-
+			j = i + 1;
+			while (content[j] != '\0' && content[j] != ' ' && !ft_isquote(content[j]))
+				j++;
+			key = ft_substr(content, i + 1, j - i - 1);
+			find_env(key, env);
+			tmp = result;
+			result = ft_strjoin(result, find_env(key, env));
+			free(tmp);
+			free(key);
+			i = j;
 		}
-		++i;
+		else
+		{
+			result = ft_strjoin_char(result, content[i]);
+			++i;
+		}
 	}
-
+	return (result);
 }
 
 void	replace_envvar(t_vars *vars)
