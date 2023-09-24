@@ -485,12 +485,13 @@ char	*replace_tokens(char *content, t_env *env)
 	i = 0;
 	while (content[i] != '\0')
 	{
-		if (content[i] == '$' && content[i + 1] != '\0' && content[i + 1] != ' '&& !ft_isquote(content[i + 1]))
+		if (content[i] == '$' && content[i + 1] != '\0' && content[i + 1] != ' '&& !ft_isquote(content[i + 1]) && content[i + 1] != '$')
 		{
 			j = i + 1;
-			while (content[j] != '\0' && content[j] != ' ' && !ft_isquote(content[j]))
+			while (content[j] != '\0' && content[j] != ' ' && !ft_isquote(content[j]) && content[j] != '$')
 				j++;
 			key = ft_substr(content, i + 1, j - i - 1);
+			printf("key : %s\n", key);
 			find_env(key, env);
 			tmp = result;
 			result = ft_strjoin(result, find_env(key, env));
@@ -520,15 +521,51 @@ void	replace_envvar(t_vars *vars)
 	}
 }
 
+// "seunan seunan" => seunan seunan
+// seunan seunan => seunan, seunan
+// 공백 기준 스플릿, 따옴표 안에 있을 경우 스플릿 X
+void	trim_quotes(t_vars *vars)
+{
+	t_list	*lst;
+	int		i;
+	int		flag[2];
+
+	lst = vars->lst;
+	while (lst != NULL)
+	{
+		flag[0] = 0;
+		flag[1] = 0;
+		i = 0;
+		while ((lst->token)[i] != '\0')
+		{
+			if (flag[0] == 0 && (lst->token)[i] == '\'')
+				flag[0] = 1;
+			else if (flag[0] == 1 && (lst->token)[i] == '\'')
+			{
+
+			}
+			else if (flag[1] == 0 && (lst->token)[i] == '\"')
+				flag[1] = 1;
+			else if (flag[1] == 1 && (lst->token)[i] == '\"')
+			{
+
+			}
+			++i;
+		}
+		lst = lst->next;
+	}
+
+}
+
 void	execute(t_vars *vars)
 {
 	char		**path;
 	int			process;
 	pid_t		*pid;
-	// int			stat;
 
 	// vars->env에서 환경변수 찾아 치환해주기.
 	// lst에서 따옴표 처리
+	// replace_envvar(vars);
 	path = parse_path(vars->env);
 	process = process_count(vars->lst);
 	pid = ft_calloc(process, sizeof(pid_t));
