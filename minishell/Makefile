@@ -4,19 +4,19 @@ NAME=minishell
 CC=gcc
 CFLAGS=-Wall -Werror -Wextra
 LIBFT=./libft/libft.a
-DEBUG= -g 
-# 3 -fsanitize=address
+DEBUG= -g#3 -fsanitize=address
 
-SRCS=\
-	main.c \
+SRCS= main.c \
+	minishell.c \
 	utils.c \
 	error.c \
 	syntax.c \
+	test/test.c \
 	$(wildcard ./execute/*.c) \
 	$(wildcard ./builtin/*.c) \
 	$(wildcard ./parse/*.c)
-TEST_SRCS=\
-	test_parse.c \
+TEST_SRCS= ./test/test_parse.c \
+	minishell.c \
 	utils.c \
 	error.c \
 	syntax.c \

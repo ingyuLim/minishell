@@ -1,41 +1,30 @@
 #include "minishell.h"
 
-/* TEST */
-static char	test_state[8][20] = {
-	"START",				// 명령어의 시작
-	"CMD",
-	"FNAME",
-	"PIPE",					// |
-	"IN_REDIR",				// <
-	"OUT_REDIR",			// >
-	"HEREDOC",				// << limiter
-	"PAIR_OUT_REDIR",		// >>
-};
-
-void	leak(void)
+void	init_vars(t_vars *vars, char *envp[])
 {
-	system("leaks minishell | grep leaked");
+	vars->env = dup_env(envp);
+	vars->lst = NULL;
 }
 
-void	free_strtok(char *str, t_list **lst)
+void	free_vars(t_vars *vars, int a, char *b[])
+{
+	t_env	*tmp;
+	(void) a;
+	(void) b;
+
+	while (vars->env != NULL)
+	{
+		tmp = vars->env;
+		free(tmp->key);
+		free(tmp->value);
+		vars->env = vars->env->next;
+		free(tmp);
+	}
+	free(vars);
+}
+
+void	free_str_tok(char *str, t_list **lst)
 {
 	free(str);
 	ft_lstclear(lst, free);
 }
-
-void	print_tokens(t_list *lst)
-{
-	int	cnt = 0;
-
-	printf("\033[1;37m");
-	while (lst != NULL)
-	{
-		printf("%d: %s, %s\n", cnt, lst->token, test_state[lst->state]);
-		lst = lst->next;
-		++cnt;
-	}
-	printf("\033[1;30m");
-	printf("\ndivided into %d tokens\n", cnt);
-	printf("\033[0m");
-}
-

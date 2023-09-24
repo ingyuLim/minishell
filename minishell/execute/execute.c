@@ -473,7 +473,7 @@ char	*ft_strjoin_char(char *s1, char c)
 }
 
 // "$USER $USER" => "seunan seunan"
-char	*replace_tokens(char *content, t_env *env)
+char	*replace_env_vars(char *content, t_env *env)
 {
 	char	*result;
 	char	*key;
@@ -505,44 +505,9 @@ char	*replace_tokens(char *content, t_env *env)
 			++i;
 		}
 	}
+	free(content);
 	return (result);
 }
-
-// "seunan seunan" => seunan seunan
-// seunan seunan => seunan, seunan
-// 공백 기준 스플릿, 따옴표 안에 있을 경우 스플릿 X
-// void	trim_quotes(t_vars *vars)
-// {
-// 	t_list	*lst;
-// 	int		i;
-// 	int		flag[2];
-
-// 	lst = vars->lst;
-// 	while (lst != NULL)
-// 	{
-// 		flag[0] = 0;
-// 		flag[1] = 0;
-// 		i = 0;
-// 		while ((lst->token)[i] != '\0')
-// 		{
-// 			if (flag[0] == 0 && (lst->token)[i] == '\'')
-// 				flag[0] = 1;
-// 			else if (flag[0] == 1 && (lst->token)[i] == '\'')
-// 			{
-
-// 			}
-// 			else if (flag[1] == 0 && (lst->token)[i] == '\"')
-// 				flag[1] = 1;
-// 			else if (flag[1] == 1 && (lst->token)[i] == '\"')
-// 			{
-
-// 			}
-// 			++i;
-// 		}
-// 		lst = lst->next;
-// 	}
-
-// }
 
 void	execute(t_vars *vars)
 {
@@ -550,9 +515,6 @@ void	execute(t_vars *vars)
 	int			process;
 	pid_t		*pid;
 
-	// vars->env에서 환경변수 찾아 치환해주기.
-	// lst에서 따옴표 처리
-	// replace_envvar(vars);
 	path = parse_path(vars->env);
 	process = process_count(vars->lst);
 	pid = ft_calloc(process, sizeof(pid_t));
