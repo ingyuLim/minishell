@@ -24,7 +24,7 @@ void	print_tokens(t_list *lst)
 	printf("\033[1;37m");
 	while (lst != NULL)
 	{
-		printf("%d: %s, %s\n", cnt, lst->token, test_state[lst->state]);
+		printf("%d: %s\nstate: %s\n", cnt, lst->token, test_state[lst->state]);
 		lst = lst->next;
 		++cnt;
 	}

@@ -30,6 +30,8 @@ typedef struct s_vars
 
 // minishell.c
 void	minishell(t_vars *vars);
+int		replace_and_check(char **str, t_vars *vars);
+int		is_valid_quotes(char *str);
 
 // syntax.c
 void	print_green(char *str);
@@ -44,6 +46,7 @@ void	free_str_tok(char *str, t_list **lst);
 
 // error.c
 void	error(char *err);
+void	error_msg(char *msg);
 void	exit_with_msg(char *msg);
 void	exit_with_err(char *err);
 

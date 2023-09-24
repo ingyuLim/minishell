@@ -18,7 +18,6 @@ int	b_unset(char **cmd, t_env **env)
 			tmp = (*env);
 			(*env) = (*env)->next;
 			free(tmp);
-			printf("head key: %s\n", (*env)->key);
 		}
 		tmp = *env;
 		while (tmp->next != NULL)

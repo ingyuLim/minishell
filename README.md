@@ -70,11 +70,12 @@
 	- [x] syntax check
 - [ ] execute
 	- [x] 다중 파이프
-	- [x] leak 잡기
 	- [x] redirection 처리
 	- [x] HERE_DOC
-	- [ ] 환경 변수 변환
-	- [ ] quote trim 처리
+	- [x] 환경 변수 변환
+	- [x] quote trim 처리
+	- [ ] leak 잡기
+	- [ ] builtin pipe 처리
 - [ ] process 상태값
 - [ ] signal 처리
 	- [x] ctrl + D

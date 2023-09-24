@@ -491,7 +491,6 @@ char	*replace_env_vars(char *content, t_env *env)
 			while (content[j] != '\0' && content[j] != ' ' && !ft_isquote(content[j]) && content[j] != '$')
 				j++;
 			key = ft_substr(content, i + 1, j - i - 1);
-			printf("key : %s\n", key);
 			find_env(key, env);
 			tmp = result;
 			result = ft_strjoin(result, find_env(key, env));

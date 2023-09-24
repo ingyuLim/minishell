@@ -8,17 +8,17 @@ void	init_vars(t_vars *vars, char *envp[])
 
 void	free_vars(t_vars *vars, int a, char *b[])
 {
-	t_env	*tmp;
+	t_env	*e_tmp;
 	(void) a;
 	(void) b;
 
 	while (vars->env != NULL)
 	{
-		tmp = vars->env;
-		free(tmp->key);
-		free(tmp->value);
+		e_tmp = vars->env;
+		free(e_tmp->key);
+		free(e_tmp->value);
 		vars->env = vars->env->next;
-		free(tmp);
+		free(e_tmp);
 	}
 	free(vars);
 }

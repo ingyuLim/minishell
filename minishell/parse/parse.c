@@ -10,8 +10,6 @@ char	*meet_quote(char *str, int *i, char quote)
 	len = 0;
 	while(str[*i] != quote) // 짝이 맞는 따옴표를 만날 때까지의 길이를 구한다.
 	{
-		if(str[*i] == '\0')
-			return (NULL);
 		++len;
 		++(*i);
 	}
@@ -50,14 +48,7 @@ char	*make_word(char *str, int *i)
 	while(ft_isword(str[last])) // == !ft_isseparator(str[last])
 	{
 		if (ft_isquote(str[last])) // 따옴표일 경우
-		{
 			tmp = meet_quote(str, &last, str[last]);
-			if (tmp == NULL)
-			{
-				free(result);
-				return (NULL);
-			}
-		}
 		else
 			tmp = meet_sep(str, &last);
 		mem = result;
@@ -111,8 +102,6 @@ t_list	*tokenize(char *str)
 		else if(ft_isword(str[i]))
 		{
 			tmp = make_word(str, &i);
-			if (tmp == NULL)
-				return (NULL);
 			ft_lstadd_back(&head, ft_lstnew(tmp));
 		}
 		else // whitespace일 경우

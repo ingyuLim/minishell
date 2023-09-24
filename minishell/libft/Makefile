@@ -4,6 +4,7 @@ NAME=libft.a
 CC=gcc
 CFLAGS=-Wall -Wextra -Werror
 DEBUG=-g3 -fsanitize=address
+LLDB=-g
 
 MANDATORY_SRC=\
 	ft_isalpha.c \
@@ -82,6 +83,10 @@ re:
 
 debug:
 	$(MAKE) fclean
-	$(MAKE) all CFLAGS="$(CFLAGS) $(DEBUG)"
+	$(MAKE) bonus CFLAGS="$(CFLAGS) $(DEBUG)"
 
-.PHONY: all clean fclean re bonus debug
+lldb:
+	$(MAKE) fclean
+	$(MAKE) bonus CFLAGS="$(CFLAGS) $(LLDB)"
+
+.PHONY: all clean fclean re bonus debug lldb
