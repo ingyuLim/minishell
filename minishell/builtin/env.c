@@ -19,22 +19,25 @@ void	print_env(t_env *env)
 
 void	add_env(t_env *env, char *cmd)
 {
-	while (env != NULL)
+	t_env	*e_tmp;
+
+	e_tmp = env;
+	while (e_tmp != NULL)
 	{
-		if (ft_strncmp(env->key, cmd, ft_strlen(env->key)) == 0)
+		if (ft_strncmp(e_tmp->key, cmd, ft_strlen(e_tmp->key)) == 0)
 		{
-			if (cmd[ft_strlen(env->key)] == '=')
+			if (cmd[ft_strlen(e_tmp->key)] == '=')
 			{
-				use_free(env->value);
-				env->value = ft_strdup(cmd + ft_strlen(env->key) + 1);
+				use_free(e_tmp->value);
+				e_tmp->value = ft_strdup(cmd + ft_strlen(e_tmp->key) + 1);
 				break ;
 			}
-			else if (cmd[ft_strlen(env->key)] == '\0')
+			else if (cmd[ft_strlen(e_tmp->key)] == '\0')
 				break ;
 		}
-		env = env->next;
+		e_tmp = e_tmp->next;
 	}
-	if (env == NULL)
+	if (e_tmp == NULL)
 	{
 		if (!ft_isvalidkey(cmd))
 			printf("minishell: export: `%s': not a valid identifier\n", cmd);

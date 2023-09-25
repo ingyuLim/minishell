@@ -2,7 +2,7 @@
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	// atexit(leak);
+	atexit(leak);
 	t_vars	*vars;
 
 	vars = (t_vars *)ft_calloc(1, sizeof(t_vars));
