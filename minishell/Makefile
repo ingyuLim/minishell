@@ -13,7 +13,7 @@ SRCS= main.c \
 	error.c \
 	syntax.c \
 	test/test.c \
-	$(wildcard ./get_next_line/*.c) \
+	$(wildcard ./env/*.c) \
 	$(wildcard ./execute/*.c) \
 	$(wildcard ./builtin/*.c) \
 	$(wildcard ./parse/*.c)
@@ -22,6 +22,7 @@ TEST_SRCS= ./test/test_parse.c \
 	utils.c \
 	error.c \
 	syntax.c \
+	$(wildcard ./env/*.c) \
 	$(wildcard ./execute/*.c) \
 	$(wildcard ./builtin/*.c) \
 	$(wildcard ./parse/*.c)

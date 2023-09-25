@@ -75,12 +75,12 @@
 	- [x] 환경 변수 변환
 	- [x] quote trim 처리
 	- [ ] leak 잡기
-	- [ ] builtin pipe 처리
+	- [x] builtin pipe 처리
 - [ ] process 상태값
-- [ ] signal 처리
+- [x] signal 처리
 	- [x] ctrl + D
-	- [ ] ctrl + C
-	- [ ] ctrl + \
+	- [x] ctrl + C
+	- [x] ctrl + \
 
 ## Analyzing a subject
 

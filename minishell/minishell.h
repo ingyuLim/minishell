@@ -32,6 +32,8 @@ typedef struct s_vars
 void	minishell(t_vars *vars);
 int		replace_and_check(char **str, t_vars *vars);
 int		is_valid_quotes(char *str);
+void	sigint_handler(int signo);
+void	sigquit_handler(int signo);
 
 // syntax.c
 void	print_green(char *str);
