@@ -4,6 +4,8 @@ void	minishell(t_vars *vars)
 {
 	char	*str;
 
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, sigquit_handler);
 	while (1)
 	{
 		str = readline("\033[0;36mminishell$\033[0m ");
@@ -60,4 +62,20 @@ int	is_valid_quotes(char *str)
 	if (sin % 2 == 0 && dou % 2 == 0)
 		return (1);
 	return (0);
+}
+
+void	sigint_handler(int signo)
+{
+	(void) signo;
+	rl_on_new_line();
+	ft_putchar_fd('\n', 1);
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+void	sigquit_handler(int signo)
+{
+	(void) signo;
+	rl_on_new_line();
+	rl_redisplay();
 }
