@@ -183,6 +183,7 @@ char	**malloc_tmp_arr(t_list *lst)
 	char	**tmp_arr;
 	int		i;
 
+	tmp_arr = NULL;
 	i = 0;
 	while(lst != NULL)
 	{
@@ -190,7 +191,8 @@ char	**malloc_tmp_arr(t_list *lst)
 			i++;
 		lst = (lst)->next;
 	}
-	tmp_arr = ft_calloc(i + 1, sizeof(char *));
+	if(i != 0)
+		tmp_arr = ft_calloc(i + 1, sizeof(char *));
 	return (tmp_arr);
 }
 
