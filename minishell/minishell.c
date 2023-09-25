@@ -8,7 +8,7 @@ void	minishell(t_vars *vars)
 	signal(SIGQUIT, sigquit_handler);
 	while (1)
 	{
-		// str = readline("\033[0;36mminishell$\033[0m ");
+		str = readline("\033[0;36mminishell$\033[0m ");
 		if (str == NULL)
 		{
 			ft_putstr_fd("exit\n", 1);

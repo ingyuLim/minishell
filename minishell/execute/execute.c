@@ -183,6 +183,7 @@ char	**malloc_tmp_arr(t_list *lst)
 	char	**tmp_arr;
 	int		i;
 
+	tmp_arr = NULL;
 	i = 0;
 	while(lst != NULL)
 	{
@@ -190,7 +191,8 @@ char	**malloc_tmp_arr(t_list *lst)
 			i++;
 		lst = (lst)->next;
 	}
-	tmp_arr = ft_calloc(i + 1, sizeof(char *));
+	if(i != 0)
+		tmp_arr = ft_calloc(i + 1, sizeof(char *));
 	return (tmp_arr);
 }
 
@@ -289,6 +291,20 @@ void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
 	return 0;
  }
 
+void	free_tmp_arr(char **tmp_arr)
+{
+	int	i;
+
+	i = 0;
+	while(tmp_arr[i] != NULL)
+	{
+		use_free(tmp_arr[i]);
+		i++;
+	}
+	use_free(tmp_arr);
+}
+
+
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 {
 	int		(*pipe_fd)[2];
@@ -352,6 +368,8 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 	free_envp(envp);
 	if (process > 1)
 		use_free(pipe_fd);
+	if(tmp_arr != NULL)
+		free_tmp_arr(tmp_arr);
 }
 
 int	is_builtin(char **cmd)
