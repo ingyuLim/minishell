@@ -9,9 +9,9 @@ void	init_vars(t_vars *vars, char *envp[])
 void	free_vars(t_vars *vars, int a, char *b[])
 {
 	t_env	*e_tmp;
+
 	(void) a;
 	(void) b;
-
 	while (vars->env != NULL)
 	{
 		e_tmp = vars->env;

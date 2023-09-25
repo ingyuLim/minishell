@@ -11,9 +11,8 @@ SRCS= main.c \
 	minishell.c \
 	utils.c \
 	error.c \
-	syntax.c \
 	test/test.c \
-	$(wildcard ./env/*.c) \
+	$(wildcard ./syntax/*.c) \
 	$(wildcard ./execute/*.c) \
 	$(wildcard ./builtin/*.c) \
 	$(wildcard ./parse/*.c)
@@ -21,8 +20,7 @@ TEST_SRCS= ./test/test_parse.c \
 	minishell.c \
 	utils.c \
 	error.c \
-	syntax.c \
-	$(wildcard ./env/*.c) \
+	$(wildcard ./syntax/*.c) \
 	$(wildcard ./execute/*.c) \
 	$(wildcard ./builtin/*.c) \
 	$(wildcard ./parse/*.c)

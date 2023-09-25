@@ -30,16 +30,16 @@ typedef struct s_vars
 
 // minishell.c
 void	minishell(t_vars *vars);
-int		replace_and_check(char **str, t_vars *vars);
-int		is_valid_quotes(char *str);
-void	sigint_handler(int signo);
-void	sigquit_handler(int signo);
 
 // syntax.c
-void	print_green(char *str);
-void	print_red(char *str);
-int		is_word(t_state state);
 int		syntax_check(t_list *lst);
+int		is_valid_one(t_list *lst, t_state *cur);
+int		is_valid_two(t_list *lst, t_state *cur);
+
+// syntax_utils.c
+int		is_word(t_state state);
+void	change_state(t_state *cur, t_state *lst, t_state state);
+int		last_condition(t_list *lst);
 
 // utils.c
 void	init_vars(t_vars *vars, char *envp[]);
@@ -52,16 +52,34 @@ void	error_msg(char *msg);
 void	exit_with_msg(char *msg);
 void	exit_with_err(char *err);
 
-// test/test.c
-void	leak(void);
-void	print_tokens(t_list *lst);
+// env.c
+int		replace_and_check(char **str, t_vars *vars);
+char	*replace_env_vars(char *content, t_env *env);
+void	state_join(char **result, int *i);
+void	env_join(char *content, char **result, int *i, t_env *env);
+int		is_valid_quotes(char *str);
 
-// parse/parse.c
+// env_utils.c
+int		is_include_dollar(char *str);
+int		is_envvar(char *content, int i, int flag);
+int		is_state(char *content, int i);
+char	*find_env(char *key, t_env *env);
+char	*ft_strjoin_char(char *s1, char c);
+
+// signal.c
+void	sigint_handler(int signo);
+void	sigquit_handler(int signo);
+
+// parse.c
 char	*meet_quote(char *str, int *i, char quote);
 char	*meet_sep(char *str, int *i);
 char	*make_word(char *str, int *i);
 char	*make_symbol(char *str, char c, int *i);
 t_list	*tokenize(char *str);
+
+// test/test.c
+void	leak(void);
+void	print_tokens(t_list *lst);
 
 // execute/execute.c
 int		process_count(t_list *lst);
