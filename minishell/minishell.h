@@ -77,6 +77,26 @@ char	*make_word(char *str, int *i);
 char	*make_symbol(char *str, char c, int *i);
 t_list	*tokenize(char *str);
 
+// builtin_utils.c
+int		ft_isvalidkey(char *key);
+t_env	*ft_envlast(t_env *env);
+void	ft_envadd_back(t_env **head, t_env *new);
+t_env	*make_env(char *content);
+t_env	*dup_env(char *envp[]);
+
+// builtin/*.c
+int		b_cd(char **cmd);
+int		b_echo(char **cmd);
+int		b_pwd(void);
+int		b_exit(char **cmd);
+int		b_env(char **cmd, t_env *env);
+int		b_export(char **cmd, t_env *env);
+void	print_env(t_env *env);
+void	add_env(t_env *env, char *cmd);
+int		b_unset(char **cmd, t_env **env);
+void	change_head(char *cmd, t_env **env);
+void	delete_node(char *cmd, t_env *env);
+
 // test/test.c
 void	leak(void);
 void	print_tokens(t_list *lst);
@@ -128,20 +148,5 @@ pid_t	use_waitpid(pid_t pid, int *stat_loc, int options);
 void	use_dup2(int fd1, int fd2);
 void	use_close(int fd);
 int		infile_open(const char *path, int oflag);
-
-// builtin/builtin.c
-int		ft_isvalidkey(char *key);
-t_env	*ft_envlast(t_env *env);
-void	ft_envadd_back(t_env **head, t_env *new);
-t_env	*make_env(char *content);
-t_env	*dup_env(char *envp[]);
-
-int		b_cd(char **cmd);
-int		b_echo(char **cmd);
-int		b_unset(char **cmd, t_env **env);
-int		b_pwd(void);
-int		b_export(char **cmd, t_env *env);
-int		b_exit(char **cmd);
-int		b_env(char **cmd, t_env *env);
 
 #endif

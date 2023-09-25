@@ -7,7 +7,7 @@ int	b_exit(char **cmd)
 	i = 0;
 	while (cmd[i] != NULL)
 		++i;
-	if (i > 2)	
+	if (i > 2)
 	{
 		error("too many arguments");
 		return (1);
