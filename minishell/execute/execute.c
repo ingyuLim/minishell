@@ -480,12 +480,16 @@ char	*replace_env_vars(char *content, t_env *env)
 	char	*tmp;
 	int		i;
 	int		j;
+	int		flag;
 
 	result = ft_strdup("");
 	i = 0;
+	flag = 0;
 	while (content[i] != '\0')
 	{
-		if (content[i] == '$' && content[i + 1] != '\0' && content[i + 1] != ' '&& !ft_isquote(content[i + 1]) && content[i + 1] != '$')
+		if (content[i] == '\'')
+			flag = !flag;
+		if (content[i] == '$' && content[i + 1] != '\0' && content[i + 1] != ' '&& !ft_isquote(content[i + 1]) && content[i + 1] != '$' && !flag)
 		{
 			j = i + 1;
 			while (content[j] != '\0' && content[j] != ' ' && !ft_isquote(content[j]) && content[j] != '$')
