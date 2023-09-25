@@ -76,6 +76,7 @@ void	find_redirect(t_list *lst, char **tmp_arr, int tmp_arr_index);
 char	**malloc_tmp_arr(t_list *lst);
 int		exist_nl(char *buf);
 size_t	gnl_strlen(char *str);
+void	free_tmp_arr(char **tmp_arr);
 void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst);
 int		ft_is_redirection(t_list *lst);
 void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path);

@@ -67,6 +67,14 @@ char	*replace_env_vars(char *content, t_env *env)
 			flag = !flag;
 		if (content[i] == '$' && content[i + 1] != '\0' && content[i + 1] != ' '&& !ft_isquote(content[i + 1]) && content[i + 1] != '$' && !flag)
 		{
+			if (content[i + 1] == '?' && content[i + 2] == '\0' && content[i + 2] == ' '&& ft_isquote(content[i + 2]) && content[i + 2] == '$') // error
+			{
+				tmp = result;
+				result = ft_strjoin(result, ft_itoa(g_status));
+				use_free(tmp);
+				i += 2;
+				continue ;
+			}
 			j = i + 1;
 			while (content[j] != '\0' && content[j] != ' ' && !ft_isquote(content[j]) && content[j] != '$')
 				j++;

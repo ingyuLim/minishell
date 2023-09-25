@@ -23,7 +23,7 @@ void	minishell(t_vars *vars)
 			free_str_tok(str, &(vars->lst));
 			continue ;
 		}
-		// print_tokens(vars->lst);
+		print_tokens(vars->lst);
 		execute(vars);
 		free_str_tok(str, &(vars->lst));
 	}
