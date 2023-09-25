@@ -84,7 +84,7 @@ char	**make_envp(t_env *env)
 	{
 		mem = ft_strjoin(env->key, "=");
 		envp[i] = ft_strjoin(mem, env->value);
-		free(mem);
+		use_free(mem);
 		env = env->next;
 		++i;
 	}
@@ -104,7 +104,7 @@ char	*path_join(char **path, char *cmd)
 		tmp = ft_strjoin(path[i], cmd);
 		if (access(tmp, X_OK) == 0)
 			break ;
-		free(tmp);
+		use_free(tmp);
 		++i;
 	}
 	if (path[i] == NULL)
@@ -119,10 +119,10 @@ void	free_envp(char **envp)
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		free(envp[i]);
+		use_free(envp[i]);
 		++i;
 	}
-	free(envp);
+	use_free(envp);
 }
 
 void	move_next_syntax(t_list **lst, int *tmp_arr_index)
@@ -238,14 +238,14 @@ void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
 		{
 			letter_num = ft_itoa(num++);
 			tmp_filename = ft_strjoin(tmp_file,letter_num);
-			free(letter_num);
+			use_free(letter_num);
 			while(access(tmp_filename,F_OK) != -1)
 			{
 				if(tmp_filename != NULL)
-					free(tmp_filename);
+					use_free(tmp_filename);
 				letter_num = ft_itoa(num++);
 				tmp_filename = ft_strjoin(tmp_file,letter_num);
-				free(letter_num);
+				use_free(letter_num);
 			}
 			// if (access(tmp_filename, F_OK) == -1)
 				// error
@@ -271,7 +271,7 @@ void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
 			}
 			use_close(tmp_fd);
 			i++;
-			free(buf);
+			use_free(buf);
 		}
 		lst = lst->next;
 	}
@@ -315,7 +315,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		{
 			if(pid_index != 0)
 				last_cmd(pid_index, pipe_fd);
-			builtin_fuc(vars, cmd);
+			builtin_func(vars, cmd);
 		}
 		else
 		{
@@ -332,7 +332,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 					last_cmd(pid_index, pipe_fd);
 				find_redirect(lst, tmp_arr,tmp_arr_index);
 				if(is_builtin(cmd))
-					exit(builtin_fuc(vars, cmd));
+					exit(builtin_func(vars, cmd));
 				else
 				{
 					cmd[0] = path_join(path, cmd[0]);
@@ -340,7 +340,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 				}
 			}
 		}
-		free(cmd);
+		use_free(cmd);
 		if(pid_index != 0)
 		{
 			close(pipe_fd[pid_index - 1][0]);     //근데 close 실패하면 원래 exit이 맞나? 글고 애초에 실패할 일이 있으려나 일케 하면...?
@@ -351,7 +351,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 	}
 	free_envp(envp);
 	if (process > 1)
-		free(pipe_fd);
+		use_free(pipe_fd);
 }
 
 int	is_builtin(char **cmd)
@@ -373,7 +373,7 @@ int	is_builtin(char **cmd)
 	return (0);
 }
 
-int	builtin_fuc(t_vars *vars, char **cmd)
+int	builtin_func(t_vars *vars, char **cmd)
 {
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
 		g_status = b_cd(cmd);
@@ -389,6 +389,7 @@ int	builtin_fuc(t_vars *vars, char **cmd)
 		g_status = b_unset(cmd, &(vars->env));
 	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
 		g_status = b_exit(cmd);
+	return (g_status);
 }
 
 char	**parse_path(t_env *env)
@@ -414,10 +415,10 @@ void	free_path(char **path)
 	i = 0;
 	while (path[i] != NULL)
 	{
-		free(path[i]);
+		use_free(path[i]);
 		i++;
 	}
-	free(path);
+	use_free(path);
 }
 
 int	is_include_dollar(char *str)
@@ -454,38 +455,57 @@ char	*find_env(char *key, t_env *env)
 	return (tmp);
 }
 
-// "$USER $USER" => "seunan seunan"
-char	*replace_tokens(char *content, t_env *env)
+char	*ft_strjoin_char(char *s1, char c)
 {
-	int		i;
 	char	*result;
-	char	*cut;
+	int		i;
+
+	result = ft_calloc(ft_strlen(s1) + 2, sizeof(char));
+	i = 0;
+	while (s1[i] != '\0')
+	{
+		result[i] = s1[i];
+		++i;
+	}
+	result[i] = c;
+	use_free(s1);
+	return (result);
+}
+
+// "$USER $USER" => "seunan seunan"
+char	*replace_env_vars(char *content, t_env *env)
+{
+	char	*result;
+	char	*key;
 	char	*tmp;
+	int		i;
+	int		j;
 
 	result = ft_strdup("");
 	i = 0;
 	while (content[i] != '\0')
 	{
-		if (content[i] != '$' && content[i + 1] != '\0' && content[i + 1] != ' '&& !ft_isquote(content[i]))
+		if (content[i] == '$' && content[i + 1] != '\0' && content[i + 1] != ' '&& !ft_isquote(content[i + 1]) && content[i + 1] != '$')
 		{
-
+			j = i + 1;
+			while (content[j] != '\0' && content[j] != ' ' && !ft_isquote(content[j]) && content[j] != '$')
+				j++;
+			key = ft_substr(content, i + 1, j - i - 1);
+			find_env(key, env);
+			tmp = result;
+			result = ft_strjoin(result, find_env(key, env));
+			use_free(tmp);
+			use_free(key);
+			i = j;
 		}
-		++i;
+		else
+		{
+			result = ft_strjoin_char(result, content[i]);
+			++i;
+		}
 	}
-
-}
-
-void	replace_envvar(t_vars *vars)
-{
-	t_list	*lst;
-
-	lst = vars->lst;
-	while (lst != NULL)
-	{
-		if (is_include_dollar(lst->token))
-			lst->token = replace_tokens(lst->token, vars->env);
-		lst = lst->next;
-	}
+	use_free(content);
+	return (result);
 }
 
 void	execute(t_vars *vars)
@@ -493,17 +513,14 @@ void	execute(t_vars *vars)
 	char		**path;
 	int			process;
 	pid_t		*pid;
-	// int			stat;
 
-	// vars->env에서 환경변수 찾아 치환해주기.
-	// lst에서 따옴표 처리
 	path = parse_path(vars->env);
 	process = process_count(vars->lst);
 	pid = ft_calloc(process, sizeof(pid_t));
 	connect_pipe(vars, pid, process, path);
 	while(wait(NULL) != -1);
 	free_path(path);
-	free(pid);
+	use_free(pid);
 }
 
 

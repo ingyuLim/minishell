@@ -12,7 +12,7 @@ int	b_echo(char **cmd)
 		flag = 1;
 		i = 2;
 	}
-	while(cmd[i] != NULL && !ft_isspecialtok(cmd[i]))
+	while(cmd[i] != NULL)
 	{
 		ft_putstr_fd(cmd[i], 1);
 		if(cmd[i + 1] != NULL)

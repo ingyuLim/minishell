@@ -17,21 +17,6 @@ int	ft_isvalidkey(char *key)
 	return (1);
 }
 
-int	ft_isspecialtok(char *token)
-{
-	if (ft_strncmp(token, "|", 2) == 0)
-		return (1);
-	if (ft_strncmp(token, "<", 2) == 0)
-		return (1);
-	if (ft_strncmp(token, "<<", 3) == 0)
-		return (1);
-	if (ft_strncmp(token, ">", 2) == 0)
-		return (1);
-	if (ft_strncmp(token, ">>", 3) == 0)
-		return (1);
-	return (0);
-}
-
 t_env	*ft_envlast(t_env *env)
 {
 	if (env == NULL)
@@ -76,7 +61,7 @@ t_env	*make_env(char *content)
 	*cut = '\0';
 	env->key = ft_strdup(tmp);
 	env->next = NULL;
-	free(tmp);
+	use_free(tmp);
 	return (env);
 }
 

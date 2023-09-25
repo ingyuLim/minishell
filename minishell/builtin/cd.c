@@ -6,7 +6,7 @@ int	b_cd(char **cmd)
 	//2. 마지막 cmd인 경우 flag를 줘서 fork 하지 않게 하기.
 	char	*path;
 
-	if (cmd[1] == NULL || ft_strncmp(cmd[1], "~", 2) == 0 || ft_isspecialtok(cmd[1] == 1))
+	if (cmd[1] == NULL || ft_strncmp(cmd[1], "~", 2) == 0)
 		path = getenv("HOME");
 	else
 		path = cmd[1];

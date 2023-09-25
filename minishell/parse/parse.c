@@ -3,25 +3,21 @@
 // 따옴표를 만날 때까지의 길이를 구한다.
 char	*meet_quote(char *str, int *i, char quote)
 {
-	char	*result;
-	int		last;
+	int		start;
 	int		len;
 
-	last = *i + 1;
-	len = 2;
-	while(str[last] != quote) // 짝이 맞는 따옴표를 만날 때까지의 길이를 구한다.
+	start = ++(*i);	// 따옴표 다음 인덱스
+	len = 0;
+	while(str[*i] != quote) // 짝이 맞는 따옴표를 만날 때까지의 길이를 구한다.
 	{
-		if(str[last] == '\0')
-			exit_with_msg("It doesn't match");
-		len++;
-		last++;
+		++len;
+		++(*i);
 	}
-	result = ft_substr(str, *i, len);
-	*i = last + 1;
-	return (result);
+	++(*i);	// 따옴표 다음 인덱스
+	return (ft_substr(str, start, len));
 }
 
-char *meet_sep(char *str, int *i)
+char	*meet_sep(char *str, int *i)
 {
 	char	*result;
 	int		len;
@@ -40,14 +36,14 @@ char *meet_sep(char *str, int *i)
 }
 
 // '|' '<' '>' whitespace가 아닐 경우 => ", ', 문자일 경우
-char *make_word(char *str, int *i)
+char	*make_word(char *str, int *i)
 {
 	int		last; // 마지막 인덱스
 	char	*tmp;
 	char	*mem;
 	char	*result;
 
-	result = ft_calloc(1, sizeof(char));
+	result = ft_strdup("");
 	last = *i;
 	while(ft_isword(str[last])) // == !ft_isseparator(str[last])
 	{
@@ -57,15 +53,15 @@ char *make_word(char *str, int *i)
 			tmp = meet_sep(str, &last);
 		mem = result;
 		result = ft_strjoin(result,tmp);
-		free(tmp);
-		free(mem);
+		use_free(tmp);
+		use_free(mem);
 	}
 	*i = last;
 	return (result);
 }
 
 // '|' '<' '>' 일 경우
-char *make_symbol(char *str, char c, int *i)
+char	*make_symbol(char *str, char c, int *i)
 {
 	char	*result;
 	int		len;
@@ -106,8 +102,6 @@ t_list	*tokenize(char *str)
 		else if(ft_isword(str[i]))
 		{
 			tmp = make_word(str, &i);
-			if (tmp == NULL)
-				return (NULL);
 			ft_lstadd_back(&head, ft_lstnew(tmp));
 		}
 		else // whitespace일 경우

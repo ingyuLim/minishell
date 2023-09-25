@@ -4,19 +4,21 @@ NAME=minishell
 CC=gcc
 CFLAGS=-Wall -Werror -Wextra
 LIBFT=./libft/libft.a
-DEBUG= -g 
-# 3 -fsanitize=address
+LLDB= -g
+DEBUG= -g3 -fsanitize=address
 
-SRCS=\
-	main.c \
+SRCS= main.c \
+	minishell.c \
 	utils.c \
 	error.c \
 	syntax.c \
+	test/test.c \
+	$(wildcard ./get_next_line/*.c) \
 	$(wildcard ./execute/*.c) \
 	$(wildcard ./builtin/*.c) \
 	$(wildcard ./parse/*.c)
-TEST_SRCS=\
-	test_parse.c \
+TEST_SRCS= ./test/test_parse.c \
+	minishell.c \
 	utils.c \
 	error.c \
 	syntax.c \
@@ -50,10 +52,16 @@ re:
 	$(MAKE) all
 
 debug:
+	$(MAKE) debug -C ./libft
 	$(MAKE) fclean
 	$(MAKE) all CFLAGS="$(CFLAGS) $(DEBUG)"
+
+lldb:
+	$(MAKE) lldb -C ./libft
+	$(MAKE) fclean
+	$(MAKE) all CFLAGS="$(CFLAGS) $(LLDB)"
 
 test:
 	$(MAKE) 'OBJS=$(TEST_OBJS)' all
 
-.PHONY: all clean fclean re debug test
+.PHONY: all clean fclean re debug lldb test

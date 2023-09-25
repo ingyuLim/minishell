@@ -1,40 +1,40 @@
 #include "../minishell.h"
 
-int	b_unset(t_list **lst, t_env **env)
+int	b_unset(char **cmd, t_env **env)
 {
+	int		i;
 	t_env	*prev;
 	t_env	*tmp;
 
-	*lst = (*lst)->next;
-	while (*lst != NULL && ft_isspecialtok((*lst)->state) == 0)
+	i = 1;
+	while (cmd[i] != NULL)
 	{
-		if (ft_strncmp((*env)->key, (*lst)->token, ft_strlen((*lst)->token) + 1) == 0)
+		if (ft_strncmp((*env)->key, cmd[i], ft_strlen(cmd[i]) + 1) == 0)
 		{
-			free((*env)->key);
-			free((*env)->value);
+			use_free((*env)->key);
+			use_free((*env)->value);
 			(*env)->key = NULL;
 			(*env)->value = NULL;
 			tmp = (*env);
 			(*env) = (*env)->next;
-			free(tmp);
-			printf("head key: %s\n", (*env)->key);
+			use_free(tmp);
 		}
 		tmp = *env;
 		while (tmp->next != NULL)
 		{
 			prev = tmp;
 			tmp = tmp->next;
-			if (ft_strncmp(tmp->key, (*lst)->token, ft_strlen((*lst)->token) + 1) == 0)
+			if (ft_strncmp(tmp->key, cmd[i], ft_strlen(cmd[i]) + 1) == 0)
 			{
-				free(tmp->key);
-				free(tmp->value);
+				use_free(tmp->key);
+				use_free(tmp->value);
 				tmp->key = NULL;
 				tmp->value = NULL;
 				prev->next = tmp->next;
-				free(tmp);
+				use_free(tmp);
 			}
 		}
-		*lst = (*lst)->next;
+		++i;
 	}
 	return (0);
 }
