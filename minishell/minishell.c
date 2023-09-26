@@ -4,10 +4,10 @@ void	minishell(t_vars *vars)
 {
 	char	*str;
 
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, sigquit_handler);
 	while (1)
 	{
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, sigquit_handler);
 		str = readline("\033[0;36mminishell$\033[0m ");
 		if (str == NULL)
 		{

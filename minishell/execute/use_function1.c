@@ -2,6 +2,7 @@
 
 void	use_execve(char *path, char *argv[], char *envp[])
 {
+	g_status = 0;
 	if (execve(path, argv, envp) == -1)
 	{
 		g_status = 1;

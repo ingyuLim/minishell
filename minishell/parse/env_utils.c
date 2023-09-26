@@ -2,14 +2,22 @@
 
 int	is_envvar(char *content, int i)
 {
-	if (content[i] == '$' && content[i + 1] != '\0' && !ft_iswhitespace(content[i + 1])&& !ft_isquote(content[i + 1]) && content[i + 1] != '$')
+	if (content[i] == '$'
+		&& content[i + 1] != '\0'
+		&& !ft_iswhitespace(content[i + 1])
+		&& !ft_isquote(content[i + 1])
+		&& content[i + 1] != '$')
 		return (1);
 	return (0);
 }
 
 int	is_state(char *content, int i)
 {
-	if (content[i + 1] == '?' && (content[i + 2] == '\0' || !ft_iswhitespace(content[i + 2])|| ft_isquote(content[i + 2]) || content[i + 2] == '$'))
+	if (content[i + 1] == '?'
+		&& (content[i + 2] == '\0'
+		|| !ft_iswhitespace(content[i + 2])
+		|| ft_isquote(content[i + 2])
+		|| content[i + 2] == '$'))
 		return (1);
 	return (0);
 }

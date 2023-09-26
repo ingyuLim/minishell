@@ -51,19 +51,32 @@ void	print_env(t_env *env, int flag)
 {
 	while (env != NULL)
 	{
-		if (flag == 1)
+		if (flag && env->value != NULL)
+		{
+			if (ft_strchr(env->value, '\"'))
+				flag = 2;
+			else
+				flag = 1;
+		}
+		if (flag)
 			ft_putstr_fd("declare -x ", STDOUT_FILENO);
 		ft_putstr_fd(env->key, STDOUT_FILENO);
 		if (env->value != NULL)
 		{
-			ft_putstr_fd("=", STDOUT_FILENO);
-			if (flag == 1)
-				ft_putstr_fd("\"", STDOUT_FILENO);
+			ft_putchar_fd('=', STDOUT_FILENO);
+			print_quote(flag);
 			ft_putstr_fd(env->value, STDOUT_FILENO);
-			if (flag == 1)
-				ft_putchar_fd('\"', STDOUT_FILENO);
+			print_quote(flag);
 		}
 		ft_putchar_fd('\n', STDOUT_FILENO);
 		env = env->next;
 	}
+}
+
+void	print_quote(int flag)
+{
+	if (flag == 1)
+		ft_putchar_fd('\"', STDOUT_FILENO);
+	else if (flag == 2)
+		ft_putchar_fd('\'', STDOUT_FILENO);
 }

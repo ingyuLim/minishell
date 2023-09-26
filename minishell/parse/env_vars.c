@@ -13,7 +13,11 @@ void	replace_env_and_trim_quote(t_vars *vars)
 		free(mem);
 		lst = lst->next;
 	}
-	// trim quote
+	// export a=" aa aa "
+	// cat "aa"$a"aa"
+	// zsh: cat: aa aa aa aa: No such file or directory
+	// bash: cat: aa: No such file or directory x 4 (4번)
+	// 하려면 환경 변수 치환 이후 스페이스 기준 스플릿 (따옴표 안의 스페이스는 무시)
 }
 
 int	quotes_check(char *str)
@@ -34,7 +38,7 @@ void	meet_single_quote(char **result, char *content, int *i)
 	int		start;
 	int		len;
 
-	++(*i);
+	++(*i);	// 따옴표 다음 인덱스
 	start = *i;
 	len = 0;
 	while(content[*i] != '\0' && content[*i] != '\'')
@@ -52,10 +56,7 @@ void	meet_single_quote(char **result, char *content, int *i)
 
 void	meet_double_quote(char **result, char *content, int *i, t_env *env)
 {
-	int		len;
-
 	++(*i); // 따옴표 다음 인덱스
-	len = 0;
 	while(content[*i] != '\0' && content[*i] != '\"')
 	{
 		if (is_envvar(content, *i))
@@ -120,7 +121,11 @@ void	env_join(char *content, char **result, int *i, t_env *env)
 	char	*key;
 
 	j = *i + 1;
-	while (content[j] != '\0' && !ft_iswhitespace(content[j]) && !ft_isquote(content[j]) && content[j] != '$' && content[j] != '=')
+	while (content[j] != '\0'
+		&& !ft_iswhitespace(content[j])
+		&& !ft_isquote(content[j])
+		&& content[j] != '$'
+		&& content[j] != '=')
 		j++;
 	key = ft_substr(content, *i + 1, j - *i - 1);
 	tmp = *result;
