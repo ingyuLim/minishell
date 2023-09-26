@@ -109,35 +109,6 @@ char	*replace_env_vars(char *content, t_env *env)
 	return (result);
 }
 
-// char	*replace_env_vars(char *content, t_env *env)
-// {
-// 	char	*result;
-// 	int		i;
-// 	int		flag;
-
-// 	result = ft_strdup("");
-// 	i = 0;
-// 	flag = 0;
-// 	while (content[i] != '\0')
-// 	{
-// 		if (content[i] == '\'')
-// 			flag = !flag;
-// 		if (is_envvar(content, i, flag))
-// 		{
-// 			if (is_state(content, i))
-// 				state_join(&result, &i);
-// 			else
-// 				env_join(content, &result, &i, env);
-// 		}
-// 		else
-// 		{
-// 			result = ft_strjoin_char(result, content[i]);
-// 			++i;
-// 		}
-// 	}
-// 	return (result);
-// }
-
 void	state_join(char **result, int *i)
 {
 	char	*tmp;

@@ -402,7 +402,7 @@ int	builtin_func(t_vars *vars, char **cmd)
 	else if (ft_strncmp(cmd[0], "export", 7) == 0)
 		g_status = b_export(cmd, vars->env);
 	else if (ft_strncmp(cmd[0], "env", 4) == 0)
-		g_status = b_env(cmd, vars->env);
+		g_status = b_env(vars->env);
 	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
 		g_status = b_unset(cmd, &(vars->env));
 	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
