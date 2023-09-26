@@ -13,6 +13,7 @@ void	trim_quote_and_replace_env(t_vars *vars)
 		free(mem);
 		lst = lst->next;
 	}
+	// trim quote
 }
 
 int	quotes_check(char *str)
@@ -51,13 +52,9 @@ void	meet_single_quote(char **result, char *content, int *i)
 
 void	meet_double_quote(char **result, char *content, int *i, t_env *env)
 {
-	char	*tmp;
-	char	*mem;
-	int		start;
 	int		len;
 
-	++(*i);
-	start = *i;
+	++(*i); // 따옴표 다음 인덱스
 	len = 0;
 	while(content[*i] != '\0' && content[*i] != '\"')
 	{
@@ -68,15 +65,13 @@ void	meet_double_quote(char **result, char *content, int *i, t_env *env)
 			else
 				env_join(content, result, i, env);
 		}
-		++len;
-		++(*i);
+		else
+		{
+			*result = ft_strjoin_char(*result, content[*i]);
+			++(*i);
+		}
 	}
 	++(*i);	// 따옴표 다음 인덱스
-	tmp = ft_substr(content, start, len);
-	mem = *result;
-	*result = ft_strjoin(*result, tmp);
-	use_free(mem);
-	use_free(tmp);
 }
 
 char	*replace_env_vars(char *content, t_env *env)
@@ -84,7 +79,6 @@ char	*replace_env_vars(char *content, t_env *env)
 	char	*result;
 	int		i;
 
-	(void) env;
 	result = ft_strdup("");
 	i = 0;
 	while (content[i] != '\0')
@@ -126,7 +120,7 @@ void	env_join(char *content, char **result, int *i, t_env *env)
 	char	*key;
 
 	j = *i + 1;
-	while (content[j] != '\0' && !ft_iswhitespace(content[j]) && !ft_isquote(content[j]) && content[j] != '$')
+	while (content[j] != '\0' && !ft_iswhitespace(content[j]) && !ft_isquote(content[j]) && content[j] != '$' && content[j] != '=')
 		j++;
 	key = ft_substr(content, *i + 1, j - *i - 1);
 	tmp = *result;

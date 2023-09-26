@@ -56,9 +56,12 @@ void	print_env(t_env *env, int flag)
 		ft_putstr_fd(env->key, STDOUT_FILENO);
 		if (env->value != NULL)
 		{
-			ft_putstr_fd("=\"", STDOUT_FILENO);
+			ft_putstr_fd("=", STDOUT_FILENO);
+			if (flag == 1)
+				ft_putstr_fd("\"", STDOUT_FILENO);
 			ft_putstr_fd(env->value, STDOUT_FILENO);
-			ft_putchar_fd('\"', STDOUT_FILENO);
+			if (flag == 1)
+				ft_putchar_fd('\"', STDOUT_FILENO);
 		}
 		ft_putchar_fd('\n', STDOUT_FILENO);
 		env = env->next;

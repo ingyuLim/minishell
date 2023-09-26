@@ -6,7 +6,8 @@ char	*meet_quote(char *str, int *i, char quote)
 	int		len;
 
 	start = *i;
-	len = 0;
+	++(*i);
+	len = 1;
 	while(str[*i] != '\0' && str[*i] != quote) // 짝이 맞는 따옴표를 만날 때까지의 길이를 구한다.
 	{
 		++len;
