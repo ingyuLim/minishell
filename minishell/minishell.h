@@ -53,6 +53,9 @@ void	error_msg(char *msg, char *cmd, char *arg);
 void	exit_with_msg(char *msg, char *cmd, char *arg);
 
 // env.c
+void	trim_quote_and_replace_env(t_vars *vars);
+void	meet_single_quote(char **result, char *content, int *i);
+void	meet_double_quote(char **result, char *content, int *i, t_env *env);
 int		quotes_check(char *str);
 char	*replace_env_vars(char *content, t_env *env);
 void	state_join(char **result, int *i);
@@ -60,8 +63,7 @@ void	env_join(char *content, char **result, int *i, t_env *env);
 int		is_valid_quotes(char *str);
 
 // env_utils.c
-int		is_include_dollar(char *str);
-int		is_envvar(char *content, int i, int flag);
+int		is_envvar(char *content, int i);
 int		is_state(char *content, int i);
 char	*find_env(char *key, t_env *env);
 char	*ft_strjoin_char(char *s1, char c);
@@ -123,7 +125,6 @@ int		is_builtin(char **cmd);
 int		builtin_func(t_vars *vars, char **cmd);
 char	**parse_path(t_env *env);
 void	free_path(char **path);
-int		is_include_dollar(char *str);
 char	*find_env(char *key, t_env *env);
 char	*ft_strjoin_char(char *s1, char c);
 char	*replace_env_vars(char *content, t_env *env);

@@ -26,20 +26,74 @@ int	quotes_check(char *str)
 	return (1);
 }
 
+void	meet_single_quote(char **result, char *content, int *i)
+{
+	char	*tmp;
+	char	*mem;
+	int		start;
+	int		len;
+
+	++(*i);
+	start = *i;
+	len = 0;
+	while(content[*i] != '\0' && content[*i] != '\'')
+	{
+		++len;
+		++(*i);
+	}
+	++(*i);	// 따옴표 다음 인덱스
+	tmp = ft_substr(content, start, len);
+	mem = *result;
+	*result = ft_strjoin(*result, tmp);
+	use_free(mem);
+	use_free(tmp);
+}
+
+void	meet_double_quote(char **result, char *content, int *i, t_env *env)
+{
+	char	*tmp;
+	char	*mem;
+	int		start;
+	int		len;
+
+	++(*i);
+	start = *i;
+	len = 0;
+	while(content[*i] != '\0' && content[*i] != '\"')
+	{
+		if (is_envvar(content, *i))
+		{
+			if (is_state(content, *i))
+				state_join(result, i);
+			else
+				env_join(content, result, i, env);
+		}
+		++len;
+		++(*i);
+	}
+	++(*i);	// 따옴표 다음 인덱스
+	tmp = ft_substr(content, start, len);
+	mem = *result;
+	*result = ft_strjoin(*result, tmp);
+	use_free(mem);
+	use_free(tmp);
+}
+
 char	*replace_env_vars(char *content, t_env *env)
 {
 	char	*result;
 	int		i;
-	int		flag;
 
+	(void) env;
 	result = ft_strdup("");
 	i = 0;
-	flag = 0;
 	while (content[i] != '\0')
 	{
 		if (content[i] == '\'')
-			flag = !flag;
-		if (is_envvar(content, i, flag))
+			meet_single_quote(&result, content, &i);
+		else if (content[i] == '\"')
+			meet_double_quote(&result, content, &i, env);
+		else if (is_envvar(content, i))
 		{
 			if (is_state(content, i))
 				state_join(&result, &i);
@@ -54,6 +108,35 @@ char	*replace_env_vars(char *content, t_env *env)
 	}
 	return (result);
 }
+
+// char	*replace_env_vars(char *content, t_env *env)
+// {
+// 	char	*result;
+// 	int		i;
+// 	int		flag;
+
+// 	result = ft_strdup("");
+// 	i = 0;
+// 	flag = 0;
+// 	while (content[i] != '\0')
+// 	{
+// 		if (content[i] == '\'')
+// 			flag = !flag;
+// 		if (is_envvar(content, i, flag))
+// 		{
+// 			if (is_state(content, i))
+// 				state_join(&result, &i);
+// 			else
+// 				env_join(content, &result, &i, env);
+// 		}
+// 		else
+// 		{
+// 			result = ft_strjoin_char(result, content[i]);
+// 			++i;
+// 		}
+// 	}
+// 	return (result);
+// }
 
 void	state_join(char **result, int *i)
 {

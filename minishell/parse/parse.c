@@ -7,10 +7,8 @@ char	*meet_quote(char *str, int *i, char quote)
 
 	start = *i;
 	len = 0;
-	while(str[*i] != quote) // 짝이 맞는 따옴표를 만날 때까지의 길이를 구한다.
+	while(str[*i] != '\0' && str[*i] != quote) // 짝이 맞는 따옴표를 만날 때까지의 길이를 구한다.
 	{
-		if (str[*i] == '\0')
-			exit_with_msg("Invalid quotes", 0, 0);
 		++len;
 		++(*i);
 	}

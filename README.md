@@ -81,7 +81,7 @@
 	- [x] ctrl + D
 	- [x] ctrl + C
 	- [x] ctrl + \
-- [ ] 환경변수 치환
+- [x] 환경변수 치환
 	- 현재 순서 : str => replace env => trim quote => parse
 	- 바꿔야할 순서 : str => parse => replace env => trim quote
 
