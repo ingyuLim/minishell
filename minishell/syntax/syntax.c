@@ -7,11 +7,10 @@ int	syntax_check(t_list *lst)
 	cur = START;
 	while (lst != NULL)
 	{
-		if (is_valid_one(lst, &cur)
-			|| is_valid_two(lst, &cur))
+		if (!(is_valid_one(lst, &cur) && is_valid_two(lst, &cur)))
 		{
 			error_msg("syntax error near unexpected token", 0, 0);
-			return (1);
+			return (0);
 		}
 		lst = lst->next;
 	}
@@ -19,9 +18,9 @@ int	syntax_check(t_list *lst)
 	{
 		if (cur != START)
 			error_msg("syntax error near unexpected token", 0, 0);
-		return (1);
+		return (0);
 	}
-	return (0);
+	return (1);
 }
 
 int	is_valid_one(t_list *lst, t_state *cur)
@@ -48,8 +47,8 @@ int	is_valid_one(t_list *lst, t_state *cur)
 		change_state(cur, &(lst->state), OUT_REDIR);
 	}
 	if (flag)
-		return (1);
-	return (0);
+		return (0);
+	return (1);
 }
 
 int	is_valid_two(t_list *lst, t_state *cur)
@@ -77,6 +76,6 @@ int	is_valid_two(t_list *lst, t_state *cur)
 			change_state(cur, &(lst->state), FNAME);
 	}
 	if (flag)
-		return (1);
-	return (0);
+		return (0);
+	return (1);
 }

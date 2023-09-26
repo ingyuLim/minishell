@@ -1,15 +1,25 @@
 #include "../minishell.h"
 
-int	replace_and_check(char **str, t_vars *vars)
+void	trim_quote_and_replace_env(t_vars *vars)
 {
+	t_list	*lst;
 	char	*mem;
 
-	mem = *str;
-	*str = replace_env_vars(*str, vars->env);	// 환경변수 치환
-	use_free(mem);
-	if (is_valid_quotes(*str) == 0)				// 따옴표 검사
+	lst = vars->lst;
+	while (lst != NULL)
 	{
-		use_free(*str);
+		mem = lst->token;
+		lst->token = replace_env_vars(lst->token, vars->env);
+		free(mem);
+		lst = lst->next;
+	}
+}
+
+int	quotes_check(char *str)
+{
+	if (is_valid_quotes(str) == 0)
+	{
+		use_free(str);
 		error_msg("Invalid quotes", 0, 0);
 		return (0);
 	}

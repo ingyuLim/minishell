@@ -11,20 +11,15 @@ void	minishell(t_vars *vars)
 		str = readline("\033[0;36mminishell$\033[0m ");
 		if (str == NULL)
 		{
-			ft_putstr_fd("exit\n", 1);
+			ft_putendl_fd("exit", 1);
 			break ;
 		}
+		if (!quotes_check(str))
+			continue ;
 		add_history(str);
-		if (replace_and_check(&str, vars) == 0)
-			continue ;
 		vars->lst = tokenize(str);
-		if (syntax_check(vars->lst) == 1)
-		{
-			free_str_tok(str, &(vars->lst));
-			continue ;
-		}
-		print_tokens(vars->lst);
-		execute(vars);
+		if (syntax_check(vars->lst))
+			execute(vars);
 		free_str_tok(str, &(vars->lst));
 	}
 }

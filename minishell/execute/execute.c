@@ -445,6 +445,7 @@ void	execute(t_vars *vars)
 	int			process;
 	pid_t		*pid;
 
+	print_tokens(vars->lst);
 	path = parse_path(vars->env);
 	process = process_count(vars->lst);
 	pid = ft_calloc(process, sizeof(pid_t));

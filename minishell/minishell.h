@@ -53,7 +53,7 @@ void	error_msg(char *msg, char *cmd, char *arg);
 void	exit_with_msg(char *msg, char *cmd, char *arg);
 
 // env.c
-int		replace_and_check(char **str, t_vars *vars);
+int		quotes_check(char *str);
 char	*replace_env_vars(char *content, t_env *env);
 void	state_join(char **result, int *i);
 void	env_join(char *content, char **result, int *i, t_env *env);
