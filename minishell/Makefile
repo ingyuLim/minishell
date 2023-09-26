@@ -17,7 +17,7 @@ SRCS= main.c \
 	$(wildcard ./execute/*.c) \
 	$(wildcard ./builtin/*.c) \
 	$(wildcard ./parse/*.c)
-TEST_SRCS= ./test/test_parse.c \
+TEST_SRCS= $(wildcard ./test/*.c) \
 	minishell.c \
 	utils.c \
 	error.c \
