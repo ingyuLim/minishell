@@ -14,9 +14,9 @@ void	minishell(t_vars *vars)
 			ft_putendl_fd("exit", 1);
 			break ;
 		}
+		add_history(str);
 		if (!quotes_check(str))
 			continue ;
-		add_history(str);
 		vars->lst = tokenize(str);
 		if (syntax_check(vars->lst))
 			execute(vars);

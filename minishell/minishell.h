@@ -53,7 +53,7 @@ void	error_msg(char *msg, char *cmd, char *arg);
 void	exit_with_msg(char *msg, char *cmd, char *arg);
 
 // env.c
-void	trim_quote_and_replace_env(t_vars *vars);
+void	replace_env_and_trim_quote(t_vars *vars);
 void	meet_single_quote(char **result, char *content, int *i);
 void	meet_double_quote(char **result, char *content, int *i, t_env *env);
 int		quotes_check(char *str);

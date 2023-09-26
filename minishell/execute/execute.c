@@ -445,7 +445,7 @@ void	execute(t_vars *vars)
 	int			process;
 	pid_t		*pid;
 
-	trim_quote_and_replace_env(vars);
+	replace_env_and_trim_quote(vars);
 	print_tokens(vars->lst);
 	path = parse_path(vars->env);
 	process = process_count(vars->lst);

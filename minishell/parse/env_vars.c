@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-void	trim_quote_and_replace_env(t_vars *vars)
+void	replace_env_and_trim_quote(t_vars *vars)
 {
 	t_list	*lst;
 	char	*mem;
