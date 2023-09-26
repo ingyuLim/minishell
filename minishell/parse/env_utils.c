@@ -29,7 +29,7 @@ int	is_envvar(char *content, int i, int flag)
 
 int	is_state(char *content, int i)
 {
-	if (content[i + 1] == '?' && (content[i + 2] == '\0' || content[i + 2] == ' '|| ft_isquote(content[i + 2]) || content[i + 2] == '$')) // error
+	if (content[i + 1] == '?' && (content[i + 2] == '\0' || content[i + 2] == ' '|| ft_isquote(content[i + 2]) || content[i + 2] == '$'))
 		return (1);
 	return (0);
 }

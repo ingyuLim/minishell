@@ -1,20 +1,21 @@
 #include "../minishell.h"
 
-void	print_env(t_env *env)
+int	b_env(char **cmd, t_env *env)
 {
-	while (env != NULL)
+	int		i;
+
+	if (cmd[1] == NULL)
+		print_env(env);
+	else
 	{
-		ft_putstr_fd("declare -x ", STDOUT_FILENO);
-		ft_putstr_fd(env->key, STDOUT_FILENO);
-		if (env->value != NULL)
+		i = 1;
+		while (cmd[i] != NULL)
 		{
-			ft_putstr_fd("=\"", STDOUT_FILENO);
-			ft_putstr_fd(env->value, STDOUT_FILENO);
-			ft_putchar_fd('\"', STDOUT_FILENO);
+			add_env(env, cmd[i]);
+			++i;
 		}
-		ft_putchar_fd('\n', STDOUT_FILENO);
-		env = env->next;
 	}
+	return (0);
 }
 
 void	add_env(t_env *env, char *cmd)
@@ -40,26 +41,25 @@ void	add_env(t_env *env, char *cmd)
 	if (e_tmp == NULL)
 	{
 		if (!ft_isvalidkey(cmd))
-			printf("minishell: export: `%s': not a valid identifier\n", cmd);
+			error_msg("not a valid identifier", "export", cmd);
 		else
 			ft_envadd_back(&env, make_env(cmd));
 	}
 }
 
-int	b_env(char **cmd, t_env *env)
+void	print_env(t_env *env)
 {
-	int		i;
-
-	if (cmd[1] == NULL)
-		print_env(env);
-	else
+	while (env != NULL)
 	{
-		i = 1;
-		while (cmd[i] != NULL)
+		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		ft_putstr_fd(env->key, STDOUT_FILENO);
+		if (env->value != NULL)
 		{
-			add_env(env, cmd[i]);
-			++i;
+			ft_putstr_fd("=\"", STDOUT_FILENO);
+			ft_putstr_fd(env->value, STDOUT_FILENO);
+			ft_putchar_fd('\"', STDOUT_FILENO);
 		}
+		ft_putchar_fd('\n', STDOUT_FILENO);
+		env = env->next;
 	}
-	return (0);
 }

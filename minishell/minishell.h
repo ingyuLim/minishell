@@ -47,10 +47,10 @@ void	free_vars(t_vars *vars, int a, char *b[]);
 void	free_str_tok(char *str, t_list **lst);
 
 // error.c
-void	error(char *err);
-void	error_msg(char *msg);
-void	exit_with_msg(char *msg);
-void	exit_with_err(char *err);
+void	error(char *err, char *cmd);
+void	exit_with_err(char *err, char *cmd);
+void	error_msg(char *msg, char *cmd, char *arg);
+void	exit_with_msg(char *msg, char *cmd, char *arg);
 
 // env.c
 int		replace_and_check(char **str, t_vars *vars);
@@ -89,6 +89,7 @@ int		b_cd(char **cmd);
 int		b_echo(char **cmd);
 int		b_pwd(void);
 int		b_exit(char **cmd);
+int		is_num(char *str);
 int		b_env(char **cmd, t_env *env);
 int		b_export(char **cmd, t_env *env);
 void	print_env(t_env *env);

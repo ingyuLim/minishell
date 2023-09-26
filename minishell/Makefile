@@ -12,6 +12,7 @@ SRCS= main.c \
 	utils.c \
 	error.c \
 	test/test.c \
+	signal.c \
 	$(wildcard ./syntax/*.c) \
 	$(wildcard ./execute/*.c) \
 	$(wildcard ./builtin/*.c) \
@@ -20,6 +21,7 @@ TEST_SRCS= ./test/test_parse.c \
 	minishell.c \
 	utils.c \
 	error.c \
+	signal.c \
 	$(wildcard ./syntax/*.c) \
 	$(wildcard ./execute/*.c) \
 	$(wildcard ./builtin/*.c) \

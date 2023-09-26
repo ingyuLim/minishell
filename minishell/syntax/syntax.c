@@ -10,7 +10,7 @@ int	syntax_check(t_list *lst)
 		if (is_valid_one(lst, &cur)
 			|| is_valid_two(lst, &cur))
 		{
-			error_msg("syntax error near unexpected token");
+			error_msg("syntax error near unexpected token", 0, 0);
 			return (1);
 		}
 		lst = lst->next;
@@ -18,7 +18,7 @@ int	syntax_check(t_list *lst)
 	if (cur == START || !is_word(cur))
 	{
 		if (cur != START)
-			error_msg("syntax error near unexpected token");
+			error_msg("syntax error near unexpected token", 0, 0);
 		return (1);
 	}
 	return (0);

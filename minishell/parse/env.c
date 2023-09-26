@@ -10,7 +10,7 @@ int	replace_and_check(char **str, t_vars *vars)
 	if (is_valid_quotes(*str) == 0)				// 따옴표 검사
 	{
 		use_free(*str);
-		error_msg("Invalid quotes");
+		error_msg("Invalid quotes", 0, 0);
 		return (0);
 	}
 	return (1);
