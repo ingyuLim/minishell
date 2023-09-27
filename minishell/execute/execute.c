@@ -402,7 +402,7 @@ int	builtin_func(t_vars *vars, char **cmd)
 	else if (ft_strncmp(cmd[0], "export", 7) == 0)
 		g_status = b_export(cmd, vars->env);
 	else if (ft_strncmp(cmd[0], "env", 4) == 0)
-		g_status = b_env(cmd, vars->env);
+		g_status = b_env(vars->env);
 	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
 		g_status = b_unset(cmd, &(vars->env));
 	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
@@ -439,12 +439,22 @@ void	free_path(char **path)
 	use_free(path);
 }
 
+void	sigint_handler_exec(int signum)
+{
+	(void)signum;
+	g_status = 130;
+	ft_putstr_fd("\n", 1);
+}
+
 void	execute(t_vars *vars)
 {
 	char		**path;
 	int			process;
 	pid_t		*pid;
 
+	signal(SIGINT, sigint_handler_exec);
+	replace_env_and_trim_quote(vars);
+	print_tokens(vars->lst);
 	path = parse_path(vars->env);
 	process = process_count(vars->lst);
 	pid = ft_calloc(process, sizeof(pid_t));

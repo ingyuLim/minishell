@@ -1,65 +1,82 @@
 #include "../minishell.h"
 
-// export a : declare -x a
-// => key: a, value: NULL
-
-// export a= : declare -x a=""
-// => key: a, value: '\0'
-
-// export a=b : declare -x a="b"
-// => key: a, value: b
-
 int	b_export(char **cmd, t_env *env)
 {
-	t_env	*e_tmp;
 	int		i;
 
-	if (cmd[1] == NULL)	// export, export | ... , export [REDIRECTION] ...
-	{
-		while (env != NULL)
-		{
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
-			ft_putstr_fd(env->key, STDOUT_FILENO);
-			if (env->value != NULL)
-			{
-				ft_putstr_fd("=\"", STDOUT_FILENO);
-				ft_putstr_fd(env->value, STDOUT_FILENO);
-				ft_putchar_fd('\"', STDOUT_FILENO);
-			}
-			ft_putchar_fd('\n', STDOUT_FILENO);
-			env = env->next;
-		}
-	}
-	else // export [NAME[=VALUE]] ...
+	if (cmd[1] == NULL)
+		print_env(env, 1);
+	else
 	{
 		i = 1;
 		while (cmd[i] != NULL)
 		{
-			e_tmp = env;
-			while (e_tmp != NULL)
-			{
-				if (ft_strncmp(e_tmp->key, cmd[i], ft_strlen(e_tmp->key)) == 0)
-				{
-					if (cmd[i][ft_strlen(e_tmp->key)] == '=')
-					{
-						use_free(e_tmp->value);
-						e_tmp->value = ft_strdup(cmd[i] + ft_strlen(e_tmp->key) + 1);
-						break ;
-					}
-					else if (cmd[i][ft_strlen(e_tmp->key)] == '\0')
-						break ;
-				}
-				e_tmp = e_tmp->next;
-			}
-			if (e_tmp == NULL)
-			{
-				if (!ft_isvalidkey(cmd[i]))
-					printf("minishell: export: `%s': not a valid identifier\n", cmd[i]);
-				else
-					ft_envadd_back(&env, make_env(cmd[i]));
-			}
+			add_env(env, cmd[i]);
 			++i;
 		}
 	}
 	return (0);
+}
+
+void	add_env(t_env *env, char *cmd)
+{
+	t_env	*e_tmp;
+
+	e_tmp = env;
+	while (e_tmp != NULL)
+	{
+		if (ft_strncmp(e_tmp->key, cmd, ft_strlen(e_tmp->key)) == 0)
+		{
+			if (cmd[ft_strlen(e_tmp->key)] == '=')
+			{
+				use_free(e_tmp->value);
+				e_tmp->value = ft_strdup(cmd + ft_strlen(e_tmp->key) + 1);
+				break ;
+			}
+			else if (cmd[ft_strlen(e_tmp->key)] == '\0')
+				break ;
+		}
+		e_tmp = e_tmp->next;
+	}
+	if (e_tmp == NULL)
+	{
+		if (!ft_isvalidkey(cmd))
+			error_msg("not a valid identifier", "export", cmd);
+		else
+			ft_envadd_back(&env, make_env(cmd));
+	}
+}
+
+void	print_env(t_env *env, int flag)
+{
+	while (env != NULL)
+	{
+		if (flag && env->value != NULL)
+		{
+			if (ft_strchr(env->value, '\"'))
+				flag = 2;
+			else
+				flag = 1;
+		}
+		if (flag)
+			ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		ft_putstr_fd(env->key, STDOUT_FILENO);
+		if (env->value != NULL)
+		{
+			ft_putchar_fd('=', STDOUT_FILENO);
+			print_quote(flag);
+			ft_putstr_fd(env->value, STDOUT_FILENO);
+			print_quote(flag);
+		}
+		ft_putchar_fd('\n', STDOUT_FILENO);
+		env = env->next;
+	}
+}
+
+void	print_quote(int flag)
+{
+	if (flag == 1)
+		ft_putchar_fd('\"', STDOUT_FILENO);
+	else if (flag == 2)
+		ft_putchar_fd('\'', STDOUT_FILENO);
 }

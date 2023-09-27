@@ -2,10 +2,10 @@
 
 int	b_pwd(void)
 {
-	char *path;
+	char	*path;
 
 	path = getcwd(NULL, BUFSIZ);
-	printf("%s\n", path);
+	ft_putendl_fd(path, STDOUT_FILENO);
 	use_free(path);
 	return (0);
 }

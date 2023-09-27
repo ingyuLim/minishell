@@ -10,7 +10,7 @@ int	b_cd(char **cmd)
 		path = cmd[1];
 	if (chdir(path) == -1)
 	{
-		error(path);
+		error(path, "cd");
 		return (1);
 	}
 	return (0);

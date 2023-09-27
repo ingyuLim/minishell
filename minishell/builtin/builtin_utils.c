@@ -9,7 +9,6 @@ int	ft_isvalidkey(char *key)
 	i = 0;
 	while (key[i] != '=' && key[i] != '\0')
 	{
-		printf("key[%d] : %c\n", i, key[i]);
 		if (!ft_isalnum(key[i]) && key[i] != '_')
 			return (0);
 		i++;
