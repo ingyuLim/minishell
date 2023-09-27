@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/27 14:01:09 by seunan            #+#    #+#             */
+/*   Updated: 2023/09/27 14:20:50 by seunan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	is_envvar(char *content, int i)
@@ -13,11 +25,31 @@ int	is_envvar(char *content, int i)
 
 int	is_state(char *content, int i)
 {
-	if (content[i + 1] == '?'
-		&& (content[i + 2] == '\0'
-		|| !ft_iswhitespace(content[i + 2])
-		|| ft_isquote(content[i + 2])
-		|| content[i + 2] == '$'))
+	if (content[i + 1] == '?' && (content[i + 2] == '\0'
+			|| !ft_iswhitespace(content[i + 2])
+			|| ft_isquote(content[i + 2]) || content[i + 2] == '$'))
+		return (1);
+	return (0);
+}
+
+int	is_valid_quotes(char *str)
+{
+	int	i;
+	int	sin;
+	int	dou;
+
+	i = 0;
+	sin = 0;
+	dou = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'' && dou % 2 == 0)
+			sin++;
+		else if (str[i] == '\"' && sin % 2 == 0)
+			dou++;
+		i++;
+	}
+	if (sin % 2 == 0 && dou % 2 == 0)
 		return (1);
 	return (0);
 }
@@ -33,19 +65,13 @@ char	*find_env(char *key, t_env *env)
 	return ("");
 }
 
-char	*ft_strjoin_char(char *s1, char c)
+int	quotes_check(char *str)
 {
-	char	*result;
-	int		i;
-
-	result = ft_calloc(ft_strlen(s1) + 2, sizeof(char));
-	i = 0;
-	while (s1[i] != '\0')
+	if (is_valid_quotes(str) == 0)
 	{
-		result[i] = s1[i];
-		++i;
+		use_free(str);
+		error_msg("Invalid quotes", 0, 0);
+		return (0);
 	}
-	result[i] = c;
-	use_free(s1);
-	return (result);
+	return (1);
 }

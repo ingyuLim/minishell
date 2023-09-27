@@ -377,6 +377,7 @@ void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
 	char	**envp;
 	t_list	*lst;
 
+	lst = vars->lst;
 	envp = make_envp(vars->env);
 	pid_index = 0;
 	tmp_arr = malloc_tmp_arr(lst);
@@ -479,13 +480,6 @@ void	free_path(char **path)
 		i++;
 	}
 	use_free(path);
-}
-
-void	sigint_handler_exec(int signum)
-{
-	(void)signum;
-	g_status = 130;
-	ft_putstr_fd("\n", 1);
 }
 
 void	execute_frame(t_vars *vars)

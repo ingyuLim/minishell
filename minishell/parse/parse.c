@@ -1,58 +1,60 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/27 14:01:16 by seunan            #+#    #+#             */
+/*   Updated: 2023/09/27 14:22:26 by seunan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-char	*meet_quote(char *str, int *i, char quote)
+t_list	*tokenize(char *str)
 {
-	int		start;
-	int		len;
+	t_list	*head;
+	char	*tmp;
+	int		i;
 
-	start = *i;
-	++(*i);
-	len = 1;
-	while(str[*i] != '\0' && str[*i] != quote) // 짝이 맞는 따옴표를 만날 때까지의 길이를 구한다.
+	i = 0;
+	head = NULL;
+	while (str[i] != '\0')
 	{
-		++len;
-		++(*i);
+		if (ft_issymbol(str[i]))
+		{
+			tmp = make_symbol(str, str[i], &i);
+			ft_lstadd_back(&head, ft_lstnew(tmp));
+		}
+		else if (ft_isword(str[i]))
+		{
+			tmp = make_word(str, &i);
+			ft_lstadd_back(&head, ft_lstnew(tmp));
+		}
+		else
+			i++;
 	}
-	++(*i);	// 따옴표 다음 인덱스
-	return (ft_substr(str, start, len + 1));
+	return (head);
 }
 
-char	*meet_sep(char *str, int *i)
-{
-	char	*result;
-	int		len;
-	int		last;
-
-	last = *i;
-	len  = 0;
-	while(!ft_isseparator(str[last]) && !ft_isquote(str[last]))
-	{
-		last++;
-		len++;
-	}
-	result = ft_substr(str, *i, len);
-	*i = last;
-	return result;
-}
-
-// '|' '<' '>' whitespace가 아닐 경우 => ", ', 문자일 경우
 char	*make_word(char *str, int *i)
 {
-	int		last; // 마지막 인덱스
+	int		last;
 	char	*tmp;
 	char	*mem;
 	char	*result;
 
 	result = ft_strdup("");
 	last = *i;
-	while(ft_isword(str[last])) // == !ft_isseparator(str[last])
+	while (ft_isword(str[last]))
 	{
-		if (ft_isquote(str[last])) // 따옴표일 경우
+		if (ft_isquote(str[last]))
 			tmp = meet_quote(str, &last, str[last]);
 		else
 			tmp = meet_sep(str, &last);
 		mem = result;
-		result = ft_strjoin(result,tmp);
+		result = ft_strjoin(result, tmp);
 		use_free(tmp);
 		use_free(mem);
 	}
@@ -60,7 +62,6 @@ char	*make_word(char *str, int *i)
 	return (result);
 }
 
-// '|' '<' '>' 일 경우
 char	*make_symbol(char *str, char c, int *i)
 {
 	char	*result;
@@ -73,39 +74,48 @@ char	*make_symbol(char *str, char c, int *i)
 		*i += len;
 		return (result);
 	}
-	while(str[*i + len] == c)
+	while (str[*i + len] == c)
 	{
 		len++;
-		if(len > 2)
-			break;
+		if (len > 2)
+			break ;
 	}
 	result = ft_substr(str, *i, len);
 	*i += len;
 	return (result);
 }
 
-t_list	*tokenize(char *str)
+char	*meet_quote(char *str, int *i, char quote)
 {
-	t_list	*head;
-	char	*tmp;
-	int		i;
+	int	start;
+	int	len;
 
-	i = 0;
-	head = NULL;
-	while(str[i] != '\0')
+	start = *i;
+	++(*i);
+	len = 1;
+	while (str[*i] != '\0' && str[*i] != quote)
 	{
-		if(ft_issymbol(str[i]))
-		{
-			tmp = make_symbol(str, str[i], &i);
-			ft_lstadd_back(&head, ft_lstnew(tmp));
-		}
-		else if(ft_isword(str[i]))
-		{
-			tmp = make_word(str, &i);
-			ft_lstadd_back(&head, ft_lstnew(tmp));
-		}
-		else // whitespace일 경우
-			i++;
+		++len;
+		++(*i);
 	}
-	return (head);
+	++(*i);
+	return (ft_substr(str, start, len + 1));
+}
+
+char	*meet_sep(char *str, int *i)
+{
+	char	*result;
+	int		len;
+	int		last;
+
+	last = *i;
+	len = 0;
+	while (!ft_isseparator(str[last]) && !ft_isquote(str[last]))
+	{
+		last++;
+		len++;
+	}
+	result = ft_substr(str, *i, len);
+	*i = last;
+	return (result);
 }
