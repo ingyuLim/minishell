@@ -146,9 +146,9 @@ char	**malloc_tmp_arr(t_list *lst);
 int		exist_nl(char *buf);
 size_t	gnl_strlen(char *str);
 void	free_tmp_arr(char **tmp_arr);
-void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst);
+void	fill_tmp_arr(char **tmp_arr, t_list *lst);
 int		ft_is_redirection(t_list *lst);
-void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path);
+void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process);
 int		is_builtin(char **cmd);
 int		builtin_func(t_vars *vars, char **cmd);
 char	**parse_path(t_env *env);
@@ -156,7 +156,7 @@ void	free_path(char **path);
 char	*find_env(char *key, t_env *env);
 char	*ft_strjoin_char(char *s1, char c);
 char	*replace_env_vars(char *content, t_env *env);
-void	execute(t_vars *vars);
+void	execute_frame(t_vars *vars);
 
 // execute/change_in_and_out.c
 void	change_stdin_to_pipe(int *pipe_fd);
