@@ -6,13 +6,13 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 17:39:36 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/16 18:21:54 by seunan           ###   ########.fr       */
+/*   Updated: 2023/09/27 14:03:24 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int ft_isword(char c)
+int	ft_isword(char c)
 {
-	return(!ft_iswhitespace(c) && !ft_issymbol(c) && c != '\0');
+	return (!ft_iswhitespace(c) && !ft_issymbol(c) && c != '\0');
 }

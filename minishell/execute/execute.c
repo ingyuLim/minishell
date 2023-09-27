@@ -439,13 +439,6 @@ void	free_path(char **path)
 	use_free(path);
 }
 
-void	sigint_handler_exec(int signum)
-{
-	(void)signum;
-	g_status = 130;
-	ft_putstr_fd("\n", 1);
-}
-
 void	execute(t_vars *vars)
 {
 	char		**path;

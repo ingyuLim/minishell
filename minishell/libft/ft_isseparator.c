@@ -6,13 +6,13 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 17:39:23 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/16 18:22:03 by seunan           ###   ########.fr       */
+/*   Updated: 2023/09/27 14:03:32 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int ft_isseparator(char c)
+int	ft_isseparator(char c)
 {
-	return(ft_iswhitespace(c) || ft_issymbol(c) || c == '\0');
+	return (ft_iswhitespace(c) || ft_issymbol(c) || c == '\0');
 }

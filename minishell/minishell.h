@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
+/*   Updated: 2023/09/27 14:24:55 by seunan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -31,6 +43,22 @@ typedef struct s_vars
 // minishell.c
 void	minishell(t_vars *vars);
 
+// utils.c
+void	init_vars(t_vars *vars, char *envp[]);
+void	free_vars(t_vars *vars, int a, char *b[]);
+void	free_str_tok(char *str, t_list **lst);
+
+// signal.c
+void	sigint_handler(int signo);
+void	sigint_handler_exec(int signum);
+void	sigquit_handler(int signo);
+
+// error.c
+void	error(char *err, char *cmd);
+void	exit_with_err(char *err, char *cmd);
+void	error_msg(char *msg, char *cmd, char *arg);
+void	exit_with_msg(char *msg, char *cmd, char *arg);
+
 // syntax.c
 int		syntax_check(t_list *lst);
 int		is_valid_one(t_list *lst, t_state *cur);
@@ -41,43 +69,30 @@ int		is_word(t_state state);
 void	change_state(t_state *cur, t_state *lst, t_state state);
 int		last_condition(t_list *lst);
 
-// utils.c
-void	init_vars(t_vars *vars, char *envp[]);
-void	free_vars(t_vars *vars, int a, char *b[]);
-void	free_str_tok(char *str, t_list **lst);
+// parse.c
+t_list	*tokenize(char *str);
+char	*make_symbol(char *str, char c, int *i);
+char	*make_word(char *str, int *i);
+char	*meet_quote(char *str, int *i, char quote);
+char	*meet_sep(char *str, int *i);
 
-// error.c
-void	error(char *err, char *cmd);
-void	exit_with_err(char *err, char *cmd);
-void	error_msg(char *msg, char *cmd, char *arg);
-void	exit_with_msg(char *msg, char *cmd, char *arg);
-
-// env.c
+// env_vars.c
 void	replace_env_and_trim_quote(t_vars *vars);
+char	*replace_env_vars(char *content, t_env *env);
 void	meet_single_quote(char **result, char *content, int *i);
 void	meet_double_quote(char **result, char *content, int *i, t_env *env);
-int		quotes_check(char *str);
-char	*replace_env_vars(char *content, t_env *env);
+
+// env_join.c
 void	state_join(char **result, int *i);
 void	env_join(char *content, char **result, int *i, t_env *env);
-int		is_valid_quotes(char *str);
+char	*ft_strjoin_char(char *s1, char c);
 
 // env_utils.c
 int		is_envvar(char *content, int i);
 int		is_state(char *content, int i);
+int		is_valid_quotes(char *str);
 char	*find_env(char *key, t_env *env);
-char	*ft_strjoin_char(char *s1, char c);
-
-// signal.c
-void	sigint_handler(int signo);
-void	sigquit_handler(int signo);
-
-// parse.c
-char	*meet_quote(char *str, int *i, char quote);
-char	*meet_sep(char *str, int *i);
-char	*make_word(char *str, int *i);
-char	*make_symbol(char *str, char c, int *i);
-t_list	*tokenize(char *str);
+int		quotes_check(char *str);
 
 // builtin_utils.c
 int		ft_isvalidkey(char *key);
@@ -86,17 +101,29 @@ void	ft_envadd_back(t_env **head, t_env *new);
 t_env	*make_env(char *content);
 t_env	*dup_env(char *envp[]);
 
-// builtin/*.c
+// cd.c
 int		b_cd(char **cmd);
+
+// echo.c
 int		b_echo(char **cmd);
+
+// pwd.c
 int		b_pwd(void);
+
+// exit.c
 int		b_exit(char **cmd);
 int		is_num(char *str);
+
+// env.c
 int		b_env(t_env *env);
+
+// export.c
 int		b_export(char **cmd, t_env *env);
 void	add_env(t_env *env, char *cmd);
-void	print_quote(int flag);
 void	print_env(t_env *env, int flag);
+void	print_quote(int flag);
+
+// unset.c
 int		b_unset(char **cmd, t_env **env);
 void	change_head(char *cmd, t_env **env);
 void	delete_node(char *cmd, t_env *env);
