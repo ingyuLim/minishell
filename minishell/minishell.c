@@ -19,7 +19,7 @@ void	minishell(t_vars *vars)
 			continue ;
 		vars->lst = tokenize(str);
 		if (syntax_check(vars->lst))
-			execute(vars);
+			execute_frame(vars);
 		free_str_tok(str, &(vars->lst));
 	}
 }

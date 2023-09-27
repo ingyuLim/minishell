@@ -52,11 +52,9 @@ char	**make_cmd(t_list *lst)
 	cmd = ft_calloc(cmd_len + 1, sizeof(char *));
 	while(lst != NULL && lst->state != PIPE)
 	{
-		// printf("token : %s, state : %d\n",lst->token, lst->state);
 		if(lst->state == CMD)
 		{
 			cmd[i] = (lst)->token;
-			// printf("cmd[%d] : %s\n",i,lst->token);
 			i++;
 		}
 		lst = (lst)->next;
@@ -137,44 +135,60 @@ void	move_next_syntax(t_list **lst, int *tmp_arr_index)
 		*lst = (*lst)->next;
 }
 
+void	find_in_redir(t_list **lst)
+{
+	int	infile_fd;
+
+	*lst = (*lst)->next;
+	infile_fd = open((*lst)->token, O_RDONLY);
+	use_dup2(infile_fd, STDIN_FILENO);
+	close(infile_fd);
+}
+
+void	find_out_redir(t_list **lst)
+{
+	int	outfile_fd;
+
+	*lst = (*lst)->next;
+	outfile_fd = open((*lst)->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	use_dup2(outfile_fd, STDOUT_FILENO);
+	close(outfile_fd);
+}
+
+void	find_heredoc(char **tmp_arr, int tmp_arr_index)
+{
+	int	infile_fd;
+
+	infile_fd = open(tmp_arr[tmp_arr_index], O_RDONLY);
+	use_dup2(infile_fd, STDIN_FILENO);
+	close(infile_fd);
+	unlink(tmp_arr[tmp_arr_index]);
+	tmp_arr_index++;
+}
+
+void	find_pair_out_redir(t_list **lst)
+{
+	int	outfile_fd;
+
+	*lst = (*lst)->next;
+	outfile_fd = open((*lst)->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	use_dup2(outfile_fd, STDOUT_FILENO);
+	close(outfile_fd);
+}
 
 void	find_redirect(t_list *lst, char **tmp_arr, int tmp_arr_index)// + int	tmp_arr_index 추가하기. 일단은 i로 선언해서 쓰자.
 {
-	int	infile_fd;
-	int	outfile_fd;
-
 	while(lst != NULL && lst->state != PIPE)
 	{
 		if(lst->state == IN_REDIR) // <
-		{
-			lst = lst->next;
-			infile_fd = open(lst->token, O_RDONLY);
-			use_dup2(infile_fd, STDIN_FILENO);
-			close(infile_fd);
-		}
+			find_in_redir(&lst);
 		else if(lst->state == OUT_REDIR) // >
-		{
-			lst = lst->next;
-			outfile_fd = open(lst->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			use_dup2(outfile_fd, STDOUT_FILENO);
-			close(outfile_fd);
-		}
+			find_out_redir(&lst);
 		else if(lst->state == HEREDOC)
-		{
-			infile_fd = open(tmp_arr[tmp_arr_index], O_RDONLY);
-			use_dup2(infile_fd, STDIN_FILENO);
-			close(infile_fd);
-			unlink(tmp_arr[tmp_arr_index]);
-			tmp_arr_index++;
-		}
+			find_heredoc(tmp_arr, tmp_arr_index);
 		else if(lst->state == PAIR_OUT_REDIR)
-		{
-			lst = lst->next;
-			outfile_fd = open(lst->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			use_dup2(outfile_fd, STDOUT_FILENO);
-			close(outfile_fd);
-		}
-		lst = (lst)->next;
+			find_pair_out_redir(&lst);
+		lst = lst->next;
 	}
 }
 
@@ -222,58 +236,75 @@ size_t	gnl_strlen(char *str)
 	return (result_len);
 }
 
-void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
+char *naming_tmp_file(char *tmp_file)
 {
-	int		num = 0;
+	int		num;
+	char	*letter_num;
+	char	*tmp_filename;
+
+	num = 0;
+	letter_num = ft_itoa(num++);
+	tmp_filename = ft_strjoin(tmp_file,letter_num);
+	use_free(letter_num);
+	while(access(tmp_filename,F_OK) != -1)
+	{
+		if(tmp_filename != NULL)
+			use_free(tmp_filename);
+		letter_num = ft_itoa(num++);
+		tmp_filename = ft_strjoin(tmp_file,letter_num);
+		use_free(letter_num);
+	}
+	return (tmp_filename);
+}
+
+void	write_in_tmpfile(t_list *lst, int tmp_fd)
+{
+	char	*limiter;
+	size_t	buffer_size;
+	char	*buf;
+	int		nl_flag;
+
+	limiter = lst->next->token;
+	buffer_size = ft_strlen(limiter) + 1;
+	buf = ft_calloc(buffer_size, sizeof(char));
+	nl_flag = 1;
+	ft_putstr_fd("\033[0;30m", 1);
+	ft_putstr_fd("> ", 1);
+	while (read(0, buf, buffer_size))
+	{
+		if (!ft_strncmp(limiter, buf, buffer_size - 1) && buf[buffer_size - 1] == '\n' && nl_flag)
+			break;
+		else if (exist_nl(buf))
+		{
+			nl_flag = 1;
+			ft_putstr_fd("> ", 1);
+		}
+		else
+			nl_flag = 0;
+		write(tmp_fd, buf, gnl_strlen(buf));
+	}
+	use_free(buf);
+}
+
+
+void	fill_tmp_arr(char **tmp_arr, t_list *lst)
+{
 	int		i = 0;
 	char	*tmp_filename = NULL;
-	char	*letter_num;
-	char	*limiter;
-	char	*buf;
 	int		tmp_fd;
-	size_t	buffer_size;
-	int		nl_flag = 1;
 
 	while(lst != NULL)
 	{
 		if(lst->state == HEREDOC)
 		{
-			letter_num = ft_itoa(num++);
-			tmp_filename = ft_strjoin(tmp_file,letter_num);
-			use_free(letter_num);
-			while(access(tmp_filename,F_OK) != -1)
-			{
-				if(tmp_filename != NULL)
-					use_free(tmp_filename);
-				letter_num = ft_itoa(num++);
-				tmp_filename = ft_strjoin(tmp_file,letter_num);
-				use_free(letter_num);
-			}
+			tmp_filename = naming_tmp_file(".tmp");
 			// if (access(tmp_filename, F_OK) == -1)
 				// error
 			tmp_fd = open(tmp_filename, O_RDWR | O_CREAT, 0644);
 			tmp_arr[i] = tmp_filename;
-			limiter = lst->next->token;
-			buffer_size = ft_strlen(limiter) + 1;
-			buf = ft_calloc(buffer_size, sizeof(char));
-			ft_putstr_fd("\033[0;30m", 1);
-			ft_putstr_fd("> ", 1);
-			while (read(0, buf, buffer_size))
-			{
-				if (!ft_strncmp(limiter, buf, buffer_size - 1) && buf[buffer_size - 1] == '\n' && nl_flag)
-					break;
-				else if (exist_nl(buf))
-				{
-					nl_flag = 1;
-					ft_putstr_fd("> ", 1);
-				}
-				else
-					nl_flag = 0;
-				write(tmp_fd, buf, gnl_strlen(buf));
-			}
+			write_in_tmpfile(lst, tmp_fd);
 			use_close(tmp_fd);
 			i++;
-			use_free(buf);
 		}
 		lst = lst->next;
 	}
@@ -304,10 +335,41 @@ void	free_tmp_arr(char **tmp_arr)
 	use_free(tmp_arr);
 }
 
-
-void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
+void	last_builtin(t_vars *vars, char	**cmd, int pid_index, int (*pipe_fd)[2])
 {
-	int		(*pipe_fd)[2];
+	if(pid_index != 0)
+		last_cmd(pid_index, pipe_fd);
+	builtin_func(vars, cmd);
+}
+
+void	connect_pipe(int pid_index, int process, int (*pipe_fd)[2])
+{
+	if(pid_index == 0 && pid_index == process - 1)
+		;
+	else if(pid_index == 0)
+		first_cmd(pipe_fd);
+	else if(pid_index != process - 1)
+		middle_cmd(pid_index, pipe_fd);
+	else
+		last_cmd(pid_index, pipe_fd);
+}
+
+void	execute_command(t_vars *vars, char **cmd, char	**envp)
+{
+	char **path;
+
+	path = parse_path(vars->env);
+	if(is_builtin(cmd))
+		exit(builtin_func(vars, cmd));
+	else
+	{
+		cmd[0] = path_join(path, cmd[0]);
+		use_execve(cmd[0], cmd, envp);
+	}
+}
+
+void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
+{
 	int		pid_index;
 	char	**tmp_arr;
 	int		tmp_arr_index = 0;
@@ -315,45 +377,25 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 	char	**envp;
 	t_list	*lst;
 
-	lst = vars->lst;
 	envp = make_envp(vars->env);
-	if(process > 1)
-		pipe_fd = ft_calloc(process - 1, sizeof(int [2]));
 	pid_index = 0;
 	tmp_arr = malloc_tmp_arr(lst);
-	fill_tmp_arr(".tmp", tmp_arr, lst);//fill_tmp_arr
+	fill_tmp_arr(tmp_arr, lst);//fill_tmp_arr
 	while (process > pid_index) //cmd가 있는 경우.
 	{
 		if (pid_index != process - 1)
 			pipe(pipe_fd[pid_index]);
 		cmd = make_cmd(lst);
 		if(is_builtin(cmd) && pid_index == process - 1 && !ft_is_redirection(lst))
-		{
-			if(pid_index != 0)
-				last_cmd(pid_index, pipe_fd);
-			builtin_func(vars, cmd);
-		}
+			last_builtin(vars, cmd, pid_index, pipe_fd);
 		else
 		{
 			pid[pid_index] = fork();
 			if (pid[pid_index] == 0)
 			{
-				if(pid_index == 0 && pid_index == process - 1)
-					;
-				else if(pid_index == 0)
-					first_cmd(pipe_fd);
-				else if(pid_index != process - 1)
-					middle_cmd(pid_index, pipe_fd);
-				else
-					last_cmd(pid_index, pipe_fd);
+				connect_pipe(pid_index, process, pipe_fd);
 				find_redirect(lst, tmp_arr,tmp_arr_index);
-				if(is_builtin(cmd))
-					exit(builtin_func(vars, cmd));
-				else
-				{
-					cmd[0] = path_join(path, cmd[0]);
-					use_execve(cmd[0], cmd, envp);
-				}
+				execute_command(vars, cmd, envp);
 			}
 		}
 		use_free(cmd);
@@ -446,22 +488,23 @@ void	sigint_handler_exec(int signum)
 	ft_putstr_fd("\n", 1);
 }
 
-void	execute(t_vars *vars)
+void	execute_frame(t_vars *vars)
 {
-	char		**path;
 	int			process;
+	int		(*pipe_fd)[2];
 	pid_t		*pid;
 
 	signal(SIGINT, sigint_handler_exec);
 	replace_env_and_trim_quote(vars);
 	print_tokens(vars->lst);
-	path = parse_path(vars->env);
 	process = process_count(vars->lst);
+	pipe_fd = NULL;
 	pid = ft_calloc(process, sizeof(pid_t));
-	connect_pipe(vars, pid, process, path);
+	if(process > 1)
+		pipe_fd = ft_calloc(process - 1, sizeof(int [2]));
+	execute(vars, pid, pipe_fd, process);
 	while(wait(NULL) != -1)
 		;
-	free_path(path);
 	use_free(pid);
 }
 
