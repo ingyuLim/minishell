@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/27 14:24:55 by seunan           ###   ########.fr       */
+/*   Updated: 2023/09/28 22:35:37 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ typedef struct s_vars
 	t_env	*env;
 }				t_vars;
 
-// minishell.c
 void	minishell(t_vars *vars);
 
 // utils.c
@@ -148,7 +147,7 @@ size_t	gnl_strlen(char *str);
 void	free_tmp_arr(char **tmp_arr);
 void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst);
 int		ft_is_redirection(t_list *lst);
-void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path);
+void	run_pipe_commands(t_vars *vars, pid_t *pid, int process, char **path);
 int		is_builtin(char **cmd);
 int		builtin_func(t_vars *vars, char **cmd);
 char	**parse_path(t_env *env);

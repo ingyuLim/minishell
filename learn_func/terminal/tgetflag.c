@@ -8,8 +8,8 @@
 #include <curses.h>
 
 int main() {
-	char term_buffer[1024];
-	bool has_auto_left_margin, has_auto_right_margin;
+	char	term_buffer[1024];
+	bool	has_auto_left_margin, has_auto_right_margin;
 
 	// Initialize curses
 	initscr();

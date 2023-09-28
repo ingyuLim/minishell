@@ -52,11 +52,9 @@ char	**make_cmd(t_list *lst)
 	cmd = ft_calloc(cmd_len + 1, sizeof(char *));
 	while(lst != NULL && lst->state != PIPE)
 	{
-		// printf("token : %s, state : %d\n",lst->token, lst->state);
 		if(lst->state == CMD)
 		{
 			cmd[i] = (lst)->token;
-			// printf("cmd[%d] : %s\n",i,lst->token);
 			i++;
 		}
 		lst = (lst)->next;
@@ -138,7 +136,7 @@ void	move_next_syntax(t_list **lst, int *tmp_arr_index)
 }
 
 
-void	find_redirect(t_list *lst, char **tmp_arr, int tmp_arr_index)// + int	tmp_arr_index 추가하기. 일단은 i로 선언해서 쓰자.
+void	find_redirect(t_list *lst, char **tmp_arr, int tmp_arr_index)
 {
 	int	infile_fd;
 	int	outfile_fd;
@@ -249,8 +247,6 @@ void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst)
 				tmp_filename = ft_strjoin(tmp_file,letter_num);
 				use_free(letter_num);
 			}
-			// if (access(tmp_filename, F_OK) == -1)
-				// error
 			tmp_fd = open(tmp_filename, O_RDWR | O_CREAT, 0644);
 			tmp_arr[i] = tmp_filename;
 			limiter = lst->next->token;
@@ -305,7 +301,7 @@ void	free_tmp_arr(char **tmp_arr)
 }
 
 
-void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
+void	run_pipe_commands(t_vars *vars, pid_t *pid, int process, char **path)
 {
 	int		(*pipe_fd)[2];
 	int		pid_index;
@@ -321,8 +317,8 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		pipe_fd = ft_calloc(process - 1, sizeof(int [2]));
 	pid_index = 0;
 	tmp_arr = malloc_tmp_arr(lst);
-	fill_tmp_arr(".tmp", tmp_arr, lst);//fill_tmp_arr
-	while (process > pid_index) //cmd가 있는 경우.
+	fill_tmp_arr(".tmp", tmp_arr, lst);
+	while (process > pid_index)
 	{
 		if (pid_index != process - 1)
 			pipe(pipe_fd[pid_index]);
@@ -359,7 +355,7 @@ void	connect_pipe(t_vars *vars, pid_t *pid, int process, char **path)
 		use_free(cmd);
 		if(pid_index != 0)
 		{
-			close(pipe_fd[pid_index - 1][0]);     //근데 close 실패하면 원래 exit이 맞나? 글고 애초에 실패할 일이 있으려나 일케 하면...?
+			close(pipe_fd[pid_index - 1][0]);
 			close(pipe_fd[pid_index - 1][1]);
 		}
 		move_next_syntax(&lst, &tmp_arr_index);
@@ -451,7 +447,7 @@ void	execute(t_vars *vars)
 	path = parse_path(vars->env);
 	process = process_count(vars->lst);
 	pid = ft_calloc(process, sizeof(pid_t));
-	connect_pipe(vars, pid, process, path);
+	run_pipe_commands(vars, pid, process, path);
 	while(wait(NULL) != -1)
 		;
 	free_path(path);

@@ -8,7 +8,6 @@ LLDB= -g
 DEBUG= -g3 -fsanitize=address
 
 SRCS= main.c \
-	minishell.c \
 	utils.c \
 	error.c \
 	test/test.c \
@@ -18,7 +17,6 @@ SRCS= main.c \
 	$(wildcard ./builtin/*.c) \
 	$(wildcard ./parse/*.c)
 TEST_SRCS= $(wildcard ./test/*.c) \
-	minishell.c \
 	utils.c \
 	error.c \
 	signal.c \
