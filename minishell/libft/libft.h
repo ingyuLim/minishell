@@ -6,7 +6,7 @@
 /*   By: inlim <inlim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:29:31 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/30 20:48:05 by inlim            ###   ########.fr       */
+/*   Updated: 2023/09/30 21:47:46 by inlim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ typedef struct s_execute
 	int		pid_index;
 	char	**tmp_arr;
 	int		tmp_arr_index;
-	char	**cmd;
 	char	**envp;
+	char	**cmd;
 }					t_execute;
 
 int					ft_isalnum(int c);

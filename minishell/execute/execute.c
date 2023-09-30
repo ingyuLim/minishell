@@ -382,7 +382,6 @@ void	init_variable(t_vars *vars, t_list **lst, t_execute *data)
 	data->tmp_arr = malloc_tmp_arr(*lst);
 	fill_tmp_arr(data->tmp_arr, *lst);//fill_tmp_arr
 	data->tmp_arr_index = 0;
-	data->cmd = make_cmd(*lst);
 	data->envp = make_envp(vars->env);
 }
 void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
@@ -390,9 +389,10 @@ void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
 	t_list		*lst;
 	t_execute	data;
 
-	init_variable(vars, &lst,&data);
+	init_variable(vars, &lst, &data);
 	while (process > data.pid_index) //cmd가 있는 경우.
 	{
+		data.cmd = make_cmd(lst);
 		if (data.pid_index != process - 1)
 			pipe(pipe_fd[data.pid_index]);
 		if(is_builtin(data.cmd) && data.pid_index == process - 1 && !ft_is_redirection(lst))
@@ -416,7 +416,9 @@ void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
 
 int	is_builtin(char **cmd)
 {
-	if (ft_strncmp(cmd[0], "cd", 3) == 0)
+	if (cmd[0] == NULL)
+		return (0);
+	else if (ft_strncmp(cmd[0], "cd", 3) == 0)
 		return (1);
 	else if (ft_strncmp(cmd[0], "pwd", 4) == 0)
 		return (1);
