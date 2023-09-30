@@ -2,13 +2,12 @@
 
 NAME=minishell
 CC=gcc
-CFLAGS=-Wall -Werror -Wextra
+CFLAGS= -Werror -Wall -Wextra -I/opt/homebrew/opt/readline/include
 LIBFT=./libft/libft.a
 LLDB= -g
 DEBUG= -g3 -fsanitize=address
 
 SRCS= main.c \
-	minishell.c \
 	utils.c \
 	error.c \
 	test/test.c \
@@ -18,7 +17,6 @@ SRCS= main.c \
 	$(wildcard ./builtin/*.c) \
 	$(wildcard ./parse/*.c)
 TEST_SRCS= $(wildcard ./test/*.c) \
-	minishell.c \
 	utils.c \
 	error.c \
 	signal.c \
@@ -32,7 +30,7 @@ TEST_OBJS=$(TEST_SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -lreadline $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -L/opt/homebrew/opt/readline/lib -lreadline -o $(NAME)
 
 $(LIBFT):
 	$(MAKE) bonus -C ./libft

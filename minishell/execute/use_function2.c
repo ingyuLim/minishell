@@ -6,20 +6,20 @@ pid_t	use_waitpid(pid_t pid, int *stat_loc, int options)
 
 	result = waitpid(pid, stat_loc, options);
 	if (result == -1)
-		exit_with_err("waitpid", 0);
+		exit_with_err("waitpid", 0, 1);
 	return (result);
 }
 
 void	use_dup2(int fd1, int fd2)
 {
 	if (dup2(fd1, fd2) == -1)
-		exit_with_err("dup2", 0);
+		exit_with_err("dup2", 0, 1);
 }
 
 void	use_close(int fd)
 {
 	if (close(fd) == -1)
-		exit_with_err("close", 0);
+		exit_with_err("close", 0, 1);
 }
 
 int	infile_open(const char *path, int oflag)
@@ -28,7 +28,7 @@ int	infile_open(const char *path, int oflag)
 
 	fd = open(path, oflag);
 	if(fd == -1)
-		exit_with_err("open", 0);
+		exit_with_err("open", 0, 1);
 	return (fd);
 }
 

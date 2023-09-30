@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inlim <inlim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:29:31 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/30 21:47:46 by inlim            ###   ########.fr       */
+/*   Updated: 2023/09/27 14:04:25 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,6 @@ typedef struct s_list
 	struct s_list	*next;
 
 }					t_list;
-
-typedef struct s_execute
-{
-	int		pid_index;
-	char	**tmp_arr;
-	int		tmp_arr_index;
-	char	**envp;
-	char	**cmd;
-}					t_execute;
 
 int					ft_isalnum(int c);
 int					ft_isalpha(int c);

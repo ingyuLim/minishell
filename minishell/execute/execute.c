@@ -101,7 +101,10 @@ char	*path_join(char **path, char *cmd)
 	{
 		tmp = ft_strjoin(path[i], cmd);
 		if (access(tmp, X_OK) == 0)
+		{
+			fprintf(stderr, "%s\n", tmp);
 			break ;
+		}
 		use_free(tmp);
 		++i;
 	}
@@ -498,9 +501,30 @@ void	execute_frame(t_vars *vars)
 	if(process > 1)
 		pipe_fd = ft_calloc(process - 1, sizeof(int [2]));
 	execute(vars, pid, pipe_fd, process);
-	while(wait(NULL) != -1)
-		;
+	wait_child(pid, process);
 	use_free(pid);
 }
-// sleep 1 << limiter1 < infile > outfile | ls << limiter2 < infile2 <infile3
-// 히어독 먼저 세고 그만큼 tmp파일의 fd를 담을 배열 malloc한 후 순서대로 입력을 담아주고 그 후 find rediection을 통해 입출력 방향 바꾸기. 그 후 tmp 파일 삭제.
+
+void	wait_child(pid_t *pid, int process)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	while (j < process - 1)
+	{
+		i = 0;
+		while (i < process - 1)
+		{
+			if (waitpid(pid[i], &g_status, WNOHANG) == pid[i])
+			{
+				g_status = WEXITSTATUS(g_status);
+				++j;
+			}
+			++i;
+		}
+
+	}
+	waitpid(pid[process - 1], &g_status, 0);
+	g_status = WEXITSTATUS(g_status);
+}
