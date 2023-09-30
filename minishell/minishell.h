@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/30 00:32:31 by seunan           ###   ########.fr       */
+/*   Updated: 2023/09/30 22:01:01 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,15 @@ typedef struct s_vars
 	t_list	*lst;
 	t_env	*env;
 }				t_vars;
+
+typedef struct s_execute
+{
+	int		pid_index;
+	char	**tmp_arr;
+	int		tmp_arr_index;
+	char	**envp;
+	char	**cmd;
+}				t_execute;
 
 void	minishell(t_vars *vars);
 
@@ -139,32 +148,42 @@ char	**make_cmd(t_list *lst);
 char	**make_envp(t_env *env);
 char	*path_join(char **path, char *cmd);
 void	free_envp(char **envp);
-void	move_next_syntax(t_list **lst, int *tmp_arr_index);
+void	move_next_syntax(t_list **lst, char **cmd, int *tmp_arr_index, int *pid_index);
+void	find_in_redir(t_list **lst);
+void	find_out_redir(t_list **lst);
+void	find_heredoc(char **tmp_arr, int tmp_arr_index);
+void	find_pair_out_redir(t_list **lst);
 void	find_redirect(t_list *lst, char **tmp_arr, int tmp_arr_index);
 char	**malloc_tmp_arr(t_list *lst);
 int		exist_nl(char *buf);
 size_t	gnl_strlen(char *str);
-void	free_tmp_arr(char **tmp_arr);
-void	fill_tmp_arr(char *tmp_file, char **tmp_arr, t_list *lst);
+char	*naming_tmp_file(char *tmp_file);
+void	write_in_tmpfile(t_list *lst, int tmp_fd);
+void	fill_tmp_arr(char **tmp_arr, t_list *lst);
 int		ft_is_redirection(t_list *lst);
-void	run_pipe_commands(t_vars *vars, pid_t *pid, int process, char **path);
+void	free_tmp_arr(char **tmp_arr);
+void	last_builtin(t_vars *vars, char	**cmd, int pid_index, int (*pipe_fd)[2]);
+void	execute_command(t_vars *vars, char **cmd, char	**envp);
+void	clear_resources(char **envp, int process,int (*pipe_fd)[2],char **tmp_arr);
+void	close_last_pipe(int (*pipe_fd)[2], int pid_index);
+void	init_variable(t_vars *vars, t_list **lst, t_execute *data);
+void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process);
 int		is_builtin(char **cmd);
 int		builtin_func(t_vars *vars, char **cmd);
 char	**parse_path(t_env *env);
 void	free_path(char **path);
-char	*find_env(char *key, t_env *env);
-char	*ft_strjoin_char(char *s1, char c);
-char	*replace_env_vars(char *content, t_env *env);
-void	execute(t_vars *vars);
+void	execute_frame(t_vars *vars);
+void	wait_child(pid_t *pid, int process);
 
 // execute/change_in_and_out.c
 void	change_stdin_to_pipe(int *pipe_fd);
 void	change_stdout_to_pipe(int *pipe_fd);
 
-// execute/children.c
+// execute/connect_pipe.c
 void	first_cmd(int (*pipe_fd)[2]);
 void	middle_cmd(int pid_index, int (*pipe_fd)[2]);
 void	last_cmd(int pid_index, int (*pipe_fd)[2]);
+void	connect_pipe(int pid_index, int process, int (*pipe_fd)[2]);
 
 // execute/use_function1.c
 void	use_execve(char *path, char *argv[], char *envp[]);

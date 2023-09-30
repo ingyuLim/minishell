@@ -6,7 +6,7 @@ void	use_execve(char *path, char *argv[], char *envp[])
 	if (execve(path, argv, envp) == -1)
 	{
 		g_status = 127;
-		exit_with_err(path, 0, 127);
+		exit_with_err(path, 0, g_status);
 	}
 }
 

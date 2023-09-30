@@ -2,7 +2,7 @@
 
 NAME=minishell
 CC=gcc
-CFLAGS=-Wall -Werror -Wextra
+CFLAGS= -Werror -Wall -Wextra -I/opt/homebrew/opt/readline/include
 LIBFT=./libft/libft.a
 LLDB= -g
 DEBUG= -g3 -fsanitize=address
@@ -30,7 +30,7 @@ TEST_OBJS=$(TEST_SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -lreadline $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -L/opt/homebrew/opt/readline/lib -lreadline -o $(NAME)
 
 $(LIBFT):
 	$(MAKE) bonus -C ./libft
