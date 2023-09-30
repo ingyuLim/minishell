@@ -123,7 +123,7 @@ void	free_envp(char **envp)
 	use_free(envp);
 }
 
-void	move_next_syntax(t_list **lst, int *tmp_arr_index)
+void	move_next_syntax(t_list **lst, char **cmd, int *tmp_arr_index, int *pid_index)
 {
 	while(*lst != NULL && ft_strncmp((*lst)->token, "|", 2) != 0)
 	{
@@ -133,6 +133,8 @@ void	move_next_syntax(t_list **lst, int *tmp_arr_index)
 	}
 	if (*lst != NULL)
 		*lst = (*lst)->next;
+	(*pid_index)++;
+	use_free(cmd);
 }
 
 void	find_in_redir(t_list **lst)
@@ -342,17 +344,7 @@ void	last_builtin(t_vars *vars, char	**cmd, int pid_index, int (*pipe_fd)[2])
 	builtin_func(vars, cmd);
 }
 
-void	connect_pipe(int pid_index, int process, int (*pipe_fd)[2])
-{
-	if(pid_index == 0 && pid_index == process - 1)
-		;
-	else if(pid_index == 0)
-		first_cmd(pipe_fd);
-	else if(pid_index != process - 1)
-		middle_cmd(pid_index, pipe_fd);
-	else
-		last_cmd(pid_index, pipe_fd);
-}
+
 
 void	execute_command(t_vars *vars, char **cmd, char	**envp)
 {
@@ -368,51 +360,58 @@ void	execute_command(t_vars *vars, char **cmd, char	**envp)
 	}
 }
 
-void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
+void	clear_resources(char **envp, int process,int (*pipe_fd)[2],char **tmp_arr)
 {
-	int		pid_index;
-	char	**tmp_arr;
-	int		tmp_arr_index = 0;
-	char	**cmd;
-	char	**envp;
-	t_list	*lst;
-
-	lst = vars->lst;
-	envp = make_envp(vars->env);
-	pid_index = 0;
-	tmp_arr = malloc_tmp_arr(lst);
-	fill_tmp_arr(tmp_arr, lst);//fill_tmp_arr
-	while (process > pid_index) //cmd가 있는 경우.
-	{
-		if (pid_index != process - 1)
-			pipe(pipe_fd[pid_index]);
-		cmd = make_cmd(lst);
-		if(is_builtin(cmd) && pid_index == process - 1 && !ft_is_redirection(lst))
-			last_builtin(vars, cmd, pid_index, pipe_fd);
-		else
-		{
-			pid[pid_index] = fork();
-			if (pid[pid_index] == 0)
-			{
-				connect_pipe(pid_index, process, pipe_fd);
-				find_redirect(lst, tmp_arr,tmp_arr_index);
-				execute_command(vars, cmd, envp);
-			}
-		}
-		use_free(cmd);
-		if(pid_index != 0)
-		{
-			close(pipe_fd[pid_index - 1][0]);     //근데 close 실패하면 원래 exit이 맞나? 글고 애초에 실패할 일이 있으려나 일케 하면...?
-			close(pipe_fd[pid_index - 1][1]);
-		}
-		move_next_syntax(&lst, &tmp_arr_index);
-		pid_index++;
-	}
 	free_envp(envp);
 	if (process > 1)
 		use_free(pipe_fd);
 	if(tmp_arr != NULL)
 		free_tmp_arr(tmp_arr);
+}
+
+void	close_last_pipe(int (*pipe_fd)[2], int pid_index)
+{
+	close(pipe_fd[pid_index - 1][0]);
+	close(pipe_fd[pid_index - 1][1]);
+}
+
+void	init_variable(t_vars *vars, t_list **lst, t_execute *data)
+{
+	*lst = vars->lst;
+	data->pid_index = 0;
+	data->tmp_arr = malloc_tmp_arr(*lst);
+	fill_tmp_arr(data->tmp_arr, *lst);//fill_tmp_arr
+	data->tmp_arr_index = 0;
+	data->cmd = make_cmd(*lst);
+	data->envp = make_envp(vars->env);
+}
+void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
+{
+	t_list		*lst;
+	t_execute	data;
+
+	init_variable(vars, &lst,&data);
+	while (process > data.pid_index) //cmd가 있는 경우.
+	{
+		if (data.pid_index != process - 1)
+			pipe(pipe_fd[data.pid_index]);
+		if(is_builtin(data.cmd) && data.pid_index == process - 1 && !ft_is_redirection(lst))
+			last_builtin(vars, data.cmd, data.pid_index, pipe_fd);
+		else
+		{
+			pid[data.pid_index] = fork();
+			if (pid[data.pid_index] == 0)
+			{
+				connect_pipe(data.pid_index, process, pipe_fd);
+				find_redirect(lst, data.tmp_arr,data.tmp_arr_index);
+				execute_command(vars, data.cmd, data.envp);
+			}
+		}
+		if(data.pid_index != 0)
+			close_last_pipe(pipe_fd, data.pid_index);
+		move_next_syntax(&lst, data.cmd, &(data.tmp_arr_index),&data.pid_index);
+	}
+	clear_resources(data.envp, process, pipe_fd, data.tmp_arr);
 }
 
 int	is_builtin(char **cmd)
@@ -501,7 +500,5 @@ void	execute_frame(t_vars *vars)
 		;
 	use_free(pid);
 }
-
-
 // sleep 1 << limiter1 < infile > outfile | ls << limiter2 < infile2 <infile3
 // 히어독 먼저 세고 그만큼 tmp파일의 fd를 담을 배열 malloc한 후 순서대로 입력을 담아주고 그 후 find rediection을 통해 입출력 방향 바꾸기. 그 후 tmp 파일 삭제.

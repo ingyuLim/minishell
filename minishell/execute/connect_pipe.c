@@ -24,3 +24,14 @@ void	last_cmd(int pid_index, int (*pipe_fd)[2])
 	change_stdin_to_pipe(pipe_fd[pid_index -1]);
 }
 
+void	connect_pipe(int pid_index, int process, int (*pipe_fd)[2])
+{
+	if(pid_index == 0 && pid_index == process - 1)
+		;
+	else if(pid_index == 0)
+		first_cmd(pipe_fd);//cmd 라고 하지 말고 syntax라고 하기.
+	else if(pid_index != process - 1)
+		middle_cmd(pid_index, pipe_fd);
+	else
+		last_cmd(pid_index, pipe_fd);
+}
