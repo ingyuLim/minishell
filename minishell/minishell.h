@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/28 22:35:37 by seunan           ###   ########.fr       */
+/*   Updated: 2023/09/30 00:32:31 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	sigquit_handler(int signo);
 
 // error.c
 void	error(char *err, char *cmd);
-void	exit_with_err(char *err, char *cmd);
+void	exit_with_err(char *err, char *cmd, int status);
 void	error_msg(char *msg, char *cmd, char *arg);
 void	exit_with_msg(char *msg, char *cmd, char *arg);
 

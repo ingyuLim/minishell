@@ -101,7 +101,10 @@ char	*path_join(char **path, char *cmd)
 	{
 		tmp = ft_strjoin(path[i], cmd);
 		if (access(tmp, X_OK) == 0)
+		{
+			fprintf(stderr, "%s\n", tmp);
 			break ;
+		}
 		use_free(tmp);
 		++i;
 	}
@@ -323,7 +326,7 @@ void	run_pipe_commands(t_vars *vars, pid_t *pid, int process, char **path)
 		if (pid_index != process - 1)
 			pipe(pipe_fd[pid_index]);
 		cmd = make_cmd(lst);
-		if(is_builtin(cmd) && pid_index == process - 1 && !ft_is_redirection(lst))
+		if(cmd[0] != NULL && is_builtin(cmd) && pid_index == process - 1 && !ft_is_redirection(lst))
 		{
 			if(pid_index != 0)
 				last_cmd(pid_index, pipe_fd);
@@ -334,6 +337,7 @@ void	run_pipe_commands(t_vars *vars, pid_t *pid, int process, char **path)
 			pid[pid_index] = fork();
 			if (pid[pid_index] == 0)
 			{
+				write(2, "1\n", 2);
 				if(pid_index == 0 && pid_index == process - 1)
 					;
 				else if(pid_index == 0)
@@ -343,10 +347,15 @@ void	run_pipe_commands(t_vars *vars, pid_t *pid, int process, char **path)
 				else
 					last_cmd(pid_index, pipe_fd);
 				find_redirect(lst, tmp_arr,tmp_arr_index);
+				write(2, "2\n", 2);
 				if(is_builtin(cmd))
+				{
+					write(2, "3\n", 2);
 					exit(builtin_func(vars, cmd));
+				}
 				else
 				{
+					write(2, "4\n", 2);
 					cmd[0] = path_join(path, cmd[0]);
 					use_execve(cmd[0], cmd, envp);
 				}
@@ -370,6 +379,8 @@ void	run_pipe_commands(t_vars *vars, pid_t *pid, int process, char **path)
 
 int	is_builtin(char **cmd)
 {
+	if (cmd[0] == NULL)
+		return (0);
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
 		return (1);
 	else if (ft_strncmp(cmd[0], "pwd", 4) == 0)
@@ -448,7 +459,7 @@ void	execute(t_vars *vars)
 	process = process_count(vars->lst);
 	pid = ft_calloc(process, sizeof(pid_t));
 	run_pipe_commands(vars, pid, process, path);
-	while(wait(NULL) != -1)
+	while(waitpid(-1, &g_status, 0) != -1)
 		;
 	free_path(path);
 	use_free(pid);
