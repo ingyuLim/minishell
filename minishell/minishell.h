@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: inlim <inlim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/27 14:24:55 by seunan           ###   ########.fr       */
+/*   Updated: 2023/09/30 21:21:34 by inlim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ char	**make_cmd(t_list *lst);
 char	**make_envp(t_env *env);
 char	*path_join(char **path, char *cmd);
 void	free_envp(char **envp);
-void	move_next_syntax(t_list **lst, int *tmp_arr_index);
+void	move_next_syntax(t_list **lst, char **cmd, int *tmp_arr_index, int *pid_index);
 void	find_redirect(t_list *lst, char **tmp_arr, int tmp_arr_index);
 char	**malloc_tmp_arr(t_list *lst);
 int		exist_nl(char *buf);
@@ -162,10 +162,11 @@ void	execute_frame(t_vars *vars);
 void	change_stdin_to_pipe(int *pipe_fd);
 void	change_stdout_to_pipe(int *pipe_fd);
 
-// execute/children.c
+// execute/connect_pipe.c
 void	first_cmd(int (*pipe_fd)[2]);
 void	middle_cmd(int pid_index, int (*pipe_fd)[2]);
 void	last_cmd(int pid_index, int (*pipe_fd)[2]);
+void	connect_pipe(int pid_index, int process, int (*pipe_fd)[2]);
 
 // execute/use_function1.c
 void	use_execve(char *path, char *argv[], char *envp[]);
