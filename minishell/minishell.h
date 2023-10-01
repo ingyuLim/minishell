@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: inlim <inlim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/30 22:01:01 by seunan           ###   ########.fr       */
+/*   Updated: 2023/09/30 22:27:48 by inlim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ char	**make_cmd(t_list *lst);
 char	**make_envp(t_env *env);
 char	*path_join(char **path, char *cmd);
 void	free_envp(char **envp);
-void	move_next_syntax(t_list **lst, char **cmd, int *tmp_arr_index, int *pid_index);
+void	move_next_syntax(t_list **lst, int (*pipe_fd)[2], int *tmp_arr_index, int *pid_index);
 void	find_in_redir(t_list **lst);
 void	find_out_redir(t_list **lst);
 void	find_heredoc(char **tmp_arr, int tmp_arr_index);

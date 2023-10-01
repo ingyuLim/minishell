@@ -126,8 +126,10 @@ void	free_envp(char **envp)
 	use_free(envp);
 }
 
-void	move_next_syntax(t_list **lst, char **cmd, int *tmp_arr_index, int *pid_index)
+void	move_next_syntax(t_list **lst, int (*pipe_fd)[2], int *tmp_arr_index, int *pid_index)
 {
+	if(*pid_index != 0)
+			close_last_pipe(pipe_fd, *pid_index);
 	while(*lst != NULL && ft_strncmp((*lst)->token, "|", 2) != 0)
 	{
 		if((*lst)->state == HEREDOC)
@@ -137,7 +139,6 @@ void	move_next_syntax(t_list **lst, char **cmd, int *tmp_arr_index, int *pid_ind
 	if (*lst != NULL)
 		*lst = (*lst)->next;
 	(*pid_index)++;
-	use_free(cmd);
 }
 
 void	find_in_redir(t_list **lst)
@@ -387,6 +388,7 @@ void	init_variable(t_vars *vars, t_list **lst, t_execute *data)
 	data->tmp_arr_index = 0;
 	data->envp = make_envp(vars->env);
 }
+
 void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
 {
 	t_list		*lst;
@@ -410,9 +412,8 @@ void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
 				execute_command(vars, data.cmd, data.envp);
 			}
 		}
-		if(data.pid_index != 0)
-			close_last_pipe(pipe_fd, data.pid_index);
-		move_next_syntax(&lst, data.cmd, &(data.tmp_arr_index),&data.pid_index);
+		use_free(data.cmd);
+		move_next_syntax(&lst, pipe_fd, &(data.tmp_arr_index),&data.pid_index);
 	}
 	clear_resources(data.envp, process, pipe_fd, data.tmp_arr);
 }
