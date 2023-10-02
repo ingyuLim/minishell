@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:01:58 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 20:55:24 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/02 21:42:03 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,22 @@ int	b_exit(char **cmd)
 
 int	is_num(char *str)
 {
-	int	i;
+	int				i;
+	long long int	num;
 
 	i = 0;
 	if (str[0] == '+' || str[0] == '-')
 		++i;
+	num = 0;
 	while (str[i] != '\0')
 	{
 		if (!ft_isdigit(str[i]))
 			return (0);
+		num = num * 10 + str[i] - '0';
+		if (num >= __LONG_LONG_MAX__ / 10
+			&& ft_isdigit(str[i + 1]) && str[i + 1] > '7')
+			return (0);
+		++i;
 	}
 	return (1);
 }

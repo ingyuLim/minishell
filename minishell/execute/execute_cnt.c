@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_cnt.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/02 21:39:51 by seunan            #+#    #+#             */
+/*   Updated: 2023/10/02 21:39:53 by seunan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	process_count(t_list *lst)
@@ -5,9 +17,9 @@ int	process_count(t_list *lst)
 	int	process;
 
 	process = 1;
-	while(lst != NULL)
+	while (lst != NULL)
 	{
-		if(ft_strncmp(lst->token, "|", 2) == 0)
+		if (ft_strncmp(lst->token, "|", 2) == 0)
 			process++;
 		lst = lst->next;
 	}
@@ -19,12 +31,12 @@ int	cmd_size_count(t_list *lst)
 	int	size;
 
 	size = 1;
-	while(lst != NULL && ft_strncmp(lst->token, "|", 2) != 0 )
+	while (lst != NULL && ft_strncmp(lst->token, "|", 2) != 0)
 	{
 		size++;
 		lst = lst->next;
 	}
-	 return (size);
+	return (size);
 }
 
 int	count_cmd_count(t_list *lst)
@@ -32,13 +44,13 @@ int	count_cmd_count(t_list *lst)
 	int	len;
 
 	len = 1;
-	while(lst != NULL && ft_strncmp((lst)->token, "|", 2) != 0)
+	while (lst != NULL && ft_strncmp((lst)->token, "|", 2) != 0)
 	{
-		if(lst->state == CMD)
+		if (lst->state == CMD)
 			len++;
 		lst = (lst)->next;
 	}
-	return len;
+	return (len);
 }
 
 size_t	gnl_strlen(char *str)

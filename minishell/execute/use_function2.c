@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   use_function2.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/02 21:39:35 by seunan            #+#    #+#             */
+/*   Updated: 2023/10/02 21:39:36 by seunan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 pid_t	use_waitpid(pid_t pid, int *stat_loc, int options)
@@ -27,7 +39,7 @@ int	infile_open(const char *path, int oflag)
 	int	fd;
 
 	fd = open(path, oflag);
-	if(fd == -1)
+	if (fd == -1)
 		exit_with_err("open", 0, 1);
 	return (fd);
 }

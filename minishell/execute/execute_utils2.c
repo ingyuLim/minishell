@@ -6,29 +6,31 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:18:42 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 20:18:42 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/02 21:39:20 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
- int	ft_is_redirection(t_list *lst)
- {
-	while(lst != NULL && lst->state != PIPE)
+int	ft_is_redirection(t_list *lst)
+{
+	while (lst != NULL && lst->state != PIPE)
 	{
-		if(lst->state ==IN_REDIR || lst->state== OUT_REDIR|| lst->state==HEREDOC||lst->state==PAIR_OUT_REDIR)
+		if (lst->state == IN_REDIR || lst->state == OUT_REDIR
+			|| lst->state == HEREDOC || lst->state == PAIR_OUT_REDIR)
 			return (1);
-		lst=lst->next;
+		lst = lst->next;
 	}
-	return 0;
- }
+	return (0);
+}
 
-void	clear_resources(char **envp, int process,int (*pipe_fd)[2],char **tmp_arr)
+void	clear_resources(char **envp, int process, int (*pipe_fd)[2],
+		char **tmp_arr)
 {
 	free_envp(envp);
 	if (process > 1)
 		use_free(pipe_fd);
-	if(tmp_arr != NULL)
+	if (tmp_arr != NULL)
 		free_tmp_arr(tmp_arr);
 }
 

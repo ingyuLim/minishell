@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_redir.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/02 21:40:02 by seunan            #+#    #+#             */
+/*   Updated: 2023/10/02 21:40:23 by seunan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 void	find_in_redir(t_list **lst)
@@ -49,15 +61,15 @@ void	find_pair_out_redir(t_list **lst)
 
 void	find_redirect(t_list *lst, char **tmp_arr, int tmp_arr_index)
 {
-	while(lst != NULL && lst->state != PIPE)
+	while (lst != NULL && lst->state != PIPE)
 	{
-		if(lst->state == IN_REDIR) // <
+		if (lst->state == IN_REDIR)
 			find_in_redir(&lst);
-		else if(lst->state == OUT_REDIR) // >
+		else if (lst->state == OUT_REDIR)
 			find_out_redir(&lst);
-		else if(lst->state == HEREDOC)
+		else if (lst->state == HEREDOC)
 			find_heredoc(tmp_arr, tmp_arr_index);
-		else if(lst->state == PAIR_OUT_REDIR)
+		else if (lst->state == PAIR_OUT_REDIR)
 			find_pair_out_redir(&lst);
 		lst = lst->next;
 	}

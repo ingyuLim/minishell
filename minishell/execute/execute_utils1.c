@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_utils1.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/02 21:39:43 by seunan            #+#    #+#             */
+/*   Updated: 2023/10/02 21:39:45 by seunan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 void	init_variable(t_vars *vars, t_list **lst, t_execute *data)
@@ -19,9 +31,9 @@ char	**make_cmd(t_list *lst)
 	i = 0;
 	cmd_len = count_cmd_count(lst);
 	cmd = ft_calloc(cmd_len + 1, sizeof(char *));
-	while(lst != NULL && lst->state != PIPE)
+	while (lst != NULL && lst->state != PIPE)
 	{
-		if(lst->state == CMD)
+		if (lst->state == CMD)
 		{
 			cmd[i] = (lst)->token;
 			i++;
