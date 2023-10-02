@@ -101,10 +101,7 @@ char	*path_join(char **path, char *cmd)
 	{
 		tmp = ft_strjoin(path[i], cmd);
 		if (access(tmp, X_OK) == 0)
-		{
-			fprintf(stderr, "%s\n", tmp);
 			break ;
-		}
 		use_free(tmp);
 		++i;
 	}
@@ -126,10 +123,8 @@ void	free_envp(char **envp)
 	use_free(envp);
 }
 
-void	move_next_syntax(t_list **lst, int (*pipe_fd)[2], int *tmp_arr_index, int *pid_index)
+void	move_next_syntax(t_list **lst, char **cmd, int *tmp_arr_index, int *pid_index)
 {
-	if(*pid_index != 0)
-			close_last_pipe(pipe_fd, *pid_index);
 	while(*lst != NULL && ft_strncmp((*lst)->token, "|", 2) != 0)
 	{
 		if((*lst)->state == HEREDOC)
@@ -139,6 +134,7 @@ void	move_next_syntax(t_list **lst, int (*pipe_fd)[2], int *tmp_arr_index, int *
 	if (*lst != NULL)
 		*lst = (*lst)->next;
 	(*pid_index)++;
+	use_free(cmd);
 }
 
 void	find_in_redir(t_list **lst)
@@ -489,13 +485,13 @@ void	free_path(char **path)
 
 void	execute_frame(t_vars *vars)
 {
-	int			process;
+	int		process;
 	int		(*pipe_fd)[2];
-	pid_t		*pid;
+	pid_t	*pid;
 
 	signal(SIGINT, sigint_handler_exec);
 	replace_env_and_trim_quote(vars);
-	print_tokens(vars->lst);
+	// print_tokens(vars->lst);
 	process = process_count(vars->lst);
 	pipe_fd = NULL;
 	pid = ft_calloc(process, sizeof(pid_t));
@@ -519,7 +515,8 @@ void	wait_child(pid_t *pid, int process)
 		{
 			if (waitpid(pid[i], &g_status, WNOHANG) == pid[i])
 			{
-				g_status = WEXITSTATUS(g_status);
+				if (WIFEXITED(g_status))
+					g_status = WEXITSTATUS(g_status);
 				++j;
 			}
 			++i;
@@ -527,5 +524,8 @@ void	wait_child(pid_t *pid, int process)
 
 	}
 	waitpid(pid[process - 1], &g_status, 0);
-	g_status = WEXITSTATUS(g_status);
+	if (g_status == 2)
+		g_status = 130;
+	else if (WIFEXITED(g_status))
+		g_status = WEXITSTATUS(g_status);
 }

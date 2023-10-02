@@ -68,15 +68,16 @@
 - [x] parsing
 	- [x] Assign Type
 	- [x] syntax check
-- [ ] execute
+- [x] execute
 	- [x] 다중 파이프
 	- [x] redirection 처리
 	- [x] HERE_DOC
 	- [x] 환경 변수 변환
 	- [x] quote trim 처리
-	- [ ] leak 잡기
+	- [x] leak 잡기
 	- [x] builtin pipe 처리
-- [ ] process 상태값
+	- [ ] norm 처리
+- [x] process 상태값
 - [x] signal 처리
 	- [x] ctrl + D
 	- [x] ctrl + C

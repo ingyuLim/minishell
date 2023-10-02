@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:36 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/30 21:43:13 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/01 01:00:29 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ void	sigint_handler(int signo)
 void	sigint_handler_exec(int signum)
 {
 	(void) signum;
-	g_status = 130;
+	g_status = 130 << 8;
 	ft_putstr_fd("\n", 1);
 }
