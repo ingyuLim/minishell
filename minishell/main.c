@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:51 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 17:04:16 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/02 20:55:48 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,10 @@ void	minishell(t_vars *vars)
 		if (!quotes_check(str))
 			continue ;
 		vars->lst = tokenize(str);
-		if (syntax_check(vars->lst) == 0)
-			g_status = 2;
+		if (vars->lst == NULL)
+			;
+		else if (syntax_check(vars->lst) == 0)
+			g_status = 258;
 		else
 			execute_frame(vars);
 		free_str_tok(str, &(vars->lst));

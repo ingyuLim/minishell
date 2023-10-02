@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:01:09 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/27 14:20:50 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/02 21:07:16 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	is_envvar(char *content, int i)
 int	is_state(char *content, int i)
 {
 	if (content[i + 1] == '?' && (content[i + 2] == '\0'
-			|| !ft_iswhitespace(content[i + 2])
+			|| ft_iswhitespace(content[i + 2])
 			|| ft_isquote(content[i + 2]) || content[i + 2] == '$'))
 		return (1);
 	return (0);

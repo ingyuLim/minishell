@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 17:26:42 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/02 20:51:46 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int		b_env(t_env *env);
 
 // export.c
 int		b_export(char **cmd, t_env *env);
-void	add_env(t_env *env, char *cmd);
+int		add_env(t_env *env, char *cmd);
 void	print_env(t_env *env, int flag);
 void	print_quote(int flag);
 
@@ -155,14 +155,12 @@ void	find_heredoc(char **tmp_arr, int tmp_arr_index);
 void	find_pair_out_redir(t_list **lst);
 void	find_redirect(t_list *lst, char **tmp_arr, int tmp_arr_index);
 char	**malloc_tmp_arr(t_list *lst);
-int		exist_nl(char *buf);
 size_t	gnl_strlen(char *str);
 char	*naming_tmp_file(char *tmp_file);
 void	write_in_tmpfile(t_list *lst, int tmp_fd);
 void	fill_tmp_arr(char **tmp_arr, t_list *lst);
 int		ft_is_redirection(t_list *lst);
 void	free_tmp_arr(char **tmp_arr);
-void	last_builtin(t_vars *vars, char	**cmd, int pid_index, int (*pipe_fd)[2]);
 void	execute_command(t_vars *vars, char **cmd, char	**envp);
 void	clear_resources(char **envp, int process,int (*pipe_fd)[2],char **tmp_arr);
 void	close_last_pipe(int (*pipe_fd)[2], int pid_index);

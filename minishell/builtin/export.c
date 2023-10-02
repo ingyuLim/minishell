@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:02:11 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/27 14:02:12 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/02 20:52:07 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 int	b_export(char **cmd, t_env *env)
 {
 	int		i;
+	int		res;
 
+	res = 0;
 	if (cmd[1] == NULL)
 		print_env(env, 1);
 	else
@@ -23,14 +25,14 @@ int	b_export(char **cmd, t_env *env)
 		i = 1;
 		while (cmd[i] != NULL)
 		{
-			add_env(env, cmd[i]);
+			res = add_env(env, cmd[i]);
 			++i;
 		}
 	}
-	return (0);
+	return (res);
 }
 
-void	add_env(t_env *env, char *cmd)
+int	add_env(t_env *env, char *cmd)
 {
 	t_env	*e_tmp;
 
@@ -53,10 +55,14 @@ void	add_env(t_env *env, char *cmd)
 	if (e_tmp == NULL)
 	{
 		if (!ft_isvalidkey(cmd))
+		{
 			error_msg("not a valid identifier", "export", cmd);
+			return (1);
+		}
 		else
 			ft_envadd_back(&env, make_env(cmd));
 	}
+	return (0);
 }
 
 void	print_env(t_env *env, int flag)

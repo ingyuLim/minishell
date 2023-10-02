@@ -31,19 +31,3 @@ int	infile_open(const char *path, int oflag)
 		exit_with_err("open", 0, 1);
 	return (fd);
 }
-
-// int	outfile_open(const char *path, int status)
-// {
-// 	int	fd;
-
-// 	if(status == REDIRECTION)
-// 		fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-// 	else
-// 		fd = open(path, O_CREAT | O_WRONLY | O_APPEND, 0644);
-// 	if (fd == -1)
-// 	{
-// 		perror("open error");
-// 		exit(1);
-// 	}
-// 	return (fd);
-// }
