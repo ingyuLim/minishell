@@ -14,7 +14,7 @@ static char	test_state[8][20] = {
 
 void	leak(void)
 {
-	system("leaks minishell | grep leaked");
+	system("leaks minishell");
 }
 
 void	print_tokens(t_list *lst)

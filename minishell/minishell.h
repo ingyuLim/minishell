@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 21:41:33 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/02 22:02:20 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ int					b_env(t_env *env);
 int					b_export(char **cmd, t_env *env);
 int					add_env(t_env *env, char *cmd);
 void				print_env(t_env *env, int flag);
+int					ft_isvalidenv(t_env *env, char *cmd, t_env *e_tmp);
 void				print_quote(int flag);
 
 // unset.c
@@ -171,6 +172,7 @@ void				close_last_pipe(int (*pipe_fd)[2], int pid_index);
 void				init_variable(t_vars *vars, t_list **lst, t_execute *data);
 void				execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2],
 						int process);
+int					ft_onlybuiltin(t_execute data, t_list *lst, int process);
 int					is_builtin(char **cmd);
 int					builtin_func(t_vars *vars, char **cmd);
 char				**parse_path(t_env *env);

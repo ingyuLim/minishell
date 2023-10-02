@@ -6,11 +6,19 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:37:05 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 21:37:05 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/02 22:02:10 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	ft_onlybuiltin(t_execute data, t_list *lst, int process)
+{
+	if (is_builtin(data.cmd) && data.pid_index == process - 1
+		&& data.pid_index == 0 && !ft_is_redirection(lst))
+		return (1);
+	return (0);
+}
 
 int	is_builtin(char **cmd)
 {

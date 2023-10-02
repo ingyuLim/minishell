@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:02:11 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 21:40:51 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/02 21:57:14 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,30 +39,18 @@ int	add_env(t_env *env, char *cmd)
 	e_tmp = env;
 	while (e_tmp != NULL)
 	{
-		if (ft_strncmp(e_tmp->key, cmd, ft_strlen(e_tmp->key)) == 0)
+		if (ft_strncmp(e_tmp->key, cmd, ft_strlen(e_tmp->key)) == 0
+			&& cmd[ft_strlen(e_tmp->key)] == '=')
 		{
-			if (cmd[ft_strlen(e_tmp->key)] == '=')
-			{
-				use_free(e_tmp->value);
-				e_tmp->value = ft_strdup(cmd + ft_strlen(e_tmp->key) + 1);
-				break ;
-			}
-			else if (cmd[ft_strlen(e_tmp->key)] == '\0')
-				break ;
+			use_free(e_tmp->value);
+			e_tmp->value = ft_strdup(cmd + ft_strlen(e_tmp->key) + 1);
+			break ;
 		}
+		else if (ft_strncmp(e_tmp->key, cmd, ft_strlen(e_tmp->key) + 1) == 0)
+			break ;
 		e_tmp = e_tmp->next;
 	}
-	if (e_tmp == NULL)
-	{
-		if (!ft_isvalidkey(cmd))
-		{
-			error_msg("not a valid identifier", "export", cmd);
-			return (1);
-		}
-		else
-			ft_envadd_back(&env, make_env(cmd));
-	}
-	return (0);
+	return (ft_isvalidenv(env, cmd, e_tmp));
 }
 
 void	print_env(t_env *env, int flag)
@@ -89,6 +77,21 @@ void	print_env(t_env *env, int flag)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 		env = env->next;
 	}
+}
+
+int	ft_isvalidenv(t_env *env, char *cmd, t_env *e_tmp)
+{
+	if (e_tmp == NULL)
+	{
+		if (!ft_isvalidkey(cmd))
+		{
+			error_msg("not a valid identifier", "export", cmd);
+			return (1);
+		}
+		else
+			ft_envadd_back(&env, make_env(cmd));
+	}
+	return (0);
 }
 
 void	print_quote(int flag)

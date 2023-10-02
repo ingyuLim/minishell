@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:18:39 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 21:42:49 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/02 22:01:54 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
 		data.cmd = make_cmd(lst);
 		if (data.pid_index != process - 1)
 			pipe(pipe_fd[data.pid_index]);
-		if (is_builtin(data.cmd) && data.pid_index == process - 1
-			&& data.pid_index == 0 && !ft_is_redirection(lst))
+		if (ft_onlybuiltin(data, lst, process))
 			builtin_func(vars, data.cmd);
 		else
 		{
