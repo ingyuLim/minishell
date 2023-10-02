@@ -123,8 +123,10 @@ void	free_envp(char **envp)
 	use_free(envp);
 }
 
-void	move_next_syntax(t_list **lst, char **cmd, int *tmp_arr_index, int *pid_index)
+void	move_next_syntax(t_list **lst, int (*pipe_fd)[2], int *tmp_arr_index, int *pid_index)
 {
+	if(*pid_index != 0)
+			close_last_pipe(pipe_fd, *pid_index);
 	while(*lst != NULL && ft_strncmp((*lst)->token, "|", 2) != 0)
 	{
 		if((*lst)->state == HEREDOC)
@@ -134,7 +136,6 @@ void	move_next_syntax(t_list **lst, char **cmd, int *tmp_arr_index, int *pid_ind
 	if (*lst != NULL)
 		*lst = (*lst)->next;
 	(*pid_index)++;
-	use_free(cmd);
 }
 
 void	find_in_redir(t_list **lst)
@@ -410,51 +411,6 @@ void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
 		}
 		use_free(data.cmd);
 		move_next_syntax(&lst, pipe_fd, &(data.tmp_arr_index),&data.pid_index);
-	}
-	clear_resources(data.envp, process, pipe_fd, data.tmp_arr);
-}
-
-void	close_last_pipe(int (*pipe_fd)[2], int pid_index)
-{
-	close(pipe_fd[pid_index - 1][0]);
-	close(pipe_fd[pid_index - 1][1]);
-}
-
-void	init_variable(t_vars *vars, t_list **lst, t_execute *data)
-{
-	*lst = vars->lst;
-	data->pid_index = 0;
-	data->tmp_arr = malloc_tmp_arr(*lst);
-	fill_tmp_arr(data->tmp_arr, *lst);//fill_tmp_arr
-	data->tmp_arr_index = 0;
-	data->envp = make_envp(vars->env);
-}
-void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
-{
-	t_list		*lst;
-	t_execute	data;
-
-	init_variable(vars, &lst, &data);
-	while (process > data.pid_index) //cmd가 있는 경우.
-	{
-		data.cmd = make_cmd(lst);
-		if (data.pid_index != process - 1)
-			pipe(pipe_fd[data.pid_index]);
-		if(is_builtin(data.cmd) && data.pid_index == process - 1 && !ft_is_redirection(lst))
-			last_builtin(vars, data.cmd, data.pid_index, pipe_fd);
-		else
-		{
-			pid[data.pid_index] = fork();
-			if (pid[data.pid_index] == 0)
-			{
-				connect_pipe(data.pid_index, process, pipe_fd);
-				find_redirect(lst, data.tmp_arr,data.tmp_arr_index);
-				execute_command(vars, data.cmd, data.envp);
-			}
-		}
-		if(data.pid_index != 0)
-			close_last_pipe(pipe_fd, data.pid_index);
-		move_next_syntax(&lst, data.cmd, &(data.tmp_arr_index),&data.pid_index);
 	}
 	clear_resources(data.envp, process, pipe_fd, data.tmp_arr);
 }
