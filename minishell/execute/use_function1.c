@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:39:38 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 21:39:40 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/03 02:41:59 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	use_execve(char *path, char *argv[], char *envp[])
 	g_status = 0;
 	if (execve(path, argv, envp) == -1)
 	{
-		if (access(path, F_OK) == 0)
+		if (access(path, F_OK) == 0 && ft_strchr(path, '/'))
 			g_status = 126;
 		else
 			g_status = 127;
