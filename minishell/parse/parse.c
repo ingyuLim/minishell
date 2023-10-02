@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:01:16 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/27 14:22:26 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/02 01:30:00 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*make_symbol(char *str, char c, int *i)
 	while (str[*i + len] == c)
 	{
 		len++;
-		if (len > 2)
+		if (len >= 2)
 			break ;
 	}
 	result = ft_substr(str, *i, len);
