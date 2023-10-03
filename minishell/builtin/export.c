@@ -6,20 +6,20 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:02:11 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 21:57:14 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/03 21:34:45 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	b_export(char **cmd, t_env *env)
+int	b_export(char **cmd, t_env **env)
 {
 	int		i;
 	int		res;
 
 	res = 0;
 	if (cmd[1] == NULL)
-		print_env(env, 1);
+		print_env(*env, 1);
 	else
 	{
 		i = 1;
@@ -32,11 +32,11 @@ int	b_export(char **cmd, t_env *env)
 	return (res);
 }
 
-int	add_env(t_env *env, char *cmd)
+int	add_env(t_env **env, char *cmd)
 {
 	t_env	*e_tmp;
 
-	e_tmp = env;
+	e_tmp = *env;
 	while (e_tmp != NULL)
 	{
 		if (ft_strncmp(e_tmp->key, cmd, ft_strlen(e_tmp->key)) == 0
@@ -51,6 +51,21 @@ int	add_env(t_env *env, char *cmd)
 		e_tmp = e_tmp->next;
 	}
 	return (ft_isvalidenv(env, cmd, e_tmp));
+}
+
+int	ft_isvalidenv(t_env **env, char *cmd, t_env *e_tmp)
+{
+	if (e_tmp == NULL)
+	{
+		if (!ft_isvalidkey(cmd))
+		{
+			error_msg("not a valid identifier", "export", cmd);
+			return (1);
+		}
+		else
+			ft_envadd_back(env, make_env(cmd));
+	}
+	return (0);
 }
 
 void	print_env(t_env *env, int flag)
@@ -77,21 +92,6 @@ void	print_env(t_env *env, int flag)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 		env = env->next;
 	}
-}
-
-int	ft_isvalidenv(t_env *env, char *cmd, t_env *e_tmp)
-{
-	if (e_tmp == NULL)
-	{
-		if (!ft_isvalidkey(cmd))
-		{
-			error_msg("not a valid identifier", "export", cmd);
-			return (1);
-		}
-		else
-			ft_envadd_back(&env, make_env(cmd));
-	}
-	return (0);
 }
 
 void	print_quote(int flag)

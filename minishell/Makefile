@@ -72,7 +72,6 @@ clean:
 	rm -f $(OBJS) $(TEST_OBJS)
 
 fclean: clean
-	$(MAKE) clean
 	rm -f $(NAME)
 
 re:

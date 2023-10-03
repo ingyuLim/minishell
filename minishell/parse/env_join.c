@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:13:31 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/03 02:36:02 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/03 20:04:54 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 
 void	state_join(char **result, int *i)
 {
-	char	*tmp;
+	char	*num;
+	char	*mem;
 
-	tmp = *result;
-	*result = ft_strjoin(*result, ft_itoa(g_status));
-	use_free(tmp);
+	mem = *result;
+	num = ft_itoa(g_status);
+	*result = ft_strjoin(*result, num);
+	use_free(mem);
+	use_free(num);
 	*i += 2;
 }
 

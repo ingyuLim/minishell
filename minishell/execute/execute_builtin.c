@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:37:05 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 22:02:10 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/03 21:32:12 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	builtin_func(t_vars *vars, char **cmd)
 	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
 		g_status = b_echo(cmd);
 	else if (ft_strncmp(cmd[0], "export", 7) == 0)
-		g_status = b_export(cmd, vars->env);
+		g_status = b_export(cmd, &(vars->env));
 	else if (ft_strncmp(cmd[0], "env", 4) == 0)
 		g_status = b_env(vars->env);
 	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
