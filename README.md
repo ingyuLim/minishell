@@ -67,6 +67,7 @@
 
 - [x] parsing
 	- [x] Assign Type
+	- [ ] quote check error code
 	- [x] syntax check
 - [x] execute
 	- [x] 다중 파이프
@@ -74,17 +75,21 @@
 	- [x] HERE_DOC
 	- [x] 환경 변수 변환
 	- [x] quote trim 처리
-	- [x] leak 잡기
+	- [ ] leak 잡기 ("$USER"""''""$?)
 	- [x] builtin pipe 처리
-	- [ ] norm 처리
+	- [x] norm 처리
 - [x] process 상태값
 - [x] signal 처리
 	- [x] ctrl + D
 	- [x] ctrl + C
+		- [ ] HERE_DOC
 	- [x] ctrl + \
-- [x] 환경변수 치환
-	- 현재 순서 : str => replace env => trim quote => parse
-	- 바꿔야할 순서 : str => parse => replace env => trim quote
+		- [ ] HERE_DOC
+		- [ ] child process
+- [ ] 환경변수 치환
+	- [ ] 환경 변수를 어느정도 삭제 후에 ./minishell 을 하면 메모리 문제 발생
+- 현재 순서 : str => replace env => trim quote => parse
+- 바꿔야할 순서 : str => parse => replace env => trim quote
 
 ## Analyzing a subject
 
