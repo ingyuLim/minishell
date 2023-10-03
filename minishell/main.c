@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:51 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/03 20:10:53 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/04 00:59:24 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	minishell(t_vars *vars)
 
 	while (1)
 	{
-		signal(SIGINT, sigint_handler);
-		signal(SIGQUIT, SIG_IGN);
 		str = readline("\033[0;36mminishell$\033[0m ");
 		if (str == NULL)
 		{

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/03 21:34:24 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/04 01:01:12 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,11 @@ typedef struct s_env
 
 typedef struct s_vars
 {
-	t_list			*lst;
-	t_env			*env;
+	t_list				*lst;
+	t_env				*env;
+	struct sigaction	act;
+	struct sigaction	oact_int;
+	struct sigaction	oact_quit;
 }					t_vars;
 
 typedef struct s_execute
@@ -57,9 +60,9 @@ void				free_vars(t_vars *vars, int a, char *b[]);
 void				free_str_tok(char *str, t_list **lst);
 
 // signal.c
+void				signal_action(t_vars *vars);
 void				sigint_handler(int signo);
 void				sigint_handler_exec(int signum);
-void				sigquit_handler(int signo);
 
 // error.c
 void				error(char *err, char *cmd);
