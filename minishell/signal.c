@@ -6,11 +6,17 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:36 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/05 16:12:19 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/05 16:55:00 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void child_handler(int signo)
+{
+	(void) signo;
+    waitpid(-1, &g_status, WNOHANG);
+}
 
 void	sigint_handler(int signo)
 {

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/05 16:15:51 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/05 16:54:50 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void				signal_handler(t_vars *vars);
 void				sigint_handler(int signo);
 void				sigint_handler_exec(int signum);
 void				sigquit_handler(int signum);
+void				child_handler(int signo);
 
 // error.c
 void				error(char *err, char *cmd);
