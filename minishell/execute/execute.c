@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:18:39 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/04 00:56:50 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/05 16:18:21 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ void	execute_frame(t_vars *vars)
 	pid_t	*pid;
 	int		(*pipe_fd)[2];
 
-	sigaction(SIGQUIT, &(vars->oact_quit), NULL);
-	sigaction(SIGQUIT, &(vars->oact_int), NULL);
+	vars->act.sa_handler = sigint_handler_exec;
+	sigaction(SIGINT, &(vars->act), NULL);
+	vars->act.sa_handler = sigquit_handler;
+	sigaction(SIGQUIT, &(vars->act), NULL);
 	replace_env_and_trim_quote(vars);
 	while (vars->lst != NULL && *(vars->lst->token) == '\0')
 		vars->lst = vars->lst->next;
@@ -84,6 +86,8 @@ void	execute_command(t_vars *vars, char **cmd, char **envp)
 {
 	char	**path;
 
+	sigaction(SIGQUIT, &(vars->oact_quit), NULL);
+	sigaction(SIGINT, &(vars->oact_int), NULL);
 	path = parse_path(vars->env);
 	if (is_builtin(cmd))
 		exit(builtin_func(vars, cmd));
