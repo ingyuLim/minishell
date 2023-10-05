@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:18:39 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/05 16:52:25 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/05 22:05:49 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	wait_child(pid_t *pid, int process)
 	int	j;
 
 	i = 0;
-	while (i < process - 1) // process >= 2
+	while (i < process - 1)
 	{
 		j = 0;
 		while (j < process - 1)
@@ -119,10 +119,10 @@ void	wait_child(pid_t *pid, int process)
 		}
 	}
 	waitpid(pid[process - 1], &g_status, 0);
-	if (WIFSIGNALED(g_status))
-		kill(pid[process - 1], g_status);
 	if (g_status == 2)
-		g_status = 130;
+		g_status += 128;
+	else if (g_status == 3)
+		g_status += 128;
 	else if (WIFEXITED(g_status))
 		g_status = WEXITSTATUS(g_status);
 }

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:51 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/05 16:54:38 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/05 22:01:20 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,10 @@ void	minishell(t_vars *vars)
 {
 	char	*str;
 
-	signal(SIGCHLD, child_handler);
-	sigaction(SIGQUIT, NULL, &(vars->oact_quit)); // SIGQUIT을 oact_quit에 저장
-	sigaction(SIGINT, NULL, &(vars->oact_int)); // SIGINT를 oact_int에 저장
+	sig_origin(vars);
 	while (1)
 	{
-		vars->act.sa_handler = sigint_handler;
-		sigaction(SIGINT, &(vars->act), NULL);
-		vars->act.sa_handler = SIG_IGN;
-		sigaction(SIGQUIT, &(vars->act), NULL);
+		signal_handler(vars);
 		str = readline("\033[0;36mminishell$\033[0m ");
 		if (str == NULL)
 		{

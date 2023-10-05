@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/05 16:54:50 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/05 21:56:58 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,21 @@ void				init_vars(t_vars *vars, char *envp[]);
 void				free_vars(t_vars *vars, int a, char *b[]);
 void				free_str_tok(char *str, t_list **lst);
 
-// signal.c
-void				signal_handler(t_vars *vars);
-void				sigint_handler(int signo);
-void				sigint_handler_exec(int signum);
-void				sigquit_handler(int signum);
-void				child_handler(int signo);
-
 // error.c
 void				error(char *err, char *cmd);
 void				exit_with_err(char *err, char *cmd, int status);
 void				error_msg(char *msg, char *cmd, char *arg);
 void				exit_with_msg(char *msg, char *cmd, char *arg);
+
+// signal.c
+void				sig_origin(t_vars *vars);
+
+// sig_handler.c
+void				signal_handler(t_vars *vars);
+void				child_handler(int signo);
+void				sigint_handler(int signo);
+void				sigint_handler_exec(int signum);
+void				sigquit_handler(int signum);
 
 // syntax.c
 int					syntax_check(t_list *lst);
