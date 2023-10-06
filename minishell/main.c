@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:51 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/06 16:33:08 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/06 17:27:28 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	main(int argc, char *argv[], char *envp[])
 
 	vars = (t_vars *)ft_calloc(1, sizeof(t_vars));
 	init_vars(vars, envp);
+	signal(SIGCHLD, child_handler);
 	minishell(vars);
 	free_vars(vars, argc, argv);
 	return (g_status);
@@ -32,10 +33,10 @@ void	minishell(t_vars *vars)
 {
 	char	*str;
 
-	sig_origin(vars);
 	while (1)
 	{
-		signal_handler(vars);
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, SIG_IGN);
 		str = readline("\033[0;36mminishell$\033[0m ");
 		if (str == NULL)
 		{
@@ -44,7 +45,8 @@ void	minishell(t_vars *vars)
 		}
 		if (!quotes_check(str))
 			continue ;
-		add_history(str); // 엔터칠 때 히스토리에 저장되는 문제 있음
+		if (*str != '\0')
+			add_history(str);
 		vars->lst = tokenize(str);
 		if (vars->lst == NULL)
 			;

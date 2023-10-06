@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/06 16:31:51 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/06 18:11:26 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@ typedef struct s_vars
 {
 	t_list				*lst;
 	t_env				*env;
-	struct sigaction	act;
-	struct sigaction	oact_quit;
-	struct sigaction	oact_int;
 }					t_vars;
 
 typedef struct s_execute
@@ -64,11 +61,6 @@ void				error(char *err, char *cmd);
 void				exit_with_err(char *err, char *cmd, int status);
 void				error_msg(char *msg, char *cmd, char *arg);
 void				exit_with_msg(char *msg, char *cmd, char *arg);
-
-// signal.c
-void				sig_origin(t_vars *vars);
-void				signal_handler(t_vars *vars);
-void				signal_handler_exec(t_vars *vars);
 
 // sig_handler.c
 void				child_handler(int signo);
@@ -178,7 +170,7 @@ void				execute_command(t_vars *vars, char **cmd, char **envp);
 void				clear_resources(char **envp, int process, int (*pipe_fd)[2],
 						char **tmp_arr);
 void				close_last_pipe(int (*pipe_fd)[2], int pid_index);
-void				init_variable(t_vars *vars, t_list **lst, t_execute *data);
+void					init_variable(t_vars *vars, t_list **lst, t_execute *data);
 void				execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2],
 						int process);
 int					ft_onlybuiltin(t_execute data, t_list *lst, int process);

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:18:39 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/06 16:26:23 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/06 18:11:00 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	execute_frame(t_vars *vars)
 	pid_t	*pid;
 	int		(*pipe_fd)[2];
 
-	signal_handler_exec(vars);
 	replace_env_and_trim_quote(vars);
 	while (*(vars->lst->token) == '\0')
 		vars->lst = vars->lst->next;
@@ -54,6 +53,11 @@ void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
 				find_redirect(lst, data.tmp_arr, data.tmp_arr_index);
 				execute_command(vars, data.cmd, data.envp);
 			}
+			else
+			{
+				signal(SIGINT, sigint_handler_exec);
+				signal(SIGQUIT, sigquit_handler_exec);
+			}
 		}
 		use_free(data.cmd);
 		move_next_syntax(&lst, pipe_fd, &(data.tmp_arr_index), &data.pid_index);
@@ -81,8 +85,8 @@ void	execute_command(t_vars *vars, char **cmd, char **envp)
 {
 	char	**path;
 
-	sigaction(SIGQUIT, &(vars->oact_quit), NULL);
-	sigaction(SIGINT, &(vars->oact_int), NULL);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	path = parse_path(vars->env);
 	if (is_builtin(cmd))
 		exit(builtin_func(vars, cmd));
@@ -104,7 +108,7 @@ void	wait_child(pid_t *pid, int process)
 		j = 0;
 		while (j < process - 1)
 		{
-			if (waitpid(pid[j], &g_status, WNOHANG) == pid[j])
+			if (waitpid(pid[j], &g_status, WNOHANG) > 0)
 			{
 				if (WIFEXITED(g_status))
 					g_status = WEXITSTATUS(g_status);
