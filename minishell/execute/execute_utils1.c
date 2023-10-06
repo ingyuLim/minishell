@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:39:43 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/06 18:13:04 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/06 21:58:58 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	init_variable(t_vars *vars, t_list **lst, t_execute *data)
 	*lst = vars->lst;
 	data->pid_index = 0;
 	data->tmp_arr = malloc_tmp_arr(*lst);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	fill_tmp_arr(data->tmp_arr, *lst);
 	data->tmp_arr_index = 0;
 	data->envp = make_envp(vars->env);
