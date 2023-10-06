@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/05 21:56:58 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/06 16:31:51 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,14 @@ void				exit_with_msg(char *msg, char *cmd, char *arg);
 
 // signal.c
 void				sig_origin(t_vars *vars);
+void				signal_handler(t_vars *vars);
+void				signal_handler_exec(t_vars *vars);
 
 // sig_handler.c
-void				signal_handler(t_vars *vars);
 void				child_handler(int signo);
 void				sigint_handler(int signo);
 void				sigint_handler_exec(int signum);
-void				sigquit_handler(int signum);
+void				sigquit_handler_exec(int signum);
 
 // syntax.c
 int					syntax_check(t_list *lst);

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:51 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/05 22:01:20 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/06 16:33:08 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	atexit(leak);
+	// atexit(leak);
 	t_vars	*vars;
 
 	vars = (t_vars *)ft_calloc(1, sizeof(t_vars));
@@ -50,7 +50,7 @@ void	minishell(t_vars *vars)
 			;
 		else if (syntax_check(vars->lst) == 0)
 			g_status = 258;
-		else
+		else if (vars->lst != NULL)
 			execute_frame(vars);
 		free_str_tok(str, &(vars->lst));
 	}

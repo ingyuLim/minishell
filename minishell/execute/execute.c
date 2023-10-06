@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:18:39 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/05 22:05:49 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/06 16:26:23 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,10 @@ void	execute_frame(t_vars *vars)
 	pid_t	*pid;
 	int		(*pipe_fd)[2];
 
-	vars->act.sa_handler = sigint_handler_exec;
-	sigaction(SIGINT, &(vars->act), NULL);
-	vars->act.sa_handler = sigquit_handler;
-	sigaction(SIGQUIT, &(vars->act), NULL);
+	signal_handler_exec(vars);
 	replace_env_and_trim_quote(vars);
-	while (vars->lst != NULL && *(vars->lst->token) == '\0')
+	while (*(vars->lst->token) == '\0')
 		vars->lst = vars->lst->next;
-	if (vars->lst == NULL)
-		return ;
 	process = process_count(vars->lst);
 	pipe_fd = NULL;
 	pid = ft_calloc(process, sizeof(pid_t));
@@ -119,9 +114,7 @@ void	wait_child(pid_t *pid, int process)
 		}
 	}
 	waitpid(pid[process - 1], &g_status, 0);
-	if (g_status == 2)
-		g_status += 128;
-	else if (g_status == 3)
+	if (g_status == 2 || g_status == 3)
 		g_status += 128;
 	else if (WIFEXITED(g_status))
 		g_status = WEXITSTATUS(g_status);
