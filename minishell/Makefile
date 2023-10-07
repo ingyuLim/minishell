@@ -12,16 +12,16 @@ SRCS= main.c \
 	utils.c \
 	error.c \
 	test/test.c \
+	signal.c \
 	$(wildcard ./syntax/*.c) \
-	$(wildcard ./signal/*.c) \
 	$(wildcard ./execute/*.c) \
 	$(wildcard ./builtin/*.c) \
 	$(wildcard ./parse/*.c)
 TEST_SRCS= $(wildcard ./test/*.c) \
 	utils.c \
 	error.c \
+	signal.c \
 	$(wildcard ./syntax/*.c) \
-	$(wildcard ./signal/*.c) \
 	$(wildcard ./execute/*.c) \
 	$(wildcard ./builtin/*.c) \
 	$(wildcard ./parse/*.c)

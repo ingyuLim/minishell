@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:18:39 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/06 18:11:00 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/07 16:21:27 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	execute_frame(t_vars *vars)
 	pid_t	*pid;
 	int		(*pipe_fd)[2];
 
+	signal(SIGINT, sigint_handler_exec);
+	signal(SIGQUIT, sigquit_handler_exec);
 	replace_env_and_trim_quote(vars);
 	while (*(vars->lst->token) == '\0')
 		vars->lst = vars->lst->next;
@@ -52,11 +54,6 @@ void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
 				connect_pipe(data.pid_index, process, pipe_fd);
 				find_redirect(lst, data.tmp_arr, data.tmp_arr_index);
 				execute_command(vars, data.cmd, data.envp);
-			}
-			else
-			{
-				signal(SIGINT, sigint_handler_exec);
-				signal(SIGQUIT, sigquit_handler_exec);
 			}
 		}
 		use_free(data.cmd);
