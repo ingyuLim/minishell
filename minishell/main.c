@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:51 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/09 00:44:19 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/09 01:00:42 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	atexit(leak);
+	// atexit(leak);
 	t_vars	*vars;
 
 	vars = (t_vars *)ft_calloc(1, sizeof(t_vars));

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:39:43 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/09 00:44:36 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/09 00:58:55 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,9 @@ char	**make_envp(t_env *env)
 			mem = ft_strjoin(env->key, "=");
 			envp[i] = ft_strjoin(mem, env->value);
 			use_free(mem);
+			++i;
 		}
-		else
-			envp[i] = ft_strdup(env->key);
 		env = env->next;
-		++i;
 	}
 	return (envp);
 }

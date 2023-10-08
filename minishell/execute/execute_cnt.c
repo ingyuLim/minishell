@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:39:51 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/09 00:43:14 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/09 00:58:21 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,10 @@ int	ent_size(t_env *env)
 
 	i = 0;
 	while (env != NULL)
+	{
+		if (env->value != NULL)
+			i++;
 		env = env->next;
+	}
 	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:18:39 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/08 22:39:04 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/09 01:12:08 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,16 @@ void	execute_frame(t_vars *vars)
 	int		process;
 	pid_t	*pid;
 	int		(*pipe_fd)[2];
+	t_list	*tmp;
 
 	signal(SIGINT, sigint_handler_exec);
 	signal(SIGQUIT, sigquit_handler_exec);
-	while (vars->lst != NULL && *(vars->lst->token) == '\0')
-		vars->lst = vars->lst->next;
-	if (vars->lst == NULL)
-		return ;
 	replace_env_and_trim_quote(vars);
+	tmp = vars->lst;
+	while (tmp != NULL && *(tmp->token) == '\0')
+		tmp = tmp->next;
+	if (tmp == NULL)
+		return ;
 	process = process_count(vars->lst);
 	pipe_fd = NULL;
 	pid = ft_calloc(process, sizeof(pid_t));
