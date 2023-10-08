@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/08 22:58:56 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/09 00:44:09 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_execute
 }					t_execute;
 
 void				minishell(t_vars *vars);
+void				eof_exit(char *str);
 
 // utils.c
 void				init_vars(t_vars *vars, char *envp[]);
@@ -148,6 +149,7 @@ void				print_tokens(t_list *lst);
 int					process_count(t_list *lst);
 int					cmd_size_count(t_list *lst);
 int					count_cmd_count(t_list *lst);
+int					ent_size(t_env *env);
 char				**make_cmd(t_list *lst);
 char				**make_envp(t_env *env);
 char				*path_join(char **path, char *cmd);

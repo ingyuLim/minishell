@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:39:43 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/06 21:58:58 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/09 00:44:36 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,24 +48,22 @@ char	**make_cmd(t_list *lst)
 char	**make_envp(t_env *env)
 {
 	char	**envp;
-	t_env	*tmp;
 	char	*mem;
 	int		i;
 
-	tmp = env;
-	i = 0;
-	while (tmp != NULL)
-	{
-		i++;
-		tmp = tmp->next;
-	}
+	i = ent_size(env);
 	envp = (char **)ft_calloc((i + 1), sizeof(char *));
 	i = 0;
 	while (env != NULL)
 	{
-		mem = ft_strjoin(env->key, "=");
-		envp[i] = ft_strjoin(mem, env->value);
-		use_free(mem);
+		if (env->value != NULL)
+		{
+			mem = ft_strjoin(env->key, "=");
+			envp[i] = ft_strjoin(mem, env->value);
+			use_free(mem);
+		}
+		else
+			envp[i] = ft_strdup(env->key);
 		env = env->next;
 		++i;
 	}

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:51 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/08 23:04:32 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/09 00:44:19 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,6 @@ int	main(int argc, char *argv[], char *envp[])
 	minishell(vars);
 	free_vars(vars, argc, argv);
 	return (g_status);
-}
-
-// todo
-// 1. 히어독 시그널 처리
-// 2. 리드라인 히스토리 (m1 mac이라 환경이 다를 수 있음)
-
-void	eof_exit(char *str)
-{
-	if (str == NULL)
-	{
-		ft_putendl_fd("exit", 1);
-		g_status = 0;
-		exit(0);
-	}
 }
 
 void	minishell(t_vars *vars)
@@ -61,5 +47,15 @@ void	minishell(t_vars *vars)
 		else if (vars->lst != NULL)
 			execute_frame(vars);
 		free_str_tok(str, &(vars->lst));
+	}
+}
+
+void	eof_exit(char *str)
+{
+	if (str == NULL)
+	{
+		ft_putendl_fd("exit", 1);
+		g_status = 0;
+		exit(0);
 	}
 }

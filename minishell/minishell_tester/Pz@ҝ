@@ -1,0 +1,43 @@
+Process:         minishell [30897]
+Path:            /goinfre/*/minishell
+Load Address:    0x10574a000
+Identifier:      minishell
+Version:         ???
+Code Type:       X86-64
+Parent Process:  ??? [1]
+
+Date/Time:       2023-10-09 00:45:02.551 +0900
+Launch Time:     2023-10-09 00:45:02.180 +0900
+OS Version:      Mac OS X 10.15.7 (19H2026)
+Report Version:  7
+Analysis Tool:   /Applications/Xcode.app/Contents/Developer/usr/bin/leaks
+Analysis Tool Version:  Xcode 12.3 (12C33)
+
+Physical footprint:         268K
+Physical footprint (peak):  268K
+----
+
+leaks Report Version: 3.0
+Process 30897: 548 nodes malloced for 427 KB
+Process 30897: 20 leaks for 1088 total leaked bytes.
+
+Leak: 0x7f9dd2407960  size=16  zone: DefaultMallocZone_0x1057a4000
+Leak: 0x7f9dd24079b0  size=64  zone: DefaultMallocZone_0x1057a4000
+Leak: 0x7f9dd24079f0  size=32  zone: DefaultMallocZone_0x1057a4000
+Leak: 0x7f9dd2407a10  size=32  zone: DefaultMallocZone_0x1057a4000
+Leak: 0x7f9dd2407b60  size=32  zone: DefaultMallocZone_0x1057a4000   length: 31  "LSCOLORS=Gxfxcxdxbxegedabagacad"
+Leak: 0x7f9dd2407bc0  size=32  zone: DefaultMallocZone_0x1057a4000   length: 30  "MAIL=seunan@student.42seoul.kr"
+Leak: 0x7f9dd2407be0  size=288  zone: DefaultMallocZone_0x1057a4000   length: 281  "PATH=/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/seunan/goinfre/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/seunan/goinfre/.brew/bin"
+Leak: 0x7f9dd2407d00  size=32  zone: DefaultMallocZone_0x1057a4000   length: 26  "USER_ZDOTDIR=/Users/seunan"
+Leak: 0x7f9dd2407d20  size=64  zone: DefaultMallocZone_0x1057a4000   length: 56  "PWD=/goinfre/seunan/Minishell/minishell/minishell_tester"
+Leak: 0x7f9dd2407d60  size=32  zone: DefaultMallocZone_0x1057a4000   length: 16  "LANG=en_US.UTF-8"
+Leak: 0x7f9dd2407d80  size=32  zone: DefaultMallocZone_0x1057a4000   length: 18  "HOME=/Users/seunan"
+Leak: 0x7f9dd2407da0  size=64  zone: DefaultMallocZone_0x1057a4000   length: 62  "VSCODE_GIT_ASKPASS_EXTRA_ARGS=--ms-enable-electron-run-as-node"
+Leak: 0x7f9dd2407de0  size=16  zone: DefaultMallocZone_0x1057a4000   length: 13  "XPC_FLAGS=0x0"
+Leak: 0x7f9dd2407df0  size=32  zone: DefaultMallocZone_0x1057a4000   length: 18  "XPC_SERVICE_NAME=0"
+Leak: 0x7f9dd2407e10  size=32  zone: DefaultMallocZone_0x1057a4000   length: 18  "VSCODE_INJECTION=1"
+Leak: 0x7f9dd2407e30  size=16  zone: DefaultMallocZone_0x1057a4000   length: 7  "SHLVL=2"
+Leak: 0x7f9dd2407e40  size=16  zone: DefaultMallocZone_0x1057a4000   length: 14  "LOGNAME=seunan"
+Leak: 0x7f9dd2407e60  size=128  zone: DefaultMallocZone_0x1057a4000   length: 119  "VSCODE_GIT_ASKPASS_MAIN=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js"
+Leak: 0x7f9dd2407ee0  size=16  zone: DefaultMallocZone_0x1057a4000   length: 7  "LESS=-R"
+Leak: 0x7f9dd2407f10  size=112  zone: DefaultMallocZone_0x1057a4000   length: 97  "VSCODE_GIT_IPC_HANDLE=/var/folders/zz/zyxvpxvq6csfxvn_n000cyhh0037m4/T/vscode-git-5826e4b58a.sock"

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:39:51 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 21:39:53 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/09 00:43:14 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,14 @@ size_t	gnl_strlen(char *str)
 		str++;
 	}
 	return (result_len);
+}
+
+int	ent_size(t_env *env)
+{
+	int	i;
+
+	i = 0;
+	while (env != NULL)
+		env = env->next;
+	return (i);
 }
