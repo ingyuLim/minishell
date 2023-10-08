@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:02:15 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/09 04:06:17 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/09 04:17:10 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	delete_node(char *cmd, t_env *env)
 
 	if (env == NULL)
 		return ;
-	while (env->next != NULL)
+	while (env && env->next != NULL)
 	{
 		prev = env;
 		env = env->next;
