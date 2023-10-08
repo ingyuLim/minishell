@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:51 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/09 01:00:42 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/09 04:08:20 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	// atexit(leak);
 	t_vars	*vars;
 
+	// atexit(leak);
 	vars = (t_vars *)ft_calloc(1, sizeof(t_vars));
 	init_vars(vars, envp);
 	signal(SIGCHLD, child_handler);
@@ -33,7 +33,8 @@ void	minishell(t_vars *vars)
 	{
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
-		str = readline("\033[0;36mminishell$\033[0m ");
+		// str = readline("\033[0;36mminishell$\033[0m ");
+		str = ft_strdup("unset _");
 		eof_exit(str);
 		if (!quotes_check(str))
 			continue ;

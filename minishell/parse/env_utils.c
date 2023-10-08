@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:01:09 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/08 22:48:57 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/09 03:57:46 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int	is_envvar(char *content, int i)
 {
 	if (content[i] == '$'
 		&& (content[i + 1] == '?'
-		|| content[i + 1] == '_'
-		|| ft_isalpha(content[i + 1])))
+			|| content[i + 1] == '_'
+			|| ft_isalpha(content[i + 1])))
 		return (1);
 	return (0);
 }
