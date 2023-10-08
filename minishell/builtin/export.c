@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:02:11 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/03 21:34:45 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/08 22:59:20 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	b_export(char **cmd, t_env **env)
 
 	res = 0;
 	if (cmd[1] == NULL)
-		print_env(*env, 1);
+		print_export(*env);
 	else
 	{
 		i = 1;
@@ -68,26 +68,17 @@ int	ft_isvalidenv(t_env **env, char *cmd, t_env *e_tmp)
 	return (0);
 }
 
-void	print_env(t_env *env, int flag)
+void	print_export(t_env *env)
 {
 	while (env != NULL)
 	{
-		if (flag && env->value != NULL)
-		{
-			if (ft_strchr(env->value, '\"'))
-				flag = 2;
-			else
-				flag = 1;
-		}
-		if (flag)
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		ft_putstr_fd("declare -x ", STDOUT_FILENO);
 		ft_putstr_fd(env->key, STDOUT_FILENO);
 		if (env->value != NULL)
 		{
-			ft_putchar_fd('=', STDOUT_FILENO);
-			print_quote(flag);
+			ft_putstr_fd("=\"", STDOUT_FILENO);
 			ft_putstr_fd(env->value, STDOUT_FILENO);
-			print_quote(flag);
+			ft_putchar_fd('\"', STDOUT_FILENO);
 		}
 		ft_putchar_fd('\n', STDOUT_FILENO);
 		env = env->next;

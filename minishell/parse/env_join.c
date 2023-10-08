@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:13:31 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/03 20:04:54 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/08 22:45:09 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,8 @@ void	env_join(char *content, char **result, int *i, t_env *env)
 
 	j = *i + 1;
 	while (content[j] != '\0'
-		&& !ft_iswhitespace(content[j])
-		&& !ft_isquote(content[j])
-		&& content[j] != '$'
-		&& content[j] != '=')
+		&& (ft_isalnum(content[j])
+		|| content[j] == '_'))
 		j++;
 	key = ft_substr(content, *i + 1, j - *i - 1);
 	tmp = *result;

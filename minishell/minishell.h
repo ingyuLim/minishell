@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/06 18:11:26 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/08 22:58:56 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,11 +126,12 @@ int					is_num(char *str);
 
 // env.c
 int					b_env(t_env *env);
+void				print_env(t_env *env);
 
 // export.c
 int					b_export(char **cmd, t_env **env);
 int					add_env(t_env **env, char *cmd);
-void				print_env(t_env *env, int flag);
+void				print_export(t_env *env);
 int					ft_isvalidenv(t_env **env, char *cmd, t_env *e_tmp);
 void				print_quote(int flag);
 
