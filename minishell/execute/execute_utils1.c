@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:39:43 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/09 00:58:55 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/11 19:03:55 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,18 @@
 
 void	init_variable(t_vars *vars, t_list **lst, t_execute *data)
 {
+	int	stdin_fd;
+
+	stdin_fd = dup(0);
 	*lst = vars->lst;
 	data->pid_index = 0;
 	data->tmp_arr = malloc_tmp_arr(*lst);
-	signal(SIGINT, SIG_IGN);
+	signal(SIGINT, heredoc_handler);
 	signal(SIGQUIT, SIG_IGN);
 	fill_tmp_arr(data->tmp_arr, *lst);
 	data->tmp_arr_index = 0;
 	data->envp = make_envp(vars->env);
+	dup2(stdin_fd, 0);
 }
 
 char	**make_cmd(t_list *lst)

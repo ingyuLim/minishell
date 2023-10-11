@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:36:07 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/06 18:12:35 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/11 18:37:35 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*naming_tmp_file(char *tmp_file)
 	return (tmp_filename);
 }
 
-void	write_in_tmpfile(t_list *lst, int tmp_fd)
+void	write_in_tmpfile(t_list *lst, int tmp_fd, int *len)
 {
 	char	*limiter;
 	size_t	buffer_size;
@@ -63,7 +63,8 @@ void	write_in_tmpfile(t_list *lst, int tmp_fd)
 	buf = ft_calloc(buffer_size, sizeof(char));
 	nl_flag = 1;
 	ft_putstr_fd("\033[0;30m> ", 1);
-	while (read(0, buf, buffer_size))
+	*len = read(0, buf, buffer_size);
+	while (*len > 0)
 	{
 		if (!ft_strncmp(limiter, buf, buffer_size - 1)
 			&& buf[buffer_size - 1] == '\n' && nl_flag)
@@ -76,6 +77,7 @@ void	write_in_tmpfile(t_list *lst, int tmp_fd)
 		else
 			nl_flag = 0;
 		write(tmp_fd, buf, gnl_strlen(buf));
+		*len = read(0, buf, buffer_size);
 	}
 	use_free(buf);
 }
@@ -85,8 +87,10 @@ void	fill_tmp_arr(char **tmp_arr, t_list *lst)
 	int		i;
 	char	*tmp_filename;
 	int		tmp_fd;
+	int		len;
 
 	i = 0;
+	len = 0;
 	tmp_filename = NULL;
 	while (lst != NULL)
 	{
@@ -95,7 +99,8 @@ void	fill_tmp_arr(char **tmp_arr, t_list *lst)
 			tmp_filename = naming_tmp_file(".tmp");
 			tmp_fd = open(tmp_filename, O_RDWR | O_CREAT, 0644);
 			tmp_arr[i] = tmp_filename;
-			write_in_tmpfile(lst, tmp_fd);
+			if (len != -1)
+				write_in_tmpfile(lst, tmp_fd, &len);
 			use_close(tmp_fd);
 			i++;
 		}

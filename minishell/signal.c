@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:36 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/09 03:56:21 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/11 19:04:02 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,14 @@ void	sigint_handler(int signo)
 	rl_replace_line("", 0);
 	rl_redisplay();
 	g_status = 1;
+}
+
+void	heredoc_handler(int signo)
+{
+	(void) signo;
+	g_status = 1;
+	ft_putchar_fd('\n', 1);
+	close(0);
 }
 
 void	sigint_handler_exec(int signum)

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/11 16:43:39 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/11 19:03:23 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,10 @@ void				exit_with_err(char *err, char *cmd, int status);
 void				error_msg(char *msg, char *cmd, char *arg);
 void				exit_with_msg(char *msg, char *cmd, char *arg);
 
-// sig_handler.c
+// signal.c
 void				child_handler(int signo);
 void				sigint_handler(int signo);
+void				heredoc_handler(int signo);
 void				sigint_handler_exec(int signum);
 void				sigquit_handler_exec(int signum);
 
@@ -165,7 +166,7 @@ void				find_redirect(t_list *lst, char **tmp_arr,
 char				**malloc_tmp_arr(t_list *lst);
 size_t				gnl_strlen(char *str);
 char				*naming_tmp_file(char *tmp_file);
-void				write_in_tmpfile(t_list *lst, int tmp_fd);
+void				write_in_tmpfile(t_list *lst, int tmp_fd, int *len);
 void				fill_tmp_arr(char **tmp_arr, t_list *lst);
 int					ft_is_redirection(t_list *lst);
 void				free_tmp_arr(char **tmp_arr);

@@ -77,19 +77,23 @@
 	- [x] quote trim 처리
 	- [x] leak 잡기 ("$USER"""''""$?) => $? ft_itoa free 안해줘서 생김
 	- [x] builtin pipe 처리
-	- [x] norm 처리
+	- [ ] norm 처리
 - [x] process 상태값
 - [x] signal 처리
 	- [x] ctrl + D
 	- [x] ctrl + C
-		- [ ] HERE_DOC
+		- [x] HERE_DOC
 	- [x] ctrl + \
-		- [ ] HERE_DOC
-		- [ ] child process
+		- [x] HERE_DOC
+		- [x] child process
 - [x] 환경변수 치환
 	- [x] 환경 변수를 어느정도 삭제 후에 ./minishell 을 하면 메모리 문제 발생
-- 현재 순서 : str => replace env => trim quote => parse
-- 바꿔야할 순서 : str => parse => replace env => trim quote
+- [ ] 고칠 것들
+	- 자식 프로세스의 leak 잡기 (path 안쓸 때 free 안해줌)
+	- << a << b << c << d > file
+		- sig_int로 취소할 때 file이 만들어지는 문제
+		- exit status가 1이 아닌 11이 나오는 문제
+	- '/' 가 들어올 때 path랑 합쳐지는 문제
 
 ## Analyzing a subject
 
