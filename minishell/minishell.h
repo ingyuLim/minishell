@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/09 03:56:59 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/11 16:43:39 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,10 +158,10 @@ void				move_next_syntax(t_list **lst, int (*pipe_fd)[2],
 						int *tmp_arr_index, int *pid_index);
 void				find_in_redir(t_list **lst);
 void				find_out_redir(t_list **lst);
-void				find_heredoc(char **tmp_arr, int tmp_arr_index);
+void				find_heredoc(char **tmp_arr, int *tmp_arr_index);
 void				find_pair_out_redir(t_list **lst);
 void				find_redirect(t_list *lst, char **tmp_arr,
-						int tmp_arr_index);
+						int *tmp_arr_index);
 char				**malloc_tmp_arr(t_list *lst);
 size_t				gnl_strlen(char *str);
 char				*naming_tmp_file(char *tmp_file);

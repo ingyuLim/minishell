@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:18:39 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/11 13:33:50 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/11 16:42:56 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
 			if (pid[data.pid_index] == 0)
 			{
 				connect_pipe(data.pid_index, process, pipe_fd);
-				find_redirect(lst, data.tmp_arr, data.tmp_arr_index);
+				find_redirect(lst, data.tmp_arr, &(data.tmp_arr_index));
 				execute_command(vars, data.cmd, data.envp);
 			}
 		}

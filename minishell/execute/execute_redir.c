@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:40:02 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 21:40:23 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/11 16:43:24 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,15 @@ void	find_out_redir(t_list **lst)
 	close(outfile_fd);
 }
 
-void	find_heredoc(char **tmp_arr, int tmp_arr_index)
+void	find_heredoc(char **tmp_arr, int *tmp_arr_index)
 {
 	int	infile_fd;
 
-	infile_fd = open(tmp_arr[tmp_arr_index], O_RDONLY);
+	infile_fd = open(tmp_arr[*tmp_arr_index], O_RDONLY);
 	use_dup2(infile_fd, STDIN_FILENO);
 	close(infile_fd);
-	unlink(tmp_arr[tmp_arr_index]);
-	tmp_arr_index++;
+	unlink(tmp_arr[*tmp_arr_index]);
+	(*tmp_arr_index)++;
 }
 
 void	find_pair_out_redir(t_list **lst)
@@ -59,7 +59,7 @@ void	find_pair_out_redir(t_list **lst)
 	close(outfile_fd);
 }
 
-void	find_redirect(t_list *lst, char **tmp_arr, int tmp_arr_index)
+void	find_redirect(t_list *lst, char **tmp_arr, int *tmp_arr_index)
 {
 	while (lst != NULL && lst->state != PIPE)
 	{
