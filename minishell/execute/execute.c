@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:18:39 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/12 15:12:42 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/12 16:41:56 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,13 @@ void	execute_command(t_vars *vars, char **cmd, char **envp)
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	path = parse_path(vars->env);
 	if (is_builtin(cmd))
 		exit(builtin_func(vars, cmd));
 	else
 	{
+		path = parse_path(vars->env);
 		cmd[0] = path_join(path, cmd[0]);
+		free_path(path);
 		use_execve(cmd[0], cmd, envp);
 	}
 }

@@ -89,7 +89,7 @@
 - [x] 환경변수 치환
 	- [x] 환경 변수를 어느정도 삭제 후에 ./minishell 을 하면 메모리 문제 발생
 - [ ] 고칠 것들
-	- 자식 프로세스의 leak 잡기 (path 안쓸 때 free 안해줌)
+	- ~~자식 프로세스의 leak 잡기 (path 안쓸 때 free 안해줌)~~
 	- << a << b << c << d > file
 		- sig_int로 취소할 때 file이 만들어지는 문제
 		- exit status가 1이 아닌 11이 나오는 문제
