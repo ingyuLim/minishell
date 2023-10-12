@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:39:43 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/11 19:03:55 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/12 16:37:23 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,9 @@ char	**make_envp(t_env *env)
 
 char	*path_join(char **path, char *cmd)
 {
-	char	*tmp;
-	int		i;
+	char		*tmp;
+	struct stat	buf;
+	int			i;
 
 	if (path == NULL)
 		return (cmd);
@@ -85,7 +86,8 @@ char	*path_join(char **path, char *cmd)
 	while (path[i] != NULL)
 	{
 		tmp = ft_strjoin(path[i], cmd);
-		if (access(tmp, X_OK) == 0)
+		stat(tmp, &buf);
+		if (access(tmp, X_OK) == 0 && S_ISREG(buf.st_mode))
 			break ;
 		use_free(tmp);
 		++i;

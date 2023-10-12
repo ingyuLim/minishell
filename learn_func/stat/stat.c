@@ -11,19 +11,22 @@ int main(int argc, char *argv[])
 {
 	struct stat sb;
 
-	if (argc != 2) {
+	if (argc != 2)
+	{
 		fprintf(stderr, "Usage: %s <pathname>\n", argv[0]);
 		return 1;
 	}
 
-	if (stat(argv[1], &sb) == -1) {
+	if (stat(argv[1], &sb) == -1)
+	{
 		perror("stat");
 		return 1;
 	}
 
 	printf("File type:				");
 
-	switch (sb.st_mode & S_IFMT) {
+	switch (sb.st_mode & S_IFMT)
+	{
 		case S_IFBLK:  printf("block device\n");			break;
 		case S_IFCHR:  printf("character device\n");		break;
 		case S_IFDIR:  printf("directory\n");			   break;

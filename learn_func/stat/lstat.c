@@ -7,8 +7,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <time.h>
+
 #define BUF_SIZE 1024
-void printType(const char *name,const struct stat *buf) {
+
+void printType(const char *name,const struct stat *buf)
+{
 	if(S_ISDIR(buf->st_mode))
 		printf("%s is DIR \n",name);
 	else if(S_ISREG(buf->st_mode))
