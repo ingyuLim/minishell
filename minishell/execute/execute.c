@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:18:39 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/12 16:41:56 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/12 16:57:57 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
 	t_execute	data;
 
 	init_variable(vars, &lst, &data);
-	signal(SIGINT, sigint_handler_exec);
-	signal(SIGQUIT, sigquit_handler_exec);
 	while (process > data.pid_index)
 	{
 		data.cmd = make_cmd(lst);
