@@ -94,6 +94,7 @@
 		- sig_int로 취소할 때 file이 만들어지는 문제
 		- exit status가 1이 아닌 11이 나오는 문제
 	- '/' 가 들어올 때 path랑 합쳐지는 문제
+	- '//////cat(asa)'
 
 ## Analyzing a subject
 

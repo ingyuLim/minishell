@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:18:39 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/11 18:57:36 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/12 15:12:42 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ void	execute_frame(t_vars *vars)
 	pid_t	*pid;
 	int		(*pipe_fd)[2];
 
-	signal(SIGINT, sigint_handler_exec);
-	signal(SIGQUIT, sigquit_handler_exec);
 	replace_env_and_trim_quote(vars);
 	head = vars->lst;
 	if (vars->lst == NULL)
@@ -45,6 +43,8 @@ void	execute(t_vars *vars, pid_t *pid, int (*pipe_fd)[2], int process)
 	t_execute	data;
 
 	init_variable(vars, &lst, &data);
+	signal(SIGINT, sigint_handler_exec);
+	signal(SIGQUIT, sigquit_handler_exec);
 	while (process > data.pid_index)
 	{
 		data.cmd = make_cmd(lst);
