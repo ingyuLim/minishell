@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:36:07 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/11 18:37:35 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/13 16:49:38 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,11 @@ void	write_in_tmpfile(t_list *lst, int tmp_fd, int *len)
 
 	limiter = lst->next->token;
 	buffer_size = ft_strlen(limiter) + 1;
-	buf = ft_calloc(buffer_size, sizeof(char));
+	buf = ft_calloc(buffer_size + 1, sizeof(char));
 	nl_flag = 1;
 	ft_putstr_fd("\033[0;30m> ", 1);
 	*len = read(0, buf, buffer_size);
+	buf[buffer_size] = '\0';
 	while (*len > 0)
 	{
 		if (!ft_strncmp(limiter, buf, buffer_size - 1)
@@ -78,6 +79,7 @@ void	write_in_tmpfile(t_list *lst, int tmp_fd, int *len)
 			nl_flag = 0;
 		write(tmp_fd, buf, gnl_strlen(buf));
 		*len = read(0, buf, buffer_size);
+		buf[buffer_size] = '\0';
 	}
 	use_free(buf);
 }
