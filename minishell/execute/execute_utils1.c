@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:39:43 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/12 16:45:00 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/13 16:24:54 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	*path_join(char **path, char *cmd)
 	if (path == NULL)
 		return (cmd);
 	i = 0;
-	if (*cmd == '\0')
+	if (!cmd || *cmd == '\0')
 		return (cmd);
 	while (path[i] != NULL)
 	{

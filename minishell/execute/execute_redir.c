@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:40:02 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/11 16:43:24 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/13 16:31:15 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	find_out_redir(t_list **lst)
 {
 	int	outfile_fd;
 
+	if (g_status == 1)
+		return ;
 	*lst = (*lst)->next;
 	outfile_fd = open((*lst)->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (outfile_fd == -1)
@@ -51,6 +53,8 @@ void	find_pair_out_redir(t_list **lst)
 {
 	int	outfile_fd;
 
+	if (g_status == 1)
+		return ;
 	*lst = (*lst)->next;
 	outfile_fd = open((*lst)->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (outfile_fd == -1)
