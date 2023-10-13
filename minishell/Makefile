@@ -1,12 +1,12 @@
 .SUFFIXES : .c .o
 
 NAME=minishell
-CC=gcc
-PRINTF = printf
-CFLAGS= -Werror -Wall -Wextra -I/opt/homebrew/opt/readline/include
+CC=cc
+PRINTF=printf
+CFLAGS=-Werror -Wall -Wextra -I/opt/homebrew/opt/readline/include
 LIBFT=./libft/libft.a
-LLDB= -g
-DEBUG= -g3 -fsanitize=address
+LLDB=-g
+DEBUG=-g3 -fsanitize=address
 
 SRCS= main.c \
 	utils.c \
