@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:18:39 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/13 19:40:29 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/14 12:10:27 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	execute_frame(t_vars *vars)
 	replace_env_and_trim_quote(vars);
 	g_status = 0;
 	head = vars->lst;
+	while (vars->lst && vars->lst->flag && *(vars->lst->token) == '\0')
+		vars->lst = vars->lst->next;
 	if (vars->lst == NULL)
 	{
 		vars->lst = head;

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:44:41 by seunan            #+#    #+#             */
-/*   Updated: 2023/09/06 23:29:24 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/14 11:59:24 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_list	*ft_lstnew(char *content)
 	if (!new)
 		return (NULL);
 	new->token = content;
+	new->flag = 0;
 	new->next = NULL;
 	return (new);
 }

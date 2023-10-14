@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:29:31 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/11 18:49:34 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/14 11:57:22 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_list
 {
 	char			*token;
 	t_state			state;
+	int				flag;
 	struct s_list	*next;
 
 }					t_list;

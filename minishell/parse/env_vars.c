@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:01:13 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/03 20:00:10 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/14 12:06:01 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ void	replace_env_and_trim_quote(t_vars *vars)
 	while (lst != NULL)
 	{
 		mem = lst->token;
+		if (ft_strchr(lst->token, '$'))
+			lst->flag = 1;
 		lst->token = replace_env_vars(lst->token, vars->env);
-		free(mem);
+		use_free(mem);
 		lst = lst->next;
 	}
 }
