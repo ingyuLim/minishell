@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:00:48 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/13 16:17:02 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/14 17:22:42 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,11 +142,7 @@ int					b_unset(char **cmd, t_env **env);
 void				change_head(char *cmd, t_env **env);
 void				delete_node(char *cmd, t_env *env);
 
-// test/test.c
-void				leak(void);
-void				print_tokens(t_list *lst);
-
-// execute/execute.c
+// execute
 int					process_count(t_list *lst);
 int					cmd_size_count(t_list *lst);
 int					count_cmd_count(t_list *lst);
@@ -165,11 +161,14 @@ void				find_redirect(t_list *lst, char **tmp_arr,
 						int *tmp_arr_index);
 char				**malloc_tmp_arr(t_list *lst);
 size_t				gnl_strlen(char *str);
+char				**malloc_tmp_arr(t_list *lst);
 char				*naming_tmp_file(char *tmp_file);
+void				fill_heredoc(int *len, int buffer_size,
+						int tmp_fd, char *limiter);
 void				write_in_tmpfile(t_list *lst, int tmp_fd, int *len);
 void				fill_tmp_arr(char **tmp_arr, t_list *lst);
-int					ft_is_redirection(t_list *lst);
 void				free_tmp_arr(char **tmp_arr);
+int					ft_is_redirection(t_list *lst);
 void				execute_command(t_vars *vars, char **cmd, char **envp);
 void				clear_resources(char **envp, int process, int (*pipe_fd)[2],
 						char **tmp_arr);

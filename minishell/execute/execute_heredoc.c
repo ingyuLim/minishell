@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:36:07 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/13 16:49:38 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/14 17:19:25 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,13 @@ char	*naming_tmp_file(char *tmp_file)
 	return (tmp_filename);
 }
 
-void	write_in_tmpfile(t_list *lst, int tmp_fd, int *len)
+void	fill_heredoc(int *len, int buffer_size, int tmp_fd, char *limiter)
 {
-	char	*limiter;
-	size_t	buffer_size;
 	char	*buf;
 	int		nl_flag;
 
-	limiter = lst->next->token;
-	buffer_size = ft_strlen(limiter) + 1;
 	buf = ft_calloc(buffer_size + 1, sizeof(char));
 	nl_flag = 1;
-	ft_putstr_fd("\033[0;30m> ", 1);
 	*len = read(0, buf, buffer_size);
 	buf[buffer_size] = '\0';
 	while (*len > 0)
@@ -82,6 +77,17 @@ void	write_in_tmpfile(t_list *lst, int tmp_fd, int *len)
 		buf[buffer_size] = '\0';
 	}
 	use_free(buf);
+}
+
+void	write_in_tmpfile(t_list *lst, int tmp_fd, int *len)
+{
+	char	*limiter;
+	size_t	buffer_size;
+
+	limiter = lst->next->token;
+	buffer_size = ft_strlen(limiter) + 1;
+	ft_putstr_fd("\033[0;30m> ", 1);
+	fill_heredoc(len, buffer_size, tmp_fd, limiter);
 }
 
 void	fill_tmp_arr(char **tmp_arr, t_list *lst)
@@ -109,17 +115,4 @@ void	fill_tmp_arr(char **tmp_arr, t_list *lst)
 		lst = lst->next;
 	}
 	ft_putstr_fd("\033[0m", 1);
-}
-
-void	free_tmp_arr(char **tmp_arr)
-{
-	int	i;
-
-	i = 0;
-	while (tmp_arr[i] != NULL)
-	{
-		use_free(tmp_arr[i]);
-		i++;
-	}
-	use_free(tmp_arr);
 }

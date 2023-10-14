@@ -3,7 +3,7 @@
 NAME=minishell
 CC=cc
 PRINTF=printf
-CFLAGS=-Werror -Wall -Wextra -I/opt/homebrew/opt/readline/include
+CFLAGS=-Werror -Wall -Wextra
 LIBFT=./libft/libft.a
 LLDB=-g
 DEBUG=-g3 -fsanitize=address
@@ -11,22 +11,33 @@ DEBUG=-g3 -fsanitize=address
 SRCS= main.c \
 	utils.c \
 	error.c \
-	test/test.c \
 	signal.c \
-	$(wildcard ./syntax/*.c) \
-	$(wildcard ./execute/*.c) \
-	$(wildcard ./builtin/*.c) \
-	$(wildcard ./parse/*.c)
-TEST_SRCS= $(wildcard ./test/*.c) \
-	utils.c \
-	error.c \
-	signal.c \
-	$(wildcard ./syntax/*.c) \
-	$(wildcard ./execute/*.c) \
-	$(wildcard ./builtin/*.c) \
-	$(wildcard ./parse/*.c)
+	parse/parse.c \
+	parse/env_vars.c \
+	parse/env_utils.c \
+	parse/env_join.c \
+	syntax/syntax.c \
+	syntax/syntax_utils.c \
+	execute/change_in_and_out.c \
+	execute/connect_pipe.c \
+	execute/execute_builtin.c \
+	execute/execute_cnt.c \
+	execute/execute_heredoc.c \
+	execute/execute_redir.c \
+	execute/execute_utils1.c \
+	execute/execute_utils2.c \
+	execute/execute.c \
+	execute/use_function1.c \
+	execute/use_function2.c \
+	builtin/builtin_utils.c \
+	builtin/cd.c \
+	builtin/echo.c \
+	builtin/env.c \
+	builtin/exit.c \
+	builtin/export.c \
+	builtin/pwd.c \
+	builtin/unset.c
 OBJS=$(SRCS:.c=.o)
-TEST_OBJS=$(TEST_SRCS:.c=.o)
 
 # Color Aliases
 DEFAULT = \033[0;39m
@@ -58,7 +69,7 @@ clear:
 	@echo "$(DEFAULT)"
 
 $(NAME): $(LIBFT) $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -L/opt/homebrew/opt/readline/lib -lreadline -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
 	@$(PRINTF) "\r%100s\r$(GREEN)$(BIN) is up to date!$(DEFAULT)\n"
 
 $(LIBFT):
@@ -88,7 +99,4 @@ lldb:
 	$(MAKE) fclean
 	$(MAKE) all CFLAGS="$(CFLAGS) $(LLDB)"
 
-test:
-	$(MAKE) 'OBJS=$(TEST_OBJS)' all
-
-.PHONY: all clean fclean re debug lldb test
+.PHONY: all clean fclean re debug lldb

@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:39:35 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/02 21:39:36 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/14 17:19:29 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,17 @@ int	infile_open(const char *path, int oflag)
 	if (fd == -1)
 		exit_with_err("open", 0, 1);
 	return (fd);
+}
+
+void	free_tmp_arr(char **tmp_arr)
+{
+	int	i;
+
+	i = 0;
+	while (tmp_arr[i] != NULL)
+	{
+		use_free(tmp_arr[i]);
+		i++;
+	}
+	use_free(tmp_arr);
 }
