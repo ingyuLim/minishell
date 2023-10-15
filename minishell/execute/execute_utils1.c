@@ -6,7 +6,7 @@
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 21:39:43 by seunan            #+#    #+#             */
-/*   Updated: 2023/10/13 19:10:42 by seunan           ###   ########.fr       */
+/*   Updated: 2023/10/15 16:53:15 by seunan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	init_variable(t_vars *vars, t_list **lst, t_execute *data)
 	data->tmp_arr_index = 0;
 	data->envp = make_envp(vars->env);
 	dup2(stdin_fd, 0);
+	close(stdin_fd);
 	signal(SIGINT, sigint_handler_exec);
 	signal(SIGQUIT, sigquit_handler_exec);
 }
