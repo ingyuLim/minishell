@@ -101,6 +101,8 @@
 	- $EMPTY -> new prompt, $? = 0
 	- "" -> error message, $? = 127
 	- "$dsa"echo a, ""echo a 는 잘 동작함
+	- 길이가 25~30자 이상일 때 버퍼가 예상치 못하게 깨짐
+	- 빌트인 함수 + 리다이렉션일 때 fork로 동작하여 cd .. > a, export a=1 > a, unset a > a 등이 bash와 같이 동작하지 않음
 	```c
 	while (vars->lst && *(vars->lst->token) == '\0')
 		vars->lst = vars->lst->next;
