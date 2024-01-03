@@ -13,7 +13,7 @@ The `Minishell` program is designed to provide a basic shell environment with fe
 ## Usage
 1. Clone the project:
 ```bash
-git clone <minishell_git_url>
+git clone https://github.com/seungwonme/minishell
 ```
 
 2. Navigate to the project directory:

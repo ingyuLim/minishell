@@ -65,7 +65,8 @@ ASCII_ART="\
 .........................................................................\
 "
 
-all: clear $(NAME)
+all: $(NAME)
+	@echo "$(GREEN)$(NAME) created successfully$(RESET)"
 
 clear:
 	clear
@@ -74,38 +75,40 @@ clear:
 	@echo "$(DEFAULT)"
 
 $(NAME): $(LIBFT) $(OBJ)
+	@echo "$(WHITE)Creating $@$(RESET)"
 	@$(CC) $(CFLAGS) $(OBJ) $(INCLUDE) $(LIBFT) $(MACOS_LIBRARY) -o $(NAME)
-	@printf "\r%100s\r$(GREEN)$(BIN) is up to date!$(DEFAULT)\n"
 
 $(LIBFT):
-	$(MAKE) bonus -C ./libft
+	@$(MAKE) bonus -C ./libft
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE)
+	@$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE)
+	@echo "$(CYAN)Compiled:$(RESET) $< -> $@"
 
 clean:
-	$(MAKE) fclean -C ./libft
-	rm -f $(OBJ) 
+	@$(MAKE) clean -C ./libft
+	@rm -f $(OBJ) 
+	@echo "$(BLUE)Cleaned up object files$(RESET)"
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME) $(LIBFT)
+	@echo "$(BLUE)Cleaned up executable and library$(RESET)"
 
 re:
-	$(MAKE) fclean
-	$(MAKE) all
+	@$(MAKE) fclean
+	@$(MAKE) all
 
-debug:
-	$(MAKE) debug -C ./libft
-	$(MAKE) fclean
-	$(MAKE) all CFLAGS="$(CFLAGS) $(DEBUG)"
+mem:
+	@$(MAKE) fclean
+	@$(MAKE) mem -C ./libft
+	@$(MAKE) all CFLAGS="$(CFLAGS) $(MEMORY)"
+	@echo "$(YELLOW)Executable compiled with memory sanitizer$(RESET)"
 
 lldb:
-	$(MAKE) lldb -C ./libft
-	$(MAKE) fclean
-	$(MAKE) all CFLAGS="$(CFLAGS) $(LLDB)"
+	@$(MAKE) fclean
+	@$(MAKE) lldb -C ./libft
+	@$(MAKE) all CFLAGS="$(CFLAGS) $(DEBUG)"
+	@echo "$(YELLOW)Executable compiled to enable LLDB debugging$(RESET)"
 
-macos:
-	$(MAKE) fclean
-	$(MAKE) all CFLAGS="$(CFLAGS) $(MACOS_INCLUDE)"
 
-.PHONY: all clean fclean re debug lldb macos
+.PHONY: all clean fclean re debug lldb

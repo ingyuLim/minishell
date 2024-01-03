@@ -91,11 +91,9 @@ $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 
 clean:
 	@rm -f $(OBJ) $(BONUS_OBJ)
-	@echo "$(BLUE)Cleaned up object files$(RESET)"
 
 fclean: clean
 	@rm -f $(NAME)
-	@echo "$(BLUE)Cleaned up executable and library$(RESET)"
 
 re:
 	@$(MAKE) fclean
@@ -103,12 +101,12 @@ re:
 
 mem:
 	@$(MAKE) fclean
-	@$(MAKE) all CFLAGS="$(CFLAGS) $(MEMORY)"
+	@$(MAKE) bonus CFLAGS="$(CFLAGS) $(MEMORY)"
 	@echo "$(YELLOW)Executable compiled with memory sanitizer$(RESET)"
 
 lldb:
 	@$(MAKE) fclean
-	@$(MAKE) all CFLAGS="$(CFLAGS) $(DEBUG)"
+	@$(MAKE) bonus CFLAGS="$(CFLAGS) $(DEBUG)"
 	@echo "$(YELLOW)Executable compiled to enable LLDB debugging$(RESET)"
 
 .PHONY: all clean fclean re mem lldb bonus
